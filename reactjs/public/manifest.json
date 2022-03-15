@@ -1,0 +1,16 @@
+{
+  "short_name": "CBS",
+  "name": "Cảnh Báo Sớm",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": "/posts",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#2F6BB1",
+  "background_color": "#EDFAF9"
+}

@@ -1,0 +1,6 @@
+- Mở thư mục json-server chạy các lệnh sau:
+npm install
+npm run dev
+- Mở thư mục reactjs chạy các lệnh sau:
+npm install
+npm start

@@ -1,0 +1,11 @@
+.space--nowrap {
+    white-space: nowrap;
+}
+.rolated-top {
+    transition-duration: 1s;
+    transform: rotateZ(180deg);
+}
+.rolated-bottom {
+    transition-duration: 1s;
+    transform: rotateZ(0deg);
+}
