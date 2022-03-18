@@ -213,3 +213,7 @@ export const dispatchTaskDetail = (task) => { return { type: types.DISPATCH_TASK
 export const getPositionModalTask =(position)=>{return {type: types.GET_POSITION_MODAL_OPTION_TASK, position}}
 // set so trang hien tai 
 export const pageCurrent = (page) => { return { type: types.PAGE_CURRENT, page } }
+//Date and time start when you filter tasks
+export const startDateFilterTasks = (date) => { return { type: types.START_DATE_FILTER, date } }
+//Date and time end when you filter tasks
+export const endDateFilterTasks = (date) => { return { type: types.END_DATE_FILTER, date } }

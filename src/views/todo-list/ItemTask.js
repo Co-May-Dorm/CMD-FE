@@ -3,7 +3,6 @@ import IconEmployee from './IconEmployee';
 import { connect } from 'react-redux';
 import * as action from "../../actions/todoListAction"
 
-
 class ItemTask extends Component {
     // render phòng ban theo cong viec neu no khong truyen vao thi se khong render ra 
     renderDepartment = () => {

@@ -9,3 +9,25 @@
     transition-duration: 1s;
     transform: rotateZ(0deg);
 }
+.styleInp {
+    width: 100%;
+    border: none;
+    outline: none;
+    color: #2f6bb1;
+}
+.list {
+    width: auto;
+    height: 100px;
+    list-style-type: none;
+    overflow-y: auto;
+    padding-left: 0px;
+}
+.list li {
+    cursor: pointer;
+}
+.list li:hover {
+    background-color: #4ddbb0;
+}
+.list::-webkit-scrollbar {
+    display: none;
+}

@@ -6,16 +6,17 @@ import * as todoListAction from "../../actions/todoListAction"
 import TaskItem from "./TaskItem";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
+import FilterAdvanced from "./FilterAdvanced"
 import PaginationCustomize from "./PaginationCustomize";
 import NewTask from "./NewTask";
 import Detail from "./Detail";
-import AppPagination from "../../components/AppPagination";
 const nameButtonStatus = ["Mới nhất", "Cũ nhất", "Đang làm", "Hoàn thành", "Ưu tiên", "Chờ xác nhận", "Qúa hạn", "Đã hủy"]
 const TodoList = () => {
     const dispacth = useDispatch()
     const page = useSelector(state => state.TodoListReducer.pageCurrent)
     const filter = useSelector(state => state.TodoListReducer.filter)
     const [modalNewTask, showModalNewTask] = useState(false)
+    const [modalFilterTask, showModalFilterTask] = useState(false)
     // get task
     const tasks = useSelector(state => state.TodoListReducer.tasks)
     const positionModalOption = useSelector(state => state.TodoListReducer.posionModalOption)
@@ -50,7 +51,7 @@ const TodoList = () => {
                                 <button type="button" className="btn btn-sm fs-5 fw-bold" onClick={() => showModalNewTask(true)} data-mdb-ripple-color="dark"><BsFillBagPlusFill size={20} /> Tạo việc</button>
                             </div>
                             <div className="mx-1">
-                                <button type="button" className="btn btn-sm fs-5 fw-bold" data-mdb-ripple-color="dark"><BsFillFileEarmarkPostFill size={20} />Báo cáo</button>
+                                <button type="button" className="btn btn-sm fs-5 fw-bold" onClick={() => showModalFilterTask(true)} data-mdb-ripple-color="dark"><BsFillFileEarmarkPostFill size={20} />Báo cáo</button>
                             </div>
                             <div className="mx-1">
                                 <button type="button" className="btn btn-sm fs-5 fw-bold" data-mdb-ripple-color="dark"><AiFillFilter size={20} /> Bộ lọc</button>
@@ -104,6 +105,7 @@ const TodoList = () => {
                 <NewTask show={modalNewTask} onHide={() => showModalNewTask(false)} />
                 {/* {renderDetailTask()} */}
                 <Detail show={isShowDetailTask} onHide={closeDetailTask} />
+                <FilterAdvanced show={modalFilterTask} onHide={() => showModalFilterTask(false)} />
             </div>
         </>
     );
