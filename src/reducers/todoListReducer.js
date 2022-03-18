@@ -10,7 +10,7 @@ let initialState = {
     // , showDatePickerStartNewTask: false, showDatePickerCompleteNewTask: false, department: [], itemNeedFilterAdvanced: []
     // , nameTaskSearch:null
     tasks: [], totalTask: 0, startDateNewTask: null, endDateNewTask: null, listEmployeeSearch: [],
-    taskDetail: {}, posionModalOption: {}, pageCurrent: 1, filter: {}
+    taskDetail: {}, posionModalOption: {}, pageCurrent: 1, filter: {}, startDateFilterTask: null, endDateFilterTask: null
 };
 // const todoListReducer = (state = initialState, action) => {
 //     switch (action.type) {
@@ -117,7 +117,7 @@ const todoListReducer = (state = initialState, action) => {
     switch (action.type) {
         case types.DISPATCH_TASKS: {
             return {
-                ...state, tasks: action.tasks.data.data.taskList,
+                ...state, tasks: action.tasks.data.data.tasks,
                 totalTask: action.tasks.data.data.pagination.totalItem
             };
         }
@@ -148,6 +148,18 @@ const todoListReducer = (state = initialState, action) => {
         //  set lai so trang hien tai
         case types.PAGE_CURRENT:{
             return { ...state, pageCurrent: action.page }
+        }
+        case types.START_DATE_FILTER:{
+            var date = action.date.slice(0, 10)
+            var moment = action.date.slice(11)
+            var d = new Date(moment), hour = d.getHours(), min = d.getMinutes();
+            return { ...state , startDateFilterTask: date + " " + [hour, min].join(":") }
+        }
+        case types.END_DATE_FILTER:{
+            var date = action.date.slice(0, 10)
+            var moment = action.date.slice(11)
+            var d = new Date(moment), hour = d.getHours(), min = d.getMinutes();
+            return { ...state , endDateFilterTask: date + " " + [hour, min].join(":") }
         }
         default:
             return state;

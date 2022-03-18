@@ -8,7 +8,8 @@ import moment from 'moment';
 import 'rc-time-picker/assets/index.css';
 import { useDispatch, useSelector } from "react-redux"
 import "../../../node_modules/rc-time-picker/assets/index.css"
-const formatTime = "hh:mm"
+import * as constantsTask from "../../constants/ActionTask"
+const formatTime = ""
 const DateInput = (props) => {
     const [times, setTimes] = useState({ time: {}, date: "", cleanDate: false })
     const [openTime, setOpenTime] = useState(false)
@@ -19,12 +20,21 @@ const DateInput = (props) => {
         let dateNewTask
         let v =times.date + new Date(times.time)
         switch (props.typenamedate) {
-            case "START_DATE_NEW_TASK": {
+            case constantsTask.START_DATE_NEW_TASK: {
                 dateNewTask = todoListAction.startDateNewTask(v)
                 break
             }
-            case "END_DATE_NEW_TASK":{
+            case constantsTask.END_DATE_NEW_TASK:{
                 dateNewTask = todoListAction.endDateNewTask(v)
+                break;
+            }
+            case constantsTask.START_DATE_FILTER:{
+                dateNewTask= todoListAction.startDateFilterTasks(v)
+                break;
+            }
+            case constantsTask.END_DATE_FILTER:{
+                dateNewTask= todoListAction.endDateFilterTasks(v)
+                break;
             }
         }
         dispacth(dateNewTask)
