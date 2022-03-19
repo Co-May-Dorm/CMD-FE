@@ -11,7 +11,7 @@ const Departments = ({ visible, setVisible }) => {
     const dispatch = useDispatch()
 
     const [filters, setFilters] = useState({
-        q: ""
+        name: ""
     })
 
     useEffect(() => {
@@ -20,7 +20,7 @@ const Departments = ({ visible, setVisible }) => {
 
     const handleSearchTerm = (searchTerm) => {
         setFilters({
-            q: searchTerm
+            name: searchTerm
         })
     }
 
@@ -28,7 +28,7 @@ const Departments = ({ visible, setVisible }) => {
     const departmentsElement = []
     const recursiveDepartmentChild = (department_parent, level) => {
         departments?.forEach((department_child) => {
-            if (department_parent.id === department_child.parent_id) {
+            if (department_parent.id === department_child.fatherDepartmentId) {
                 departmentsElement.push(
                     <DepartmentItem
                         key={department_child.id}
@@ -42,7 +42,7 @@ const Departments = ({ visible, setVisible }) => {
     }
     const traverseDepartment = () => {
         departments?.forEach((department) => {
-            if (!department.parent_id) {
+            if (!department.fatherDepartmentId) {
                 departmentsElement.push(
                     <DepartmentItem
                         key={department.id}
@@ -54,7 +54,7 @@ const Departments = ({ visible, setVisible }) => {
             }
         })
     }
-    traverseDepartment();
+    traverseDepartment()
     //
 
     return (
@@ -79,7 +79,10 @@ const Departments = ({ visible, setVisible }) => {
                 <Modal.Body>
                     <div className="row align-content-between justify-content-between bg-light p-3">
                         <div className="col">
-                            <AppSearch onSearch={handleSearchTerm} />
+                            <AppSearch
+                                value={filters.name}
+                                onSearch={handleSearchTerm}
+                            />
                         </div>
                         <div className="col-auto">
                             <AddDepartment />

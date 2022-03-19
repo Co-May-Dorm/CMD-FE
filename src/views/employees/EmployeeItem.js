@@ -18,14 +18,14 @@ const EmployeeItem = ({ employee }) => {
         <>
 
             {/* Giao diện hiển thị khi >= xl */}
-            <div className="d-lg-flex d-none item justify-content-evenly align-items-center mb-3">
+            <div className="d-lg-flex d-none flex-nowrap item justify-content-evenly align-items-center mb-3">
                 <div className="item-label" />
-                <div className="col-2 text-break" style={{ paddingLeft: "3rem" }}>{standardizingName(employee.name)}</div>
+                <div className="col-4 text-break" style={{ paddingLeft: "3rem" }}>{standardizingName(employee.name)}</div>
                 <div className="col-1 text-break">{showDate()}</div>
                 <div className="col-3 text-break">{employee.email}</div>
                 <div className="col-1 text-break">{employee.phoneNumber}</div>
                 <div className="col-2 text-break">{employee.department?.name}</div>
-                <div className="col-2 text-break">{employee.positionList[0].name}</div>
+                <div className="col-2 text-break">{employee.positions[0].name}</div>
                 <Dropdown>
                     <Dropdown.Toggle
                         variant="none"

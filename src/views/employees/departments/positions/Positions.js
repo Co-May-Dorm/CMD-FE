@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap'
-import { AiOutlineClose } from 'react-icons/ai'
 import { BiTrash } from 'react-icons/bi'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateDepartmentRequest } from '../../../../actions/departmentsAction'
@@ -8,7 +7,7 @@ import { fetchRolesRequest } from '../../../../actions/rolesAction'
 import AppToaster from '../../../../components/AppToaster'
 
 const Positions = ({ visible, setVisible, department }) => {
-    const roles = useSelector(state => state.roles.data)
+    const roles = useSelector(state => state.roles.taskList)
     const dispatch = useDispatch()
 
     const [info, setInfo] = useState([])
@@ -73,7 +72,7 @@ const Positions = ({ visible, setVisible, department }) => {
         if (info.length === 0) {
             setInfo([{
                 name: "",
-                is_lead: false,
+                isManager: false,
                 role: {
                     id: "",
                     name: ""
@@ -85,7 +84,7 @@ const Positions = ({ visible, setVisible, department }) => {
                 ...info,
                 {
                     name: "",
-                    is_lead: false,
+                    isManager: false,
                     role: {
                         id: "",
                         name: ""
@@ -116,7 +115,7 @@ const Positions = ({ visible, setVisible, department }) => {
         }
     }
     //
-
+    
     return (
         <>
             <Modal
@@ -142,7 +141,7 @@ const Positions = ({ visible, setVisible, department }) => {
                         onSubmit={handleSubmit}
                     >
                         {
-                            info.map((position, index) => (
+                            info?.map((position, index) => (
                                 <div key={index}>
                                     <ListGroup.Item className="bg-light text-body">
                                         <Form.Group className="mb-3">
@@ -178,11 +177,11 @@ const Positions = ({ visible, setVisible, department }) => {
                                         <div className="row justify-content-center">
                                             <Form.Check
                                                 label="Là trưởng phòng"
-                                                name="is_lead"
+                                                name="isManager"
                                                 className="col ms-3"
                                                 tabIndex={index}
-                                                disabled={info.some(e => e.is_lead === true) && position.is_lead === false}
-                                                checked={position.is_lead}
+                                                disabled={info.some(e => e.isManager === true) && position.isManager === false}
+                                                checked={position.isManager}
                                                 onChange={handleInputChange}
                                             />
                                             <Button variant="none" className="col-auto me-3" onClick={() => setVisibleDelete(true)}>

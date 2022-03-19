@@ -8,12 +8,12 @@ import RoleItem from './RoleItem'
 import AddRole from './SubmitRole/AddRole'
 
 const Roles = ({ visible, setVisible }) => {
-    const roles = useSelector(state => state.roles.data)
+    const roles = useSelector(state => state.roles.taskList)
     const pagination = useSelector(state => state.roles.pagination)
     const dispatch = useDispatch()
 
     const [filters, setFilters] = useState({
-        q: ""
+        
     })
 
     useEffect(() => {

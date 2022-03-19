@@ -10,23 +10,23 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     /* Quản lý các state */
     const [info, setInfo] = useState({
         // State lưu thông tin của nhân viên khi người dùng nhập dữ liệu
-        uniqueNumber: "",
+        code: "",
         name: "",
         dateOfBirth: "",
         email: "",
-        phone: "",
+        phoneNumber: "",
         department: {
             id: "",
             name: "",
             code: ""
         },
-        positionList: {
+        positions: {
             id: "",
             name: ""
         },
         user: {
-            username: "",
-            password: "",
+            username: null,
+            enableLogin: false
         }
     })
     const departments = useSelector(state => state.departments.data)
@@ -51,7 +51,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         if (employee?.id) {
             setInfo({
                 ...employee,
-                user: (employee?.user !== null) ? employee.user : { username: "", password: "" }
+                user: (employee.user.enableLogin !== false) ? employee.user : { username: "" }
             })
             if (employee?.user?.username) {
                 setVisibleLogin(true)
@@ -65,15 +65,18 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
             if (e.target.checked) {
                 setInfo({
                     ...info,
-                    user: null
+                    user: {
+                        username: null,
+                        enableLogin: false
+                    }
                 })
             }
             else {
                 setInfo({
                     ...info,
                     user: {
-                        username: "",
-                        password: ""
+                        username: info.email,
+                        enableLogin: true
                     }
                 })
             }
@@ -91,17 +94,17 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         setInfo({
             ...info,
             department,
-            positionList: {
+            positions: {
                 id: "",
                 name: ""
             },
         })
     }
-    const handlePositionChange = (positionList) => {
+    const handlePositionChange = (positions) => {
         setVisiblePosition(false);
         setInfo({
             ...info,
-            positionList
+            positions
         })
     }
     const handleUserChange = (e) => {
@@ -112,6 +115,26 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                 [e.target.name]: e.target.value
             }
         })
+    }
+    const handleToggleLogin = (e) => {
+        if (e.target.checked) {
+            setInfo({
+                ...info,
+                user: {
+                    username: info.user.username || info.email,
+                    enableLogin: true
+                }
+            })
+        }
+        else {
+            setInfo({
+                ...info,
+                user: {
+                    username: null,
+                    enableLogin: false
+                }
+            })
+        }
     }
     //
 
@@ -131,7 +154,13 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                 dispatch(updateEmployeeRequest(info))
             }
             else {
-                dispatch(addEmployeeRequest(info))
+                const data = {
+                    ...info,
+                    department: info.department.id,
+                    positions: [info.positions.id]
+                }
+                console.log(data)
+                dispatch(addEmployeeRequest(data))
             }
             setVisible(false)
         }
@@ -141,7 +170,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     //
     let SelectPositionElement = null
     if (visiblePosition) {
-        if (info.department?.id && !info.department?.positionLists.length) {
+        if (info.department?.id && !info.department?.positions.length) {
             SelectPositionElement = <ListGroup.Item className="bg-light" align="center">Phòng ban hiện chưa có chức vụ nào!</ListGroup.Item>
         }
         else if (!info.department.id) {
@@ -150,8 +179,8 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         else {
             SelectPositionElement = <SelectPosition
                 visible={visiblePosition}
-                currentPosition={info.positionList}
-                data={info.department.positionLists}
+                currentPosition={info.positions}
+                data={info.department.positions}
                 onPositionChange={handlePositionChange}
             />
         }
@@ -184,7 +213,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                 type="text"
                                 name="code"
                                 placeholder="Nhập mã nhân viên..."
-                                value={info.uniqueNumber}
+                                value={info.code}
                                 onChange={handleInputChange}
                                 required
                             />
@@ -239,12 +268,12 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                         </div>
                         <hr />
                         <div className="mb-3">
-                            <Form.Label htmlFor="phone">Số điện thoại:</Form.Label>
+                            <Form.Label htmlFor="phoneNumber">Số điện thoại:</Form.Label>
                             <Form.Control
                                 type="number"
-                                name="phone"
+                                name="phoneNumber"
                                 placeholder="Nhập số điện thoại của nhân viên..."
-                                value={info.phone}
+                                value={info.phoneNumber}
                                 onChange={handleInputChange}
                                 required
                             />
@@ -278,13 +307,13 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                         </div>
                         <hr />
                         <div className="mb-3">
-                            <Form.Label htmlFor="positionList">Chức vụ:</Form.Label>
+                            <Form.Label htmlFor="positions">Chức vụ:</Form.Label>
                             <div ref={refSelectPosition}>
                                 <Form.Control
                                     type="text"
-                                    name="positionList"
+                                    name="positions"
                                     placeholder="Chọn chức vụ của nhân viên..."
-                                    value={info.positionList?.name}
+                                    value={info.positions?.name}
                                     onChange={handleInputChange}
                                     onClick={() => setVisiblePosition(!visiblePosition)}
                                     required
@@ -302,11 +331,11 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                     <Form.Check
                                         type="switch"
                                         label="Cho phép đăng nhập"
-                                        checked={visibleLogin}
-                                        onChange={handleInputChange}
+                                        checked={info.user.enableLogin}
+                                        onChange={handleToggleLogin}
                                     />
                                 </Card.Header>
-                                {(visibleLogin) ? (
+                                {(info.user.enableLogin) ? (
                                     <>
                                         <div className="mb-3">
                                             <Form.Label htmlFor="username" className="mt-3">Tên đăng nhập:</Form.Label>
@@ -314,7 +343,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                                 type="text"
                                                 name="username"
                                                 placeholder="Nhập tên đăng nhập..."
-                                                value={info.user?.username || ""}
+                                                value={info.user?.username || info.email}
                                                 onChange={handleUserChange}
                                                 required
                                             />
@@ -322,18 +351,17 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                                 Vui lòng nhập tên đăng nhập.
                                             </Form.Control.Feedback>
                                         </div>
-                                        {((employee?.id && employee?.user.username === "" && employee?.user.password === "") || !employee) ? (
+                                        {((employee?.id && employee?.user.username === "" && employee?.user.password === "cmacmacma") || !employee) ? (
                                             <>
                                                 <hr />
                                                 <div className="mb-3">
                                                     <Form.Label htmlFor="password">Mật khẩu:</Form.Label>
                                                     <Form.Control
-                                                        type="password"
+                                                        type="text"
                                                         name="password"
                                                         placeholder="Nhập mật khẩu..."
-                                                        value={info.user?.password || ""}
-                                                        onChange={handleUserChange}
-                                                        required
+                                                        value={"cmacmacma"}
+                                                        readOnly
                                                     />
                                                     <Form.Control.Feedback type="invalid">
                                                         Vui lòng nhập mật khẩu.

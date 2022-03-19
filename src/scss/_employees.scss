@@ -37,3 +37,8 @@
         right: 0;
     }
 }
+
+body #main-table-employee {
+    max-height: 60%;
+    overflow: scroll;
+}

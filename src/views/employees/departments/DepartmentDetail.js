@@ -47,7 +47,7 @@ const DepartmentDetail = ({ department }) => {
                     </thead>
                     <tbody>
                         {
-                            department.positionList.map((position, index) => (
+                            department.positions.map((position, index) => (
                                 <tr key={index}>
                                     <td>{position.name}</td>
                                     <td>{position?.role.name}</td>
