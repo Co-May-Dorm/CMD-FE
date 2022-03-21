@@ -38,7 +38,6 @@
     }
 }
 
-body #main-table-employee {
-    max-height: 60%;
-    overflow: scroll;
+.horizontal-scrollable > .row {
+    overflow-x: auto;
 }

@@ -13,7 +13,8 @@ import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
 */
 const AppPagination = ({ pagination, onPageChange }) => {
     // Lấy các đối tượng từ props pagination
-    const { page, limit, totalItem } = pagination
+    let { page, limit, totalItem } = pagination
+    page = parseInt(page)
 
     // Tính toán tổng số trang
     const totalPage = Math.ceil(totalItem / limit)
@@ -218,10 +219,10 @@ const AppPagination = ({ pagination, onPageChange }) => {
     return (
         <div className="d-table m-auto">
             <Pagination
-            className="col"
-            size={
-                width < 576 ? "sm" : (width < 992 ? "" : "lg")
-            }
+                className="col"
+                size={
+                    width < 576 ? "sm" : (width < 992 ? "" : "lg")
+                }
             >
                 <Pagination.Item
                     disabled={page <= 1}
@@ -231,7 +232,7 @@ const AppPagination = ({ pagination, onPageChange }) => {
                 </Pagination.Item>
                 {
                     fetchListPage().map((pageItem, index) => {
-                        if (pageItem === `"${page}"`) {
+                        if (pageItem === page) {
                             return (
                                 <Pagination.Item
                                     key={index}

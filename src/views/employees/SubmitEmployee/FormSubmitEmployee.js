@@ -32,9 +32,8 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     const departments = useSelector(state => state.departments.data)
     const dispatch = useDispatch()
 
-    const [visibleDepartment, setVisibleDepartment] = useState(false) // State quản lý hiển thị danh sách phòng ban để người dùng chọn
-    const [visiblePosition, setVisiblePosition] = useState(false) // State quản lý hiển thị danh sách chức vụ để người dùng chọn
-    const [visibleLogin, setVisibleLogin] = useState(false) // State quản lý hiển thị nhập tên đăng và mật khẩu nếu cho phép đăng nhập
+    const [visibleSelectDepartment, setVisibleSelectDepartment] = useState(false) // State quản lý hiển thị danh sách phòng ban để người dùng chọn
+    const [visibleSelectPosition, setVisibleSelectPosition] = useState(false) // State quản lý hiển thị danh sách chức vụ để người dùng chọn
     //
 
     /* Quản lý các ref */
@@ -43,8 +42,8 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     //
 
     /* Hàm xử lý đóng các Dropdown khi click ra ngoài */
-    useOnClickOutside(refSelectDepartment, () => setVisibleDepartment(false))
-    useOnClickOutside(refSelectPosition, () => setVisiblePosition(false))
+    useOnClickOutside(refSelectDepartment, () => setVisibleSelectDepartment(false))
+    useOnClickOutside(refSelectPosition, () => setVisibleSelectPosition(false))
     //
 
     useEffect(() => {
@@ -53,9 +52,6 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                 ...employee,
                 user: (employee.user.enableLogin !== false) ? employee.user : { username: "" }
             })
-            if (employee?.user?.username) {
-                setVisibleLogin(true)
-            }
         }
     }, [employee])
 
@@ -80,7 +76,6 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                     }
                 })
             }
-            setVisibleLogin(e.target.checked)
         }
         else {
             setInfo({
@@ -90,7 +85,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         }
     }
     const handleDepartmentChange = (department) => {
-        setVisibleDepartment(false);
+        setVisibleSelectDepartment(false);
         setInfo({
             ...info,
             department,
@@ -101,7 +96,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         })
     }
     const handlePositionChange = (positions) => {
-        setVisiblePosition(false);
+        setVisibleSelectPosition(false);
         setInfo({
             ...info,
             positions
@@ -151,7 +146,13 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
             e.preventDefault()
             e.stopPropagation()
             if (info.id) {
-                dispatch(updateEmployeeRequest(info))
+                const data = {
+                    ...info,
+                    department: info.department.id,
+                    positions: [info.positions.id]
+                }
+                console.log(data)
+                dispatch(updateEmployeeRequest(data))
             }
             else {
                 const data = {
@@ -169,7 +170,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
 
     //
     let SelectPositionElement = null
-    if (visiblePosition) {
+    if (visibleSelectPosition) {
         if (info.department?.id && !info.department?.positions.length) {
             SelectPositionElement = <ListGroup.Item className="bg-light" align="center">Phòng ban hiện chưa có chức vụ nào!</ListGroup.Item>
         }
@@ -178,7 +179,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         }
         else {
             SelectPositionElement = <SelectPosition
-                visible={visiblePosition}
+                visible={visibleSelectPosition}
                 currentPosition={info.positions}
                 data={info.department.positions}
                 onPositionChange={handlePositionChange}
@@ -188,7 +189,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
 
     return (
             <Modal
-                size="xl"
+                size="lg"
                 scrollable
                 show={visible}
                 onHide={() => setVisible(false)}
@@ -291,14 +292,14 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                     placeholder="Chọn phòng ban của nhân viên..."
                                     value={info.department?.name}
                                     onChange={handleInputChange}
-                                    onClick={() => setVisibleDepartment(!visibleDepartment)}
+                                    onClick={() => setVisibleSelectDepartment(!visibleSelectDepartment)}
                                     required
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     Vui lòng chọn phòng ban.
                                 </Form.Control.Feedback>
                                 <SelectDepartment
-                                    visible={visibleDepartment}
+                                    visible={visibleSelectDepartment}
                                     currentDepartment={info.department}
                                     departments={departments}
                                     onDepartmentChange={handleDepartmentChange}
@@ -315,7 +316,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                     placeholder="Chọn chức vụ của nhân viên..."
                                     value={info.positions?.name}
                                     onChange={handleInputChange}
-                                    onClick={() => setVisiblePosition(!visiblePosition)}
+                                    onClick={() => setVisibleSelectPosition(!visibleSelectPosition)}
                                     required
                                 />
                                 {SelectPositionElement}
