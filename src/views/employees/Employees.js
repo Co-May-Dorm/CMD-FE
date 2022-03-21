@@ -129,7 +129,7 @@ const Employees = () => {
             <Container fluid>
                 <div className="d-lg-flex d-none">
                     <Row className="col mb-3 justify-content-evenly align-items-center">
-                        <div className="col-4" style={{ paddingLeft: "3rem" }}>
+                        <div className="col-2" style={{ paddingLeft: "3rem" }}>
                             <span
                                 className="fw-bolder cursor-pointer"
                                 onClick={() => handleSort("emp.name")}
@@ -186,7 +186,6 @@ const Employees = () => {
                         <div className="col-auto" />
                     </Row>
                 </div>
-                <div id="main-table-employee">
                     <div className="d-lg-block d-none">
                         <Row>
                             {
@@ -203,7 +202,6 @@ const Employees = () => {
                             }
                         </Row>
                     </div>
-                </div>
                 <div className="d-lg-none">
                     <Row className="mb-3 justify-content-evenly align-items-center">
                         {
