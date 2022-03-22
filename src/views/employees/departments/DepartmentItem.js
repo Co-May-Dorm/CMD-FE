@@ -22,7 +22,7 @@ const DepartmentItem = ({ department, level }) => {
                 {department.name}
             </ListGroup.Item>
             <Modal
-                size="xl"
+                size="lg"
                 scrollable
                 show={visible}
                 onHide={() => setVisible(false)}

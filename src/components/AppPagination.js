@@ -14,7 +14,6 @@ import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
 const AppPagination = ({ pagination, onPageChange }) => {
     // Lấy các đối tượng từ props pagination
     let { page, limit, totalItem } = pagination
-    page = parseInt(page)
 
     // Tính toán tổng số trang
     const totalPage = Math.ceil(totalItem / limit)
