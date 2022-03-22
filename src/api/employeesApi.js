@@ -1,4 +1,5 @@
 import axiosClient from "./axiosClient"
+import axios from 'axios'
 
 // API nhân viên
 const baseUrl = "/employees"
@@ -12,15 +13,15 @@ const employeesApi = {
         return axiosClient.get(requestUrl)
     },
     add: (data) => {
-        const requestUrl = `${baseUrl}`
+        const requestUrl = `${baseUrl}/add`
         return axiosClient.post(requestUrl, data)
     },
     update: (data) => {
-        const requestUrl = `${baseUrl}/${data.id}`
+        const requestUrl = `${baseUrl}/edit`
         return axiosClient.patch(requestUrl, data)
     },
     delete: (id) => {
-        const requestUrl = `${baseUrl}/${id}`
+        const requestUrl = `${baseUrl}/delete/${id}`
         return axiosClient.delete(requestUrl)
     }
 }

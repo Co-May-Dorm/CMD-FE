@@ -7,7 +7,7 @@ const SelectDepartment = ({ visible, currentDepartment, departments, onDepartmen
     const selectDepartmentElement = []
     const recursiveDepartmentChild = (department_parent, level) => {
         departments.forEach((department_child) => {
-            if (department_parent.id === department_child.parent_id) {
+            if (department_parent.id === department_child.fatherDepartmentId) {
                 selectDepartmentElement.push(
                     <ListGroup.Item
                         component="button"
@@ -26,7 +26,7 @@ const SelectDepartment = ({ visible, currentDepartment, departments, onDepartmen
     }
     const traverseDepartment = () => {
         departments.forEach((department) => {
-            if (!department.parent_id) {
+            if (!department.fatherDepartmentId) {
                 selectDepartmentElement.push(
                     <ListGroup.Item
                         action

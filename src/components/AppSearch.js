@@ -29,7 +29,7 @@ const AppSearch = ({ value = "", onSearch }) => {
         // Sau khi đã đợi đủ 1 giây thì thực hiện gọi props onSearch để thực hiện việc tìm kiếm
         typingTimeoutRef.current = setTimeout(() => {
             onSearch(e.target.value)
-        }, 1000)
+        }, 500)
 
     }
     return (

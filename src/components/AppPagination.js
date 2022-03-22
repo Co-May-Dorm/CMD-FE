@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react'
 import { Pagination } from 'react-bootstrap'
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
@@ -14,7 +13,7 @@ import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
 */
 const AppPagination = ({ pagination, onPageChange }) => {
     // Lấy các đối tượng từ props pagination
-    const { page, limit, totalItem } = pagination
+    let { page, limit, totalItem } = pagination
 
     // Tính toán tổng số trang
     const totalPage = Math.ceil(totalItem / limit)
@@ -219,10 +218,10 @@ const AppPagination = ({ pagination, onPageChange }) => {
     return (
         <div className="d-table m-auto">
             <Pagination
-            className="col"
-            size={
-                width < 576 ? "sm" : (width < 992 ? "" : "lg")
-            }
+                className="col"
+                size={
+                    width < 576 ? "sm" : (width < 992 ? "" : "lg")
+                }
             >
                 <Pagination.Item
                     disabled={page <= 1}
@@ -231,24 +230,24 @@ const AppPagination = ({ pagination, onPageChange }) => {
                     <BsChevronLeft />
                 </Pagination.Item>
                 {
-                    fetchListPage().map((page, index) => {
-                        if (page === page) {
+                    fetchListPage().map((pageItem, index) => {
+                        if (pageItem === page) {
                             return (
                                 <Pagination.Item
                                     key={index}
                                     active
                                 >
-                                    {page}
+                                    {pageItem}
                                 </Pagination.Item>
                             )
                         }
-                        else if (page === "...") {
+                        else if (pageItem === "...") {
                             return (
                                 <Pagination.Item
                                     disabled
                                     key={index}
                                 >
-                                    {page}
+                                    {pageItem}
                                 </Pagination.Item>
                             )
                         }
@@ -256,9 +255,9 @@ const AppPagination = ({ pagination, onPageChange }) => {
                             return (
                                 <Pagination.Item
                                     key={index}
-                                    onClick={() => handlePageChange(page)}
+                                    onClick={() => handlePageChange(pageItem)}
                                 >
-                                    {page}
+                                    {pageItem}
                                 </Pagination.Item>
                             )
                         }
