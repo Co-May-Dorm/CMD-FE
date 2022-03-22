@@ -9,8 +9,9 @@ let initialState = {
     // selectedDropdown: null, timeStartNewStart: null, timeCompleteNewStask: null
     // , showDatePickerStartNewTask: false, showDatePickerCompleteNewTask: false, department: [], itemNeedFilterAdvanced: []
     // , nameTaskSearch:null
-    tasks: [], totalTask: 0, startDateNewTask: null, endDateNewTask: null, listEmployeeSearch: [],
+    tasks: [], totalTask: 0, startDateNewTask: null, endDateNewTask: null, listCreatorSearch: [],
     taskDetail: {}, posionModalOption: {}, pageCurrent: 1, filter: {}, startDateFilterTask: null, endDateFilterTask: null
+    , listEmployeeSearch: [], relatedObjectSearch: []
 };
 // const todoListReducer = (state = initialState, action) => {
 //     switch (action.type) {
@@ -115,51 +116,77 @@ let initialState = {
 
 const todoListReducer = (state = initialState, action) => {
     switch (action.type) {
+        // dispatch task to store reducer when get list task
         case types.DISPATCH_TASKS: {
             return {
                 ...state, tasks: action.tasks.data.data.tasks,
                 totalTask: action.tasks.data.data.pagination.totalItem
             };
         }
+        // dispatch start date when create a new task
         case types.START_DATE_NEW_TASK: {
             var date = action.date.slice(0, 10)
             var moment = action.date.slice(11)
             var d = new Date(moment), hour = d.getHours(), min = d.getMinutes();
             return { ...state, startDateNewTask: date + " " + [hour, min].join(":") }
         }
+        // dispatch end date when create a new task
         case types.END_DATE_NEW_TASK: {
             var date = action.date.slice(0, 10)
             var moment = action.date.slice(11)
             var d = new Date(moment), hour = d.getHours(), min = d.getMinutes();
             return { ...state, endDateNewTask: date + " " + [hour, min].join(":") }
         }
-        case types.SAVE_LIST_EMPLOYEE_SEARCH: {
-            return { ...state, listEmployeeSearch: action.data.data.data }
-        }
+        // is show detail task 
         case types.IS_SHOW_DETAIL_TASK: {
             return { ...state, isShowDetailTask: !state.isShowDetailTask }
         }
+        // dispatch task detail to store reducer
         case types.DISPATCH_TASK_DETAIL: {
             return { ...state, taskDetail: action.task.data.data[0] }
         }
+        // 
         case types.GET_POSITION_MODAL_OPTION_TASK: {
             return { ...state, posionModalOption: action.position }
         }
-        //  set lai so trang hien tai
-        case types.PAGE_CURRENT:{
+        //  set number page current
+        case types.PAGE_CURRENT: {
             return { ...state, pageCurrent: action.page }
         }
-        case types.START_DATE_FILTER:{
+        // dispatch stare date filter when you using filter advanced
+        case types.START_DATE_FILTER: {
             var date = action.date.slice(0, 10)
             var moment = action.date.slice(11)
             var d = new Date(moment), hour = d.getHours(), min = d.getMinutes();
-            return { ...state , startDateFilterTask: date + " " + [hour, min].join(":") }
+            return { ...state, startDateFilterTask: date + " " + [hour, min].join(":") }
         }
-        case types.END_DATE_FILTER:{
+        // dispatch end date filter when you using filter advanced
+        case types.END_DATE_FILTER: {
             var date = action.date.slice(0, 10)
             var moment = action.date.slice(11)
             var d = new Date(moment), hour = d.getHours(), min = d.getMinutes();
-            return { ...state , endDateFilterTask: date + " " + [hour, min].join(":") }
+            return { ...state, endDateFilterTask: date + " " + [hour, min].join(":") }
+        }
+        // dispatch creator search when search creator
+        case types.DISPATCH_CREATOR_SEARCH: {
+            const result = action.data.data.data
+            if (Object.keys(result).length > 0) {
+                return { ...state, listCreatorSearch: result.employees }
+            }
+        }
+          // dispatch creator search when search employee
+        case types.DISPATCH_EMPLOYEE_SEARCH: {
+            const result = action.data.data.data
+            if (Object.keys(result).length > 0) {
+                return { ...state, listEmployeeSearch: result.employees }
+            }
+        }
+          // dispatch creator search when search related object
+        case types.DISPATCH_RELATED_OBJECT: {
+            const result = action.data.data.data
+            if (Object.keys(result).length > 0) {
+                return { ...state, relatedObjectSearch: result.employees }
+            }
         }
         default:
             return state;

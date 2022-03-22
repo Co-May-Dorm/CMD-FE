@@ -1,6 +1,6 @@
 import { BiSearchAlt } from "react-icons/bi";
 import { BsFillBagPlusFill, BsFillFileEarmarkPostFill } from "react-icons/bs";
-import { AiFillFilter } from "react-icons/ai";
+import { AiFillFilter, AiOutlineSortAscending, AiOutlineSortDescending } from "react-icons/ai";
 import ButtonStatus from "./assigned-to-me/ButtonStatus";
 import * as todoListAction from "../../actions/todoListAction"
 import TaskItem from "./TaskItem";
@@ -17,6 +17,7 @@ const TodoList = () => {
     const filter = useSelector(state => state.TodoListReducer.filter)
     const [modalNewTask, showModalNewTask] = useState(false)
     const [modalFilterTask, showModalFilterTask] = useState(false)
+    const [counterName, setCounterName] = useState(0);
     // get task
     const tasks = useSelector(state => state.TodoListReducer.tasks)
     const positionModalOption = useSelector(state => state.TodoListReducer.posionModalOption)
@@ -51,10 +52,10 @@ const TodoList = () => {
                                 <button type="button" className="btn btn-sm fs-5 fw-bold" onClick={() => showModalNewTask(true)} data-mdb-ripple-color="dark"><BsFillBagPlusFill size={20} /> Tạo việc</button>
                             </div>
                             <div className="mx-1">
-                                <button type="button" className="btn btn-sm fs-5 fw-bold" onClick={() => showModalFilterTask(true)} data-mdb-ripple-color="dark"><BsFillFileEarmarkPostFill size={20} />Báo cáo</button>
+                                <button type="button" className="btn btn-sm fs-5 fw-bold" data-mdb-ripple-color="dark"><BsFillFileEarmarkPostFill size={20} />Báo cáo</button>
                             </div>
                             <div className="mx-1">
-                                <button type="button" className="btn btn-sm fs-5 fw-bold" data-mdb-ripple-color="dark"><AiFillFilter size={20} /> Bộ lọc</button>
+                                <button type="button" className="btn btn-sm fs-5 fw-bold" onClick={() => showModalFilterTask(true)} data-mdb-ripple-color="dark"><AiFillFilter size={20} /> Bộ lọc</button>
                             </div>
                         </div>
                     </div>
@@ -80,7 +81,10 @@ const TodoList = () => {
                 </div>
                 <div className="row ms-4 me-4">
                     <div className="col-4 space--nowrap ms-5">
-                        <span style={{ fontSize: "11px" }} className="fw-bigBold fs-7">TÊN CÔNG VIỆC</span>
+                        <span onClick={() => setCounterName(
+                            counterName == 1 ? 0 : counterName++
+                        )} style={{ fontSize: "11px" }} className="fw-bigBold fs-7">TÊN CÔNG VIỆC</span>
+                       {counterName==0? <AiOutlineSortAscending size={20}/>: <AiOutlineSortDescending size={20}/>}
                     </div>
                     <div className="col-1"><span className="fw-bigBold fs-7 space--nowrap" style={{ fontSize: "11px" }}>NGƯỜI GIAO</span></div>
                     <div className="col-1"><span className="fw-bigBold fs-7 space--nowrap" style={{ fontSize: "11px" }}>NGƯỜI LÀM</span></div>

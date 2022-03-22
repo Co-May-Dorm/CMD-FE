@@ -17,17 +17,24 @@
 }
 .list {
     width: auto;
-    height: 100px;
+    max-height: 100px;
     list-style-type: none;
     overflow-y: auto;
-    padding-left: 0px;
+    padding: 5px;
+    margin: 0;
 }
 .list li {
     cursor: pointer;
 }
-.list li:hover {
+.listItem:hover {
     background-color: #4ddbb0;
 }
 .list::-webkit-scrollbar {
     display: none;
+}
+.icon {
+    display: none;
+}
+.icon:hover {
+    display: block;
 }

@@ -88,7 +88,7 @@ const NewTask = (props) => {
     //search employees
     const searchEmployees = (e) => {
         const params = ["SEARCH_EMPLOYEES", { object: "employees", contain: "name_like", key: e.target.value }]
-        dispacth(todoListAction.search(params))
+        // dispacth(todoListAction.search(params))
     }
     //change days of week
     const changeDaysOfWeek = (dow) => {
