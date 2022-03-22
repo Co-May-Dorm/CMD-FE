@@ -188,205 +188,206 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     }
 
     return (
-            <Modal
-                size="lg"
-                scrollable
-                show={visible}
-                onHide={() => setVisible(false)}
+        <Modal
+            size="lg"
+            scrollable
+            show={visible}
+            onHide={() => setVisible(false)}
+        >
+            <Modal.Header
+                closeButton
+                className="bg-gradient"
             >
-                <Modal.Header
-                    closeButton
-                    className="bg-gradient"
-                >
-                    <Modal.Title className="text-white">
-                        {employee?.id ? "CHỈNH SỬA NHÂN VIÊN" : "THÊM NHÂN VIÊN MỚI"}
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form
-                        noValidate
-                        validated={validated}
-                        onSubmit={handleSubmit}
-                    >
-                        <div className="mb-3">
-                            <Form.Label htmlFor="code">Mã nhân viên:</Form.Label>
+                <Modal.Title className="text-white">
+                    {employee?.id ? "CHỈNH SỬA NHÂN VIÊN" : "THÊM NHÂN VIÊN MỚI"}
+                </Modal.Title>
+            </Modal.Header>
+            <Form
+                className="modal-body"
+                noValidate
+                validated={validated}
+                onSubmit={handleSubmit}
+            >
+                <div className="modal-body-content">
+                    <div className="mb-3">
+                        <Form.Label htmlFor="code">Mã nhân viên:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="code"
+                            placeholder="Nhập mã nhân viên..."
+                            value={info.code}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            Vui lòng nhập mã nhân viên.
+                        </Form.Control.Feedback>
+                    </div>
+                    <hr />
+                    <div className="mb-3">
+                        <Form.Label htmlFor="name">Họ và tên:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="name"
+                            placeholder="Nhập họ và tên nhân viên..."
+                            value={info.name}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            Vui lòng nhập họ và tên nhân viên.
+                        </Form.Control.Feedback>
+                    </div>
+                    <hr />
+                    <div className="mb-3">
+                        <Form.Label htmlFor="dateOfBirth">Ngày sinh:</Form.Label>
+                        <Form.Control
+                            type="date"
+                            name="dateOfBirth"
+                            placeholder="Nhập ngày sinh..."
+                            value={info.dateOfBirth || ""}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            Vui lòng nhập ngày sinh.
+                        </Form.Control.Feedback>
+                    </div>
+                    <hr />
+                    <div className="mb-3">
+                        <Form.Label htmlFor="email">Email:</Form.Label>
+                        <Form.Control
+                            type="email"
+                            name="email"
+                            placeholder="Nhập email nhân viên..."
+                            value={info.email}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            Vui lòng nhập email.
+                        </Form.Control.Feedback>
+                    </div>
+                    <hr />
+                    <div className="mb-3">
+                        <Form.Label htmlFor="phoneNumber">Số điện thoại:</Form.Label>
+                        <Form.Control
+                            type="number"
+                            name="phoneNumber"
+                            placeholder="Nhập số điện thoại của nhân viên..."
+                            value={info.phoneNumber}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            Vui lòng nhập số điện thoại.
+                        </Form.Control.Feedback>
+                    </div>
+                    <hr />
+                    <div className="mb-3">
+                        <Form.Label htmlFor="department">Phòng ban:</Form.Label>
+                        <div ref={refSelectDepartment}>
                             <Form.Control
                                 type="text"
-                                name="code"
-                                placeholder="Nhập mã nhân viên..."
-                                value={info.code}
+                                name="department"
+                                placeholder="Chọn phòng ban của nhân viên..."
+                                value={info.department?.name}
                                 onChange={handleInputChange}
+                                onClick={() => setVisibleSelectDepartment(!visibleSelectDepartment)}
                                 required
                             />
                             <Form.Control.Feedback type="invalid">
-                                Vui lòng nhập mã nhân viên.
+                                Vui lòng chọn phòng ban.
                             </Form.Control.Feedback>
+                            <SelectDepartment
+                                visible={visibleSelectDepartment}
+                                currentDepartment={info.department}
+                                departments={departments}
+                                onDepartmentChange={handleDepartmentChange}
+                            />
                         </div>
-                        <hr />
-                        <div className="mb-3">
-                            <Form.Label htmlFor="name">Họ và tên:</Form.Label>
+                    </div>
+                    <hr />
+                    <div className="mb-3">
+                        <Form.Label htmlFor="positions">Chức vụ:</Form.Label>
+                        <div ref={refSelectPosition}>
                             <Form.Control
                                 type="text"
-                                name="name"
-                                placeholder="Nhập họ và tên nhân viên..."
-                                value={info.name}
+                                name="positions"
+                                placeholder="Chọn chức vụ của nhân viên..."
+                                value={info.positions?.name}
                                 onChange={handleInputChange}
+                                onClick={() => setVisibleSelectPosition(!visibleSelectPosition)}
                                 required
                             />
+                            {SelectPositionElement}
                             <Form.Control.Feedback type="invalid">
-                                Vui lòng nhập họ và tên nhân viên.
+                                Vui lòng chọn chức vụ.
                             </Form.Control.Feedback>
                         </div>
-                        <hr />
-                        <div className="mb-3">
-                            <Form.Label htmlFor="dateOfBirth">Ngày sinh:</Form.Label>
-                            <Form.Control
-                                type="date"
-                                name="dateOfBirth"
-                                placeholder="Nhập ngày sinh..."
-                                value={info.dateOfBirth || ""}
-                                onChange={handleInputChange}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Vui lòng nhập ngày sinh.
-                            </Form.Control.Feedback>
-                        </div>
-                        <hr />
-                        <div className="mb-3">
-                            <Form.Label htmlFor="email">Email:</Form.Label>
-                            <Form.Control
-                                type="email"
-                                name="email"
-                                placeholder="Nhập email nhân viên..."
-                                value={info.email}
-                                onChange={handleInputChange}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Vui lòng nhập email.
-                            </Form.Control.Feedback>
-                        </div>
-                        <hr />
-                        <div className="mb-3">
-                            <Form.Label htmlFor="phoneNumber">Số điện thoại:</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="phoneNumber"
-                                placeholder="Nhập số điện thoại của nhân viên..."
-                                value={info.phoneNumber}
-                                onChange={handleInputChange}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Vui lòng nhập số điện thoại.
-                            </Form.Control.Feedback>
-                        </div>
-                        <hr />
-                        <div className="mb-3">
-                            <Form.Label htmlFor="department">Phòng ban:</Form.Label>
-                            <div ref={refSelectDepartment}>
-                                <Form.Control
-                                    type="text"
-                                    name="department"
-                                    placeholder="Chọn phòng ban của nhân viên..."
-                                    value={info.department?.name}
-                                    onChange={handleInputChange}
-                                    onClick={() => setVisibleSelectDepartment(!visibleSelectDepartment)}
-                                    required
+                    </div>
+                    <hr />
+                    <Card>
+                        <Card.Body>
+                            <Card.Header>
+                                <Form.Check
+                                    type="switch"
+                                    label="Cho phép đăng nhập"
+                                    checked={info.user.enableLogin}
+                                    onChange={handleToggleLogin}
                                 />
-                                <Form.Control.Feedback type="invalid">
-                                    Vui lòng chọn phòng ban.
-                                </Form.Control.Feedback>
-                                <SelectDepartment
-                                    visible={visibleSelectDepartment}
-                                    currentDepartment={info.department}
-                                    departments={departments}
-                                    onDepartmentChange={handleDepartmentChange}
-                                />
-                            </div>
-                        </div>
-                        <hr />
-                        <div className="mb-3">
-                            <Form.Label htmlFor="positions">Chức vụ:</Form.Label>
-                            <div ref={refSelectPosition}>
-                                <Form.Control
-                                    type="text"
-                                    name="positions"
-                                    placeholder="Chọn chức vụ của nhân viên..."
-                                    value={info.positions?.name}
-                                    onChange={handleInputChange}
-                                    onClick={() => setVisibleSelectPosition(!visibleSelectPosition)}
-                                    required
-                                />
-                                {SelectPositionElement}
-                                <Form.Control.Feedback type="invalid">
-                                    Vui lòng chọn chức vụ.
-                                </Form.Control.Feedback>
-                            </div>
-                        </div>
-                        <hr />
-                        <Card>
-                            <Card.Body>
-                                <Card.Header>
-                                    <Form.Check
-                                        type="switch"
-                                        label="Cho phép đăng nhập"
-                                        checked={info.user.enableLogin}
-                                        onChange={handleToggleLogin}
-                                    />
-                                </Card.Header>
-                                {(info.user.enableLogin) ? (
-                                    <>
-                                        <div className="mb-3">
-                                            <Form.Label htmlFor="username" className="mt-3">Tên đăng nhập:</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                name="username"
-                                                placeholder="Nhập tên đăng nhập..."
-                                                value={info.user?.username || info.email}
-                                                onChange={handleUserChange}
-                                                required
-                                            />
-                                            <Form.Control.Feedback type="invalid">
-                                                Vui lòng nhập tên đăng nhập.
-                                            </Form.Control.Feedback>
-                                        </div>
-                                        {((employee?.id && employee?.user.username === "" && employee?.user.password === "cmacmacma") || !employee) ? (
-                                            <>
-                                                <hr />
-                                                <div className="mb-3">
-                                                    <Form.Label htmlFor="password">Mật khẩu:</Form.Label>
-                                                    <Form.Control
-                                                        type="text"
-                                                        name="password"
-                                                        placeholder="Nhập mật khẩu..."
-                                                        value={"cmacmacma"}
-                                                        readOnly
-                                                    />
-                                                    <Form.Control.Feedback type="invalid">
-                                                        Vui lòng nhập mật khẩu.
-                                                    </Form.Control.Feedback>
-                                                </div>
-                                            </>
-                                        ) : null}
+                            </Card.Header>
+                            {(info.user.enableLogin) ? (
+                                <>
+                                    <div className="mb-3">
+                                        <Form.Label htmlFor="username" className="mt-3">Tên đăng nhập:</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="username"
+                                            placeholder="Nhập tên đăng nhập..."
+                                            value={info.user?.username || info.email}
+                                            onChange={handleUserChange}
+                                            required
+                                        />
+                                        <Form.Control.Feedback type="invalid">
+                                            Vui lòng nhập tên đăng nhập.
+                                        </Form.Control.Feedback>
+                                    </div>
+                                    {((employee?.id && employee?.user.username === "" && employee?.user.password === "cmacmacma") || !employee) ? (
+                                        <>
+                                            <hr />
+                                            <div className="mb-3">
+                                                <Form.Label htmlFor="password">Mật khẩu:</Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    name="password"
+                                                    placeholder="Nhập mật khẩu..."
+                                                    value={"cmacmacma"}
+                                                    readOnly
+                                                />
+                                                <Form.Control.Feedback type="invalid">
+                                                    Vui lòng nhập mật khẩu.
+                                                </Form.Control.Feedback>
+                                            </div>
+                                        </>
+                                    ) : null}
 
-                                    </>
-                                ) : null}
-                            </Card.Body>
-                        </Card>
-                        <Modal.Footer>
-                            <Button
-                                className="d-table m-auto"
-                                size="lg"
-                                type="submit"
-                            >
-                                {(employee?.id) ? "Cập nhật thông tin" : "Xác nhận tạo mới"}
-                            </Button>
-                        </Modal.Footer>
-                    </Form>
-                </Modal.Body>
-            </Modal>
+                                </>
+                            ) : null}
+                        </Card.Body>
+                    </Card>
+                </div>
+                <Modal.Footer>
+                    <Button
+                        className="d-table m-auto"
+                        size="lg"
+                        type="submit"
+                    >
+                        {(employee?.id) ? "Cập nhật thông tin" : "Xác nhận tạo mới"}
+                    </Button>
+                </Modal.Footer>
+            </Form>
+        </Modal >
     )
 }
 

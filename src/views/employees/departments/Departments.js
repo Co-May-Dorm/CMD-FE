@@ -60,7 +60,7 @@ const Departments = ({ visible, setVisible }) => {
     return (
         <>
             <Modal
-                size="xl"
+                size="lg"
                 scrollable
                 show={visible}
                 onHide={() => setVisible(false)}
