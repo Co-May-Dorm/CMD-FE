@@ -83,19 +83,6 @@ export const addItemNeedFilter = (item) => {
 // export const showTimeStartNewTask = () => { return { type: types.SHOW_DATE_PICKER_START_NEW_TASK } }
 // //thay đổi trạng thái đóng mở của datepicker của ngày kết thúc của một công việc mới
 // export const showTimeCompleteNewTask = () => { return { type: types.SHOW_DATE_PICKER_COMPLETES_NEW_TASK } }
-// // tao cong viec moi
-// export const creatNewTask = (param) => {
-//     return () => {
-//         const newTask = async () => {
-//             try {
-//                 await todoListApi.newtTask(param)//newtTask() function using to load data task with data limited a page is 10 task
-//             } catch (error) {
-//                 console.log("Can not load...!", error)
-//             }
-//         }
-//         newTask()
-//     }
-// }
 // //tìm kiềm phòng ban
 // export const searchDepartment = (params) => {
 //     return (dispatch) => {
@@ -246,4 +233,17 @@ export const dispatchSearchEmployees = (data) => { return { type: types.DISPATCH
 export const dispatchCreator = (data) => { return { type: types.DISPATCH_CREATOR_SEARCH, data } }
 // dispatch creator related object searched to store reducer
 export const dispatchRelatedObject = (data) => { return { type: types.DISPATCH_RELATED_OBJECT, data } }
+// create new task
+export const creatNewTask = (param) => {
+    return () => {
+        const newTask = async () => {
+            try {
+                await todoListApi.newTask(param)
+            } catch (error) {
+                console.log("Can not load...!", error)
+            }
+        }
+        newTask()
+    }
+}
 

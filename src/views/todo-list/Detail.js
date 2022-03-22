@@ -61,7 +61,7 @@ const Detail = (props) => {
     return (
         <Modal scrollable show={true}
             {...props}
-            // size="sm"
+            // size=""
             aria-labelledby="contained-modal-title-vcenter"
             centered
         // onExit={dispatchDateNewTask}
@@ -88,7 +88,7 @@ const Detail = (props) => {
                             <span className="fw-bold fs-4">Tên công việc</span>
                         </div>
                         <div className="col">
-                            <span className="fs-5">{dataDetailTask.name}</span>
+                            <span className="fs-5">{dataDetailTask.title}</span>
                         </div>
                     </div>
                     <div className="row ms-4 me-4 mt-1 mb-1">
@@ -96,9 +96,9 @@ const Detail = (props) => {
                             <span className="fw-bold fs-4">Thời hạn</span>
                         </div>
                         <div className="col">
-                            <span className="fs-5">{sliceDate(JSON.parse(dataDetailTask.properties).start_date)}</span>
+                            {/* <span className="fs-5">{sliceDate(JSON.parse(dataDetailTask.properties).createDate)}</span>
                             -
-                            <span className="fs-5">{sliceDate(JSON.parse(dataDetailTask.properties).done_at)}</span>
+                            <span className="fs-5">{sliceDate(JSON.parse(dataDetailTask.properties).done_at)}</span> */}
                         </div>
                     </div>
                     <div className="row ms-4 me-4 mt-1 mb-1">
@@ -106,9 +106,9 @@ const Detail = (props) => {
                             <span className="fw-bold fs-4">Mức độ ưu tiên</span>
                         </div>
                         <div className="col">
-                            <span className="fs-5">{
+                            {/* <span className="fs-5">{
                                 renderPriority(JSON.parse(dataDetailTask.properties).priority)
-                            }</span>
+                            }</span> */}
                         </div>
                     </div>
                     <div className="row ms-4 me-4 mt-1 mb-1">
@@ -121,10 +121,10 @@ const Detail = (props) => {
                             </div>
                             <div className="col-8">
                                 <div className="row ">
-                                    <span className="fs-5 text-blue fw-bold">Nguyễn Văn A</span>
+                                    <span className="fs-5 text-blue fw-bold">{dataDetailTask.creatorName}</span>
                                 </div>
                                 <div className="row">
-                                    <span className="fs-8 fst-italic">Phòng điều hành</span>
+                                    <span className="fs-8 fst-italic">{dataDetailTask.departmentName}</span>
                                 </div>
                             </div>
                         </div>
@@ -139,7 +139,7 @@ const Detail = (props) => {
                             </div>
                             <div className="col-8">
                                 <div className="row ">
-                                    <span className="fs-5 text-blue fw-bold">Nguyễn Văn Mười</span>
+                                    <span className="fs-5 text-blue fw-bold">{dataDetailTask.recieverName}</span>
                                 </div>
                                 <div className="row">
                                     <span className="fs-8 fst-italic">Phòng nhân viên</span>
@@ -151,7 +151,10 @@ const Detail = (props) => {
                         <div className="">
                             <span className="fw-bold fs-4">Mô tả:</span>
                         </div>
-                        <div className="fs-5" dangerouslySetInnerHTML={{ __html: dataDetailTask.description }}>
+                        <div className="fs-5" 
+                        // dangerouslySetInnerHTML={{ __html: dataDetailTask.description }}
+                        >
+                            {dataDetailTask.description}
                         </div>
                     </div>
                     <div className="row ms-4 me-4 mt-1 mb-1">
@@ -159,8 +162,8 @@ const Detail = (props) => {
                             <span className="fw-bold fs-4">Trạng thái</span>
                         </div>
                         <div className="col">
-                            <span className="fs-5 me-1">{returnNameStatus(JSON.parse(dataDetailTask.properties).status)}</span>
-                            <span className="fs-6 ms-1">({sliceDate(JSON.parse(dataDetailTask.properties).done_at)})</span>
+                            <span className="fs-5 me-1">{dataDetailTask.statusName}</span>
+                            <span className="fs-6 ms-1">({dataDetailTask.finishDate})</span>
                         </div>
                     </div>
                     <div className="row ms-4 me-4 mt-1 mb-1">

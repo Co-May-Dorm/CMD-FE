@@ -7,6 +7,7 @@ import { FaUserAlt } from "react-icons/fa";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CgAttachment } from "react-icons/cg"
+import * as constant from "../../constants/ActionTask"
 import DateInput from "./DateInput";
 import * as todoListAction from "../../actions/todoListAction"
 import "../../../node_modules/@ckeditor/ckeditor5-editor-classic/theme/classiceditor.css"
@@ -35,7 +36,6 @@ const NewTask = (props) => {
     const [showListEmployeesInvolve, setShowListEmployeesInvolve] = useState(false)
     const [showDateStart, setShowDateStart] = useState(false)
     const [showDateEnd, setShowDateEnd] = useState(false)
-    const [employee, setEmployee] = useState("")
     const [showRepeatUnit, setShowRepeatUnit] = useState(false)
     const [levelPrioritize, setLevelPrioritize] = useState(0)
     const [daysOfWeek, setDaysOfWeek] = useState([])
@@ -50,6 +50,12 @@ const NewTask = (props) => {
     const wrapperRef = useRef(null)
     const inputEplsRef = useRef(null)
     const dispacth = useDispatch()
+    //state new task
+    const [title, setTitle] = useState("")
+    const [employee, setEmployee] = useState(null)
+    const [description, setDescription] = useState('')
+    //end
+
     //set color prioritize level 
     const setColorPrioritizeLevel = (index) => {
         const arrayColor = ["#2F6BB1", "#0DD2DE", "#3CEBC1", "#75FFD6"]
@@ -71,6 +77,29 @@ const NewTask = (props) => {
         }
         return els.map((item) => item)
     }
+    //add new task
+    const addNewTask = () => {
+        const formData = new FormData();
+        formData.append("code", "89")
+        formData.append("creator_id", 1)
+        formData.append("receiver_id", employee.id)
+        formData.append("status_id", "1")
+        formData.append("title", title)
+        formData.append("description", description)
+        formData.append("createDate", startNewDateTask)
+        formData.append("finishDate", endNewDateTask)
+        const data = {
+            "code": `99`,
+            "creator_id": 1,
+            "receiver_id": employee.id,
+            "status_id": "1",
+            "title": title,
+            "description": description,
+            "createDate": startNewDateTask,
+            "finishDate": endNewDateTask
+        }
+        dispacth(todoListAction.creatNewTask(data))
+    }
     //processing actions of components select list dropdown with input
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -86,9 +115,33 @@ const NewTask = (props) => {
         };
     }, [wrapperRef]);
     //search employees
-    const searchEmployees = (e) => {
-        const params = ["SEARCH_EMPLOYEES", { object: "employees", contain: "name_like", key: e.target.value }]
-        // dispacth(todoListAction.search(params))
+    const searchEmployee = (event, type) => {
+        const e = event.target.value
+        // check what type search and set state employee of type that search
+        switch (type) {
+            case constant.DISPATCH_EMPLOYEE_SEARCH: {
+                setEmployee(e)
+                break
+            }
+            case constant.DISPATCH_RELATED_OBJECT: {
+                // setRelatedObject(e)
+                // break;
+            }
+        }
+        const req = {
+            "object": "employees",
+            "mapSearch": [
+                {
+                    "key": "name",
+                    "value": e
+                }
+            ],
+            "page": 1
+        }
+        const delaySearch = (setTimeout(() => {
+            dispacth(todoListAction.searchEmployee({ "typeSearch": type, "request": req }))
+        }, 1000))
+        return () => clearTimeout(delaySearch)
     }
     //change days of week
     const changeDaysOfWeek = (dow) => {
@@ -216,13 +269,13 @@ const NewTask = (props) => {
                         <div className="row ms-5 me-5 mb-2">
                             <span className="fw-bold pe-0 ps-0 fs-4">Tên công việc</span>
                             <div className="d-flex form-control">
-                                <input style={{ border: "none", outline: "none" }} className={"ps-2 w-100 text-blue"}></input>
+                                <input type="search" onChange={(event) => setTitle(event.target.value)} style={{ border: "none", outline: "none" }} className={"ps-2 w-100 text-blue"}></input>
                             </div>
                         </div>
                         <div className="row ms-5 me-5 mb-2 position-relative">
                             <span className="fw-bold pe-0 ps-0 fs-4">Người được giao</span>
                             <div className="d-flex form-control rounded-top" onClick={() => setShowListEmployees(!showListEmployees)} >
-                                <input value={employee} ref={inputEplsRef} type={"search"} onChange={searchEmployees} style={{ border: "none", outline: "none" }} className={"ps-2 w-100"}></input>
+                                <input value={employee === null ? "" : employee.name} ref={inputEplsRef} type={"search"} onChange={(event) => searchEmployee(event, constant.DISPATCH_EMPLOYEE_SEARCH)} style={{ border: "none", outline: "none" }} className={"ps-2 w-100"}></input>
                                 <IoMdArrowDropdown size={20} />
                                 {/* <Spinner size="sm"
                                     animation="border"
@@ -235,8 +288,8 @@ const NewTask = (props) => {
                                     <ul ref={wrapperRef} className="list-group pe-0 position-absolute position-absolute top-100 start-0 bg-white" role={"listbox"} style={{ overflowY: "auto", maxHeight: listEmployeeSearch.length === 0 ? "40px" : "200px" }}>
                                         {listEmployeeSearch.length === 0 ? <li role={"option"} className="list-group-item list-group-item-action disabled">
                                             Hãy nhập tên nhân viên của bạn
-                                        </li> : listEmployeeSearch.map((item, id) => <li onClick={() => setEmployee(item.display_name)} key={id} role={"option"} className="list-group-item list-group-item-action">
-                                            <span className="mx-auto text-blue"> <FaUserAlt size={15} className="me-2" /> </span> {item.display_name}
+                                        </li> : listEmployeeSearch.map((item, id) => <li onClick={() => setEmployee(item)} key={id} role={"option"} className="list-group-item list-group-item-action">
+                                            <span className="mx-auto text-blue"> <FaUserAlt size={15} className="me-2" /> </span> {item.name}
                                         </li>)}
                                     </ul>
                                     : null
@@ -254,7 +307,7 @@ const NewTask = (props) => {
                                 <div id="editor" >
                                     <CKEditor
                                         editor={ClassicEditor}
-                                        data="<p>Hello from CKEditor 5!</p>"
+                                        data={description}
                                         config={editorConfiguration}
                                         onReady={editor => {
                                             // You can store the "editor" and use when it is needed.
@@ -262,6 +315,7 @@ const NewTask = (props) => {
                                         }}
                                         onChange={(event, editor) => {
                                             const data = editor.getData();
+                                            setDescription(data)
                                             // console.log({ event, editor, data });
                                         }}
                                         onBlur={(event, editor) => {
@@ -278,13 +332,13 @@ const NewTask = (props) => {
                             <div className="col-sm p-2">
                                 <span className="col-5 fw-bold p0 mb-2 fs-4">Thời gian từ ngày</span>
                                 <div className="col d-flex form-control p-0 ps-2" onClick={() => setShowDateStart(!showDateStart)}>
-                                    <input readOnly value={startNewDateTask == null ? "" : startNewDateTask} style={{ border: "none", outline: "none" }} className={"w-100 p-0 text-blue"}></input>
+                                    <input readOnly value={startNewDateTask === null ? "" : startNewDateTask} style={{ border: "none", outline: "none" }} className={"w-100 p-0 text-blue"}></input>
                                 </div>
                             </div>
                             <div className="col-sm p-2" >
                                 <span className="fw-bold pe-0 ps-0 mb-2 fs-4">Đến ngày</span>
                                 <div className="col d-flex form-control p-0 ps-2" onClick={() => setShowDateEnd(!showDateEnd)}>
-                                    <input readOnly value={endNewDateTask == null ? "" : endNewDateTask} style={{ border: "none", outline: "none" }} className={"w-100 p-0 text-blue"}></input>
+                                    <input readOnly value={endNewDateTask === null ? "" : endNewDateTask} style={{ border: "none", outline: "none" }} className={"w-100 p-0 text-blue"}></input>
                                 </div>
                             </div>
                         </div>
@@ -340,7 +394,7 @@ const NewTask = (props) => {
                             <div className="col-sm p-2 position-relative">
                                 <span className="col-5 fw-bold p0 mb-2 fs-4">Đối tượng liên quan</span>
                                 <div className="col d-flex form-control p-0 ps-2" onClick={() => setShowListEmployeesInvolve(!showListEmployeesInvolve)}>
-                                    <input type={"search"} onChange={searchEmployees} style={{ border: "none", outline: "none", color: "#2F6BB1" }} className={"w-100 p-0 ps-1 pe-2"}></input>
+                                    <input type={"search"} onChange={searchEmployee} style={{ border: "none", outline: "none", color: "#2F6BB1" }} className={"w-100 p-0 ps-1 pe-2"}></input>
                                 </div>
                                 {
                                     showListEmployeesInvolve ?
@@ -349,7 +403,7 @@ const NewTask = (props) => {
                                             {listEmployeeSearch.length === 0 ? <li role={"option"} className="list-group-item list-group-item-action disabled">
                                                 Hãy nhập tên nhân viên của bạn
                                             </li> : listEmployeeSearch.map((item, id) => <li key={id} role={"option"} className="list-group-item list-group-item-action">
-                                                <span className="mx-auto"> <FaUserAlt size={15} className="me-2" /> </span> {item.display_name}
+                                                <span className="mx-auto"> <FaUserAlt size={15} className="me-2" /> </span> {item.name}
                                             </li>)}
                                         </ul>
                                         : null
@@ -386,7 +440,7 @@ const NewTask = (props) => {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={props.onHide}>Lưu và tạo mới</Button>
+                    <Button onClick={addNewTask}>Lưu và tạo mới</Button>
                     <Button onClick={props.onHide}>Lưu</Button>
                 </Modal.Footer>
             </Modal>

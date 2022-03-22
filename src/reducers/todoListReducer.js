@@ -143,7 +143,7 @@ const todoListReducer = (state = initialState, action) => {
         }
         // dispatch task detail to store reducer
         case types.DISPATCH_TASK_DETAIL: {
-            return { ...state, taskDetail: action.task.data.data[0] }
+            return { ...state, taskDetail: action.task.data.data }
         }
         // 
         case types.GET_POSITION_MODAL_OPTION_TASK: {

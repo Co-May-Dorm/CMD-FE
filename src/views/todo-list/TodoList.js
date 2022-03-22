@@ -17,10 +17,10 @@ const TodoList = () => {
     const filter = useSelector(state => state.TodoListReducer.filter)
     const [modalNewTask, showModalNewTask] = useState(false)
     const [modalFilterTask, showModalFilterTask] = useState(false)
-    const [counterName, setCounterName] = useState(0);
+    let [counterName, setCounterName] = useState(0);
     // get task
     const tasks = useSelector(state => state.TodoListReducer.tasks)
-    const positionModalOption = useSelector(state => state.TodoListReducer.posionModalOption)
+    // const positionModalOption = useSelector(state => state.TodoListReducer.posionModalOption)
     // is show detail task
     const isShowDetailTask = useSelector(state => state.TodoListReducer.isShowDetailTask)
     useEffect(() => {
@@ -82,9 +82,9 @@ const TodoList = () => {
                 <div className="row ms-4 me-4">
                     <div className="col-4 space--nowrap ms-5">
                         <span onClick={() => setCounterName(
-                            counterName == 1 ? 0 : counterName++
+                            counterName === 1 ? 0 : counterName++
                         )} style={{ fontSize: "11px" }} className="fw-bigBold fs-7">TÊN CÔNG VIỆC</span>
-                       {counterName==0? <AiOutlineSortAscending size={20}/>: <AiOutlineSortDescending size={20}/>}
+                        {counterName === 0 ? <AiOutlineSortAscending size={20} /> : <AiOutlineSortDescending size={20} />}
                     </div>
                     <div className="col-1"><span className="fw-bigBold fs-7 space--nowrap" style={{ fontSize: "11px" }}>NGƯỜI GIAO</span></div>
                     <div className="col-1"><span className="fw-bigBold fs-7 space--nowrap" style={{ fontSize: "11px" }}>NGƯỜI LÀM</span></div>
@@ -93,7 +93,7 @@ const TodoList = () => {
                     <div className="col-1 position-relative ms-2"><span className="fw-bigBold fs-7 position-absolute top-50 end-0 translate-middle-y" style={{ fontSize: "11px" }}>ĐÁNH GIÁ</span></div>
                 </div>
                 <div className="d-flex flex-column">
-                    {tasks.map((item, key) => <TaskItem key={key} name={item.title} id={item.taskId}
+                    {tasks.map((item, key) => <TaskItem key={key} name={item.title} id={item.id}
                         //  avartarCreater={item.employees.avatar} avartarEmployee={item.employees.avatar}
                         nameCreater={item.creatorName} nameEmployee={item.recieverName} status={item.statusName}
                     // properties={item.properties} 
