@@ -35,10 +35,10 @@ const TaskItem = (props) => {
         }
     }
     const getDetailTask = async () => {
-        // const getDataDetailTask = todoListAction.getTaskDetailRequest(props.id)
-        // dispacth(getDataDetailTask)
-        // const showDetailTask = todoListAction.showDetailTask()
-        // dispacth(showDetailTask)
+        const getDataDetailTask = todoListAction.getTaskDetailRequest(props.id)
+        dispacth(getDataDetailTask)
+        const showDetailTask = todoListAction.showDetailTask()
+        dispacth(showDetailTask)
     }
     // show more option for every task
     const showMoreOption = (event) => {

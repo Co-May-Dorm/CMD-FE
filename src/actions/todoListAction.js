@@ -83,19 +83,6 @@ export const addItemNeedFilter = (item) => {
 // export const showTimeStartNewTask = () => { return { type: types.SHOW_DATE_PICKER_START_NEW_TASK } }
 // //thay đổi trạng thái đóng mở của datepicker của ngày kết thúc của một công việc mới
 // export const showTimeCompleteNewTask = () => { return { type: types.SHOW_DATE_PICKER_COMPLETES_NEW_TASK } }
-// // tao cong viec moi
-// export const creatNewTask = (param) => {
-//     return () => {
-//         const newTask = async () => {
-//             try {
-//                 await todoListApi.newtTask(param)//newtTask() function using to load data task with data limited a page is 10 task
-//             } catch (error) {
-//                 console.log("Can not load...!", error)
-//             }
-//         }
-//         newTask()
-//     }
-// }
 // //tìm kiềm phòng ban
 // export const searchDepartment = (params) => {
 //     return (dispatch) => {
@@ -170,27 +157,6 @@ export const dispatchTasks = (tasks) => { return { type: types.DISPATCH_TASKS, t
 export const startDateNewTask = (date) => { return { type: types.START_DATE_NEW_TASK, date } }
 //Date and time end task when you create a new task
 export const endDateNewTask = (date) => { return { type: types.END_DATE_NEW_TASK, date } }
-//tool search by params
-export const search = (params) => {
-    return dispatch => {
-        const fetchSearchByParams = async () => {
-            try {
-                const response = await todoListApi.searchByParams(params[1])
-                switch (params[0]) {
-                    case "SEARCH_EMPLOYEES": {
-                        dispatch(saveEmployeeSearch(response))
-                        break;
-                    }
-                }
-            } catch (error) {
-                console.log("Can not load...!", error)
-            }
-        }
-        fetchSearchByParams()
-    }
-}
-// save data employees searched to store redux
-export const saveEmployeeSearch = (data) => { return { type: types.SAVE_LIST_EMPLOYEE_SEARCH, data } }
 // is show detail task
 export const showDetailTask = () => { return { type: types.IS_SHOW_DETAIL_TASK } }
 //get data detail a task
@@ -210,10 +176,74 @@ export const getTaskDetailRequest = (params) => {
 // dispatch detail task
 export const dispatchTaskDetail = (task) => { return { type: types.DISPATCH_TASK_DETAIL, task } }
 //get position modal option task
-export const getPositionModalTask =(position)=>{return {type: types.GET_POSITION_MODAL_OPTION_TASK, position}}
+export const getPositionModalTask = (position) => { return { type: types.GET_POSITION_MODAL_OPTION_TASK, position } }
 // set so trang hien tai 
 export const pageCurrent = (page) => { return { type: types.PAGE_CURRENT, page } }
 //Date and time start when you filter tasks
 export const startDateFilterTasks = (date) => { return { type: types.START_DATE_FILTER, date } }
 //Date and time end when you filter tasks
 export const endDateFilterTasks = (date) => { return { type: types.END_DATE_FILTER, date } }
+//Search creator 
+export const searchCreator = (params) => {
+    return (dispatch) => {
+        const fetchSearchByParams = async () => {
+            try {
+                const response = await todoListApi.searchByParams(params)
+                dispatch(dispatchSearchCreator(response))
+            } catch (error) {
+                console.log("Can not load...!", error)
+            }
+        }
+        fetchSearchByParams()
+    }
+}
+// dispatch employees searched to store reducer
+export const dispatchSearchCreator = (data) => { return { type: types.DISPATCH_CREATOR_SEARCH, data } }
+//Search list employees 
+export const searchEmployee = (params) => {
+    return (dispatch) => {
+        const fetchSearchByParams = async () => {
+            try {
+                const response = await todoListApi.searchByParams(params.request)
+                switch (params.typeSearch) {
+                    case types.DISPATCH_CREATOR_SEARCH: {
+                        dispatch(dispatchCreator(response))
+                        break;
+                    }
+                    case types.DISPATCH_EMPLOYEE_SEARCH: {
+                        dispatch(dispatchSearchEmployees(response))
+                        break;
+                    }
+                    case types.DISPATCH_RELATED_OBJECT: {
+                        dispatch(dispatchRelatedObject(response))
+                        break;
+                    }
+
+                }
+            } catch (error) {
+                console.log("Can not load...!", error)
+            }
+        }
+        fetchSearchByParams()
+    }
+}
+// dispatch employees searched to store reducer
+export const dispatchSearchEmployees = (data) => { return { type: types.DISPATCH_EMPLOYEE_SEARCH, data } }
+// dispatch creator searched to store reducer
+export const dispatchCreator = (data) => { return { type: types.DISPATCH_CREATOR_SEARCH, data } }
+// dispatch creator related object searched to store reducer
+export const dispatchRelatedObject = (data) => { return { type: types.DISPATCH_RELATED_OBJECT, data } }
+// create new task
+export const creatNewTask = (param) => {
+    return () => {
+        const newTask = async () => {
+            try {
+                await todoListApi.newTask(param)
+            } catch (error) {
+                console.log("Can not load...!", error)
+            }
+        }
+        newTask()
+    }
+}
+

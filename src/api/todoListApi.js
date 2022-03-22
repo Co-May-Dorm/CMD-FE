@@ -4,7 +4,7 @@ const baseUrl = "/tasks"
 const todoListApi = {
     //get detail a task
     getDetailTask: async (params) => {
-        let url = `${baseUrl}?id=${params}`;
+        let url = `${baseUrl}/${params}`;
         return await axiosClient.get(url)
     },
     getTasks: async (params) => {
@@ -51,11 +51,15 @@ const todoListApi = {
     },
     //search by params
     searchByParams: (params) => {
-        let url = `/${params.object}?${params.contain}=${params.key}&_limit=10&_page=${params.page}`;
-        return axiosClient.get(url,{params})
+        let reqSearch="";
+        params.mapSearch.forEach(element => {
+            reqSearch+=`${element.key}=${element.value}`
+        });
+        let url = `/${params.object}?${reqSearch}&page=${params.page}`;
+        return axiosClient.get(url)
     },
-    newtTask: (params) => {
-        const url = "/tasks"
+    newTask: (params) => {
+        const url = "/tasks/add"
         axiosClient.post(url, params).then(q=>console.log(q))
     }
 

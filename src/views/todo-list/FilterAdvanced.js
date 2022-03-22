@@ -5,40 +5,35 @@ import { useRef, useState } from 'react'
 import { useDispatch, useSelector } from "react-redux"
 import DateInput from "./DateInput";
 import * as constants from "../../constants/ActionTask"
+import * as todoListAction from "../../actions/todoListAction"
+import InputSearch from "./InputSearch"
 const nameButtonStatus = ["Mới nhất", "Cũ nhất", "Đang làm", "Hoàn thành", "Ưu tiên", "Chờ xác nhận", "Qúa hạn", "Đã hủy"]
+const namePrioritized = ["Thấp", "Bình thường", "Ưu tiên", "Rất ưu tiên"]
 const FilterAdvanced = (props) => {
     const dispacth = useDispatch()
-    const days = useRef(null)
     const [showDateStartFilter, setShowDateStartFilter] = useState(false)
     const [showDateEndFilter, setShowDateEndFilter] = useState(false)
     const [showTypeTasks, setShowTypeTasks] = useState(false)
-    const [typeTask, setTypeTask] = useState(null)
+    const [typeTask, setTypeTask] = useState("")
+    const [showPrioritizedTasks, setShowPrioritizedTasks] = useState(false)
+    const [prioritizedTask, setPrioritizedTask] = useState("")
+    const [showCreator, setShowCreator] = useState(false)
+    const [showEmployee, setShowEmployee] = useState(false)
+    const [showRelatedObject, setShowRelatedObject] = useState(false)
+    const [creator, setCreator] = useState({})
+    const [employee, setEmployee] = useState({})
+    const [relatedObject, setRelatedObject] = useState({})
     const startDateFilter = useSelector(state => state.TodoListReducer.startDateFilterTask)
     const endDateFilter = useSelector(state => state.TodoListReducer.endDateFilterTask)
+    const listCreator = useSelector(state => state.TodoListReducer.listCreatorSearch)
+    const listEmployee = useSelector(state => state.TodoListReducer.listEmployeeSearch)
+    const listRelatedObject = useSelector(state => state.TodoListReducer.relatedObjectSearch)
     // showTypeTask: false, typeTask: null, showPriority: false, typePriority: null
     // , showStatus: false, typeStatus: [], showAssignedPerson: false, employeeCurrent: null, showInvolveEployee: false, involveEployee: []
     // , showCreator: false, creator: null, showDepartment: false, department: null
-    // showStartDateInput = () => {
-    //     this.props.showDateInputStart()
-    // }
-    // showEndDateInput = () => {
-    //     this.props.showDateInputEnd()
-    // }
-    // closeForm = () => {
-    //     this.props.isShowFilterAdvanced()
-    // }
-    // showTypeTask = () => this.setState({ showTypeTask: !this.state.showTypeTask })
-    // changeTypeTask = (type) => this.setState({ typeTask: type })
-    // showPriority = () => this.setState({ showPriority: !this.state.showPriority })
-    // changeTypePriority = (status) => this.setState({ typePriority: status })
-    // showStatus = () => this.setState({ showStatus: !this.state.showStatus })
     // changeStatus = async (status) => {
     //     await this.props.addItemFilter(status)
     // }
-    // showAssignedPerson = () => this.setState({ showAssignedPerson: !this.state.showAssignedPerson })
-    // showInvolveEployee = () => this.setState({ showInvolveEployee: !this.state.showInvolveEployee })
-    // showCreator = () => this.setState({ showCreator: !this.state.showCreator })
-    // showDepartment = () => this.setState({ showDepartment: !this.state.showDepartment })
     // //chọn nhân viên liên quan được chọn
     // selectedInvolveEployee = (item) => this.setState({ involveEployee: this.state.involveEployee.concat(item) })
     // //dung de render danh sach nhan vien khi nhap vao o tim kiem nhan vien
@@ -96,12 +91,6 @@ const FilterAdvanced = (props) => {
     //         </span>
     //     }
     // }
-    // //chọn phần tử được chọn trong danh sách nhân viên
-    // selectedItem = (item) => this.setState({ employeeCurrent: item })
-    // //chọn phần tử được chọn trong danh sách nhân viên
-    // selectedDepartment = (item) => this.setState({ department: item })
-    // //chọn phần tử được chọn trong danh sách nhân viên
-    // selectedCreator = (item) => this.setState({ creator: item })
     // //dung de lay thong tin tim kiem moi khi noi dung trong input thay doi
     // changeInforSearch = (e) => {
     //     this.props.searchListEmployee({ object: "employees", contain: "nameEmployee_like", key: e.target.value })
@@ -123,15 +112,71 @@ const FilterAdvanced = (props) => {
     //     this.props.getTaskByFilterAdvanced(data)
     //     this.closeForm()
     // }
-    const s = (e) => {
-        console.log(e)
-        console.log(days)
-        const d = days.current.scrollHeight
-        console.log(d)
+    const offDropdow = (name) => {
+
     }
-    const clickTypeTask=(typeTask)=>{
+    //this function to set show type task and set type task
+    const clickTypeTask = (typeTask) => {
         setShowTypeTasks()
         setTypeTask(typeTask)
+    }
+    //this function to set show prioritized and set prioritized
+    const clickPrioritized = (prioritizedTask) => {
+        setShowPrioritizedTasks()
+        setPrioritizedTask(prioritizedTask)
+    }
+    // this function to set show creator and list creator searched
+    const clickItemSearch = (creator, typeClick) => {
+        switch (typeClick) {
+            case constants.CLICK_ITEM_CREATOR_SEARCH: {
+                setShowCreator()
+                setCreator(creator)
+                break
+            }
+            case constants.CLICK_ITEM_EMPLOYEE_SEARCH: {
+                setShowEmployee()
+                setEmployee(creator)
+                break;
+            }
+            case constants.CLICK_ITEM_RELATED_OBJECT: {
+                setShowRelatedObject()
+                setRelatedObject(creator)
+                break
+            }
+        }
+    }
+    // search employees
+    const searchEmployee = (event, type) => {
+        const e = event.target.value
+        // check what type search and set state employee of type that search
+        switch (type) {
+            case constants.DISPATCH_CREATOR_SEARCH: {
+                setCreator(e)
+                break;
+            }
+            case constants.DISPATCH_EMPLOYEE_SEARCH: {
+                setEmployee(e)
+                break
+            }
+            case constants.DISPATCH_RELATED_OBJECT: {
+                setRelatedObject(e)
+                break;
+            }
+        }
+        const req = {
+            "object": "employees",
+            "mapSearch": [
+                {
+                    "key": "name",
+                    "value": e
+                }
+            ],
+            "page": 1
+        }
+        const delaySearch = (setTimeout(() => {
+            dispacth(todoListAction.searchEmployee({ "typeSearch": type, "request": req }))
+        }, 1000))
+        return () => clearTimeout(delaySearch)
     }
     return (
         <>
@@ -153,14 +198,14 @@ const FilterAdvanced = (props) => {
                             <h3>Thời gian bắt đầu:</h3>
                             <div className="form-control d-flex flex-row position-relative">
                                 <input readOnly value={startDateFilter} onClick={() => setShowDateStartFilter(!showDateStartFilter)} className="styleInp"></input>
-                                <IoMdArrowDropdown className={`${0 ? "rolated-top" : "rolated-bottom"}`} size={25} />
+                                {/* <IoMdArrowDropdown className={`${showDateStartFilter ? "rolated-top" : "rolated-bottom"}`} size={25} /> */}
                             </div>
                         </div>
                         <div className="col-sm">
                             <h3>Dự kiến kết thúc:</h3>
                             <div className="form-control d-flex flex-row">
                                 <input readOnly onClick={() => setShowDateEndFilter(!showDateEndFilter)} value={endDateFilter} className="styleInp"></input>
-                                <IoMdArrowDropdown className={`${0 ? "rolated-top" : "rolated-bottom"}`} size={25} />
+                                {/* <IoMdArrowDropdown className={`${showDateEndFilter ? "rolated-top" : "rolated-bottom"}`} size={25} /> */}
                             </div>
                         </div>
                     </div>
@@ -169,55 +214,8 @@ const FilterAdvanced = (props) => {
                             <h3>Loại công việc:</h3>
                             <div className="form-control d-flex flex-row position-relative">
                                 <input value={typeTask} onClick={() => setShowTypeTasks(!showTypeTasks)} readOnly className="styleInp"></input>
-                                <IoMdArrowDropdown className={`${0 ? "rolated-top" : "rolated-bottom"}`} size={25} />
-                                {showTypeTasks ? <div className="form-control d-flex flex-row position-absolute top-100 start-0 w-100 rounded mt-2" style={{ zIndex: 1 }}>
-                                    {/* <div className="col position-relative">
-                                        <div className="rounded position-absolute top-50 start-50 translate-middle w-75 h-25 bg-teal" style={{ opacity: 0.6 }}></div>
-                                        <ul className="list">
-                                            <li>a</li>
-                                            <li>s</li>
-                                            <li>s</li>
-                                            <li>s</li>
-                                            <li>s</li>
-                                            <li>sachs</li>
-                                            <li>s</li>
-                                            <li>s</li>
-                                            <li>a</li>
-                                            <li>s</li>
-                                            <li>s</li>
-                                            <li>s</li>
-                                            <li>s</li>
-                                            <li>sachs</li>
-                                            <li>s</li>
-                                            <li>s</li>
-                                        </ul>
-                                    </div>
-                                    <div className="col position-relative">
-                                        <div className="rounded position-absolute top-50 start-50 translate-middle w-75 h-25 bg-teal" style={{ opacity: 0.3 }}></div>
-                                        <ul className="list" ref={days} onWheel={s}>
-                                            <li>a</li>
-                                            <li>s</li>
-                                            <li>s</li>
-                                            <li>s</li>
-                                            <li>s</li>
-                                            <li style={{ top: "50px" }}>sachs</li>
-                                            <li>s</li>
-                                            <li>s</li>
-                                        </ul>
-                                    </div>
-                                    <div className="col position-relative">
-                                        <div className="rounded position-absolute top-50 start-50 translate-middle w-75 h-25 bg-teal" style={{ opacity: 0.3 }}></div>
-                                        <ul className="list">
-                                            <li>a</li>
-                                            <li>s</li>
-                                            <li>s</li>
-                                            <li>s</li>
-                                            <li>s</li>
-                                            <li>sachs</li>
-                                            <li>s</li>
-                                            <li>s</li>
-                                        </ul>
-                                    </div> */}
+                                <IoMdArrowDropdown className={`${showTypeTasks ? "rolated-top" : "rolated-bottom"}`} size={25} />
+                                {showTypeTasks ? <div className="form-control d-flex flex-row position-absolute top-100 start-0 w-100 rounded mt-1" style={{ zIndex: 1 }}>
                                     <div className="col" id="listTypeTask">
                                         <ul className="list">
                                             {nameButtonStatus.map((item, id) => <li key={id} onClick={() => clickTypeTask(item)}>{item}</li>)}
@@ -228,35 +226,34 @@ const FilterAdvanced = (props) => {
                         </div>
                         <div className="col-sm">
                             <h3>Độ ưu tiên:</h3>
-                            <div className="form-control d-flex flex-row">
-                                <input readOnly className="styleInp"></input>
-                                <IoMdArrowDropdown className={`${0 ? "rolated-top" : "rolated-bottom"}`} size={25} />
+                            <div className="form-control d-flex flex-row position-relative">
+                                <input value={prioritizedTask} onClick={() => setShowPrioritizedTasks(!showPrioritizedTasks)} readOnly className="styleInp"></input>
+                                <IoMdArrowDropdown className={`${showPrioritizedTasks ? "rolated-top" : "rolated-bottom"}`} size={25} />
+                                {showPrioritizedTasks ? <div className="form-control d-flex flex-row position-absolute top-100 start-0 w-100 rounded mt-1" style={{ zIndex: 1 }}>
+                                    <div className="col" id="listTypeTask">
+                                        <ul className="list">
+                                            {namePrioritized.map((item, id) => <li key={id} onClick={() => clickPrioritized(item)}>{item}</li>)}
+                                        </ul>
+                                    </div>
+                                </div> : null}
                             </div>
                         </div>
                     </div>
                     <div className="row mt-2 mb-2">
-                        <div className="col">
-                            <h3>Người giao:</h3>
-                            <div className="form-control d-flex flex-row">
-                                <input readOnly className="styleInp"></input>
-                            </div>
-                        </div>
+                        <InputSearch
+                            nameInput="Người giao" value={creator.name} callBackSetState={setShowCreator} callBackSearch={searchEmployee} constant={constants.DISPATCH_CREATOR_SEARCH}
+                            state={showCreator} list={listCreator} typeClick={constants.CLICK_ITEM_CREATOR_SEARCH}
+                            callBackClick={clickItemSearch} />
                     </div>
                     <div className="row mt-2 mb-2">
-                        <div className="col">
-                            <h3>Người được giao:</h3>
-                            <div className="form-control d-flex flex-row">
-                                <input readOnly className="styleInp"></input>
-                            </div>
-                        </div>
+                        <InputSearch nameInput="Người được giao" value={employee.name} callBackSetState={setShowEmployee} callBackSearch={searchEmployee} constant={constants.DISPATCH_EMPLOYEE_SEARCH}
+                            state={showEmployee} list={listEmployee} typeClick={constants.CLICK_ITEM_EMPLOYEE_SEARCH}
+                            callBackClick={clickItemSearch} />
                     </div>
                     <div className="row mt-2 mb-2">
-                        <div className="col">
-                            <h3>Đối tượng liên quan:</h3>
-                            <div className="form-control d-flex flex-row">
-                                <input readOnly className="styleInp"></input>
-                            </div>
-                        </div>
+                        <InputSearch nameInput="Đối tượng liên quan" value={relatedObject.name} callBackSetState={setShowRelatedObject} callBackSearch={searchEmployee} constant={constants.DISPATCH_RELATED_OBJECT}
+                            state={showRelatedObject} list={listRelatedObject} typeClick={constants.CLICK_ITEM_RELATED_OBJECT}
+                            callBackClick={clickItemSearch} />
                     </div>
                     <div className="row mt-2 mb-2">
                         <div className="col">
@@ -276,7 +273,6 @@ const FilterAdvanced = (props) => {
                     </div>
                 </Modal.Body>
             </Modal>
-
             <DateInput typenamedate={constants.START_DATE_FILTER} show={showDateStartFilter} onHide={() => setShowDateStartFilter(false)} />
             <DateInput typenamedate={constants.END_DATE_FILTER} show={showDateEndFilter} onHide={() => setShowDateEndFilter(false)} />
         </>
