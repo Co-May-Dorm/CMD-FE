@@ -165,9 +165,9 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                 }
                 console.log(data)
                 dispatch(addEmployeeRequest(data))
-                window.location.reload()
             }
             setVisible(false)
+            window.location.reload()
         }
     }
     //
@@ -393,7 +393,6 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                             </div>
                                         </>
                                     ) : null}
-
                                 </>
                             ) : null}
                         </Card.Body>
