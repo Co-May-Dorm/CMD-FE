@@ -73,7 +73,6 @@
   flex-direction: column;
   width: 100%; // Ensure `.modal-content` extends the full width of the parent `.modal-dialog`
   // counteract the pointer-events: none; in the .modal-dialog
-  height: 100%;
   color: $modal-content-color;
   pointer-events: auto;
   background-color: $modal-content-bg;
@@ -218,6 +217,22 @@
       .modal-footer {
         @include border-radius(0);
       }
+    }
+  }
+  @include media-breakpoint-down($breakpoint) {
+    .modal-fullheight#{$postfix} {
+      height: 100%;
+      margin: 0;
+
+      .modal-content {
+        height: 100%;
+        border: 0;
+      }
+
+      .modal-body {
+        overflow-y: auto;
+      }
+
     }
   }
 }

@@ -111,7 +111,8 @@ const FormSubmitRole = ({ visible, setVisible, role = null }) => {
     return (
         <>
             <Modal
-                fullscreen
+                className="modal-fullheight"
+                size="lg"
                 scrollable
                 show={visible}
                 onHide={() => setVisible(false)}

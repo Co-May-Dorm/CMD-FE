@@ -99,6 +99,7 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
     return (
         <>
             <Modal
+                className="modal-fullheight"
                 size="lg"
                 scrollable
                 show={visible}

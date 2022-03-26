@@ -115,11 +115,12 @@ const Positions = ({ visible, setVisible, department }) => {
         }
     }
     //
-    
+
     return (
         <>
             <Modal
-                fullscreen
+                className="modal-fullheight"
+                size="lg"
                 scrollable
                 show={visible}
                 onHide={() => setVisible(false)}
