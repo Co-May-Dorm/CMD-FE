@@ -39,7 +39,8 @@ const Roles = ({ visible, setVisible }) => {
     return (
         <>
             <Modal
-                fullscreen
+                className="modal-fullheight"
+                size="lg"
                 scrollable
                 show={visible}
                 onHide={() => setVisible(false)}

@@ -194,7 +194,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     return (
         <Modal
             size="lg"
-            className="h-100"
+            className="modal-fullheight"
             scrollable
             show={visible}
             onHide={() => setVisible(false)}
