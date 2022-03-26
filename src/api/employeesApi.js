@@ -18,7 +18,7 @@ const employeesApi = {
     },
     update: (data) => {
         const requestUrl = `${baseUrl}/edit`
-        return axiosClient.patch(requestUrl, data)
+        return axiosClient.put(requestUrl, data)
     },
     delete: (id) => {
         const requestUrl = `${baseUrl}/delete/${id}`

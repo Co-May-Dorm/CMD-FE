@@ -51,6 +51,8 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         if (employee?.id) {
             setInfo({
                 ...employee,
+                department: departments.find(dep => dep.id === employee.department.id),
+                positions: employee.positions[0],
                 user: (employee.user.enableLogin !== false) ? employee.user : { username: "" }
             })
         }
@@ -163,9 +165,9 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                 }
                 console.log(data)
                 dispatch(addEmployeeRequest(data))
+                window.location.reload()
             }
             setVisible(false)
-            window.location.reload()
         }
     }
     //
