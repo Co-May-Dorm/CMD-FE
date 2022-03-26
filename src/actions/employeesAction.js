@@ -33,7 +33,7 @@ export const addEmployeeRequest = (employee) => {
     return (dispatch) => {
         employeesApi.add(employee)
             .then(response => {
-                dispatch(addEmployee(response.data))
+                dispatch(addEmployee(response.data.data))
             })
             .catch(error => {
                 alert(error)

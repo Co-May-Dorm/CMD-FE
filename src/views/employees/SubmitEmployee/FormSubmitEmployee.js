@@ -13,6 +13,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         code: "",
         name: "",
         dateOfBirth: "",
+        gender: "",
         email: "",
         phoneNumber: "",
         department: {
@@ -164,6 +165,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                 dispatch(addEmployeeRequest(data))
             }
             setVisible(false)
+            window.location.reload()
         }
     }
     //
@@ -190,6 +192,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     return (
         <Modal
             size="lg"
+            className="h-100"
             scrollable
             show={visible}
             onHide={() => setVisible(false)}
@@ -249,6 +252,23 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                             onChange={handleInputChange}
                             required
                         />
+                        <Form.Control.Feedback type="invalid">
+                            Vui lòng nhập ngày sinh.
+                        </Form.Control.Feedback>
+                    </div>
+                    <hr />
+                    <div className="mb-3">
+                        <Form.Label htmlFor="gender">Giới tính:</Form.Label>
+                        <Form.Select
+                            type="date"
+                            name="gender"
+                            value={info.gender}
+                            onChange={handleInputChange}
+                            required
+                        >
+                            <option value="0">Nữ</option>
+                            <option value="1">Nam</option>
+                        </Form.Select>
                         <Form.Control.Feedback type="invalid">
                             Vui lòng nhập ngày sinh.
                         </Form.Control.Feedback>
