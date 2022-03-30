@@ -5,11 +5,6 @@ import DeleteEmployee from './DeleteEmployee'
 import EditEmployee from './SubmitEmployee/EditEmployee'
 
 const EmployeeItem = ({ employee }) => {
-    const standardizingName = (str) => {
-        const convertToArray = str.toLowerCase().split(' ')
-        const result = convertToArray.map(val => val.replace(val.charAt(0), val.charAt(0).toUpperCase()))
-        return result.join(' ');
-    }
     const showDate = () => {
         const dateOfBirth = new Date(employee.dateOfBirth)
         return "" + (dateOfBirth.getDate() < 10 ? "0" : "") + dateOfBirth.getDate() + "/" + (dateOfBirth.getMonth() + 1 < 10 ? "0" : "") + (dateOfBirth.getMonth() + 1) + "/" + dateOfBirth.getFullYear()
@@ -20,7 +15,7 @@ const EmployeeItem = ({ employee }) => {
             {/* Giao diện hiển thị khi >= xl */}
             <div className="d-lg-flex d-none flex-nowrap item justify-content-evenly align-items-center mb-3">
                 <div className="item-label" />
-                <div className="col-2 text-break" style={{ paddingLeft: "3rem" }}>{standardizingName(employee.name)}</div>
+                <div className="col-2 text-break" style={{ paddingLeft: "3rem" }}>{employee.name}</div>
                 <div className="col-1 text-break">{showDate()}</div>
                 <div className="col-3 text-break">{employee.email}</div>
                 <div className="col-1 text-break">{employee.phoneNumber}</div>
@@ -50,7 +45,7 @@ const EmployeeItem = ({ employee }) => {
                         Họ và tên:
                     </Col>
                     <Col className="text-break">
-                        {standardizingName(employee.name)}
+                        {employee.name}
                     </Col>
                 </Row>
                 <Row className="mb-3">
