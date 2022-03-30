@@ -394,6 +394,7 @@ $box-shadow: 0 0rem 0.5rem rgba($blue, 0.15) !default;
 $box-shadow-sm: 0 0.125rem 0.25rem rgba($black, 0.075) !default;
 $box-shadow-lg: 0 1rem 3rem rgba($black, 0.175) !default;
 $box-shadow-inset: inset 0 1px 2px rgba($black, 0.075) !default;
+$box-shadow-bt:  0px 5px 0px 0px #36ACE8 !default;
 // scss-docs-end box-shadow-variables
 
 $component-active-color: $white !default;
@@ -464,6 +465,8 @@ $h5-font-size: $font-size-base + 0.2 !default;
 $h6-font-size: $font-size-base + 0.15 !default;
 $h7-font-size: $font-size-base + 0.1 !default;
 $h8-font-size: $font-size-base !default;
+$h9-font-size: $font-size-base - .125 !default;
+$h10-font-size : $font-size-base - 0.25 !default;
 // scss-docs-end font-variables
 
 // scss-docs-start font-sizes
@@ -476,6 +479,8 @@ $font-sizes: (
   6: $h6-font-size,
   7: $h7-font-size,
   8: $h8-font-size,
+  9: $h9-font-size,
+  10: $h10-font-size,
 ) !default;
 // scss-docs-end font-sizes
 

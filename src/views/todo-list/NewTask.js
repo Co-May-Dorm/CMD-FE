@@ -78,16 +78,7 @@ const NewTask = (props) => {
         return els.map((item) => item)
     }
     //add new task
-    const addNewTask = () => {
-        const formData = new FormData();
-        formData.append("code", "89")
-        formData.append("creator_id", 1)
-        formData.append("receiver_id", employee.id)
-        formData.append("status_id", "1")
-        formData.append("title", title)
-        formData.append("description", description)
-        formData.append("createDate", startNewDateTask)
-        formData.append("finishDate", endNewDateTask)
+    const addNewTask = async () => {
         const data = {
             "code": `99`,
             "creator_id": 1,
@@ -98,7 +89,7 @@ const NewTask = (props) => {
             "createDate": startNewDateTask,
             "finishDate": endNewDateTask
         }
-        dispacth(todoListAction.creatNewTask(data))
+       console.log(await dispacth(todoListAction.creatNewTask(data)))
     }
     //processing actions of components select list dropdown with input
     useEffect(() => {

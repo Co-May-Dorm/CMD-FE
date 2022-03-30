@@ -60,7 +60,7 @@ const todoListApi = {
     },
     newTask: (params) => {
         const url = "/tasks/add"
-        axiosClient.post(url, params).then(q=>console.log(q))
+        axiosClient.post(url, params).then(q=>q)
     }
 
 }

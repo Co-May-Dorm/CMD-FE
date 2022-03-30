@@ -47,8 +47,9 @@ $utilities: map-merge(
         null: $box-shadow,
         sm: $box-shadow-sm,
         lg: $box-shadow-lg,
+        button: $box-shadow-bt,
         none: none,
-      )
+        )
     ),
     // scss-docs-end utils-shadow
     // scss-docs-start utils-position

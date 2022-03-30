@@ -243,7 +243,8 @@ export const creatNewTask = (param) => {
                 console.log("Can not load...!", error)
             }
         }
-        newTask()
+        newTask().then(q=>q)
     }
 }
+
 
