@@ -38,3 +38,29 @@
 .icon:hover {
     display: block;
 }
+.modalNonTop {
+    .modal-dialog-scrollable {
+        margin-top: 0;
+        .big-hight {
+            max-height: none;
+        }
+    }
+}
+.margin-center-non-left {
+    margin: auto;
+    margin-left: 0;
+}
+.margin-center {
+    margin: auto;
+}
+.margin-center-non-right {
+    margin: auto;
+    margin-right: 0;
+}
+.noHover {
+    pointer-events: none;
+}
+.btn-outline-active :checked {
+    color: #4ddbb0;
+    background-color: #4ddbb0;
+}
