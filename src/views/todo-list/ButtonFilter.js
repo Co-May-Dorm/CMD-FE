@@ -16,22 +16,22 @@ class ButtonFilter extends Component {
     }
     // button duoc kich hoat chua
     active = async () => {
-        this.setState({ active: !this.state.active })
-        await this.props.addItemFilter(this.props.nameButtonFilter)
-        let data
-        if (this.state.active) {
-            /*
-            Neu no duoc click thi lay nhung item can loc co trng store sau do them cai item hien tai
-            */
-            let filter = this.props.status.itemNeedFilter.concat(this.props.nameButtonFilter)
-            // data = { page: this.props.status.numberCurrent, filter }
-            data = { page: 1, filter, advanced:[] }
-        } else {
-            let filter = this.props.status.itemNeedFilter.filter(item => item !== this.props.nameButtonFilter)
-            // data = { page: this.props.status.numberCurrent, filter }
-            data = { page: 1, filter, advanced:[] }
-        }
-        this.props.getTaskByPage(data)
+        // this.setState({ active: !this.state.active })
+        // // await this.props.addItemFilter(this.props.nameButtonFilter)
+        // let data
+        // if (this.state.active) {
+        //     /*
+        //     Neu no duoc click thi lay nhung item can loc co trng store sau do them cai item hien tai
+        //     */
+        //     let filter = this.props.status.itemNeedFilter.concat(this.props.nameButtonFilter)
+        //     // data = { page: this.props.status.numberCurrent, filter }
+        //     data = { page: 1, filter, advanced:[] }
+        // } else {
+        //     let filter = this.props.status.itemNeedFilter.filter(item => item !== this.props.nameButtonFilter)
+        //     // data = { page: this.props.status.numberCurrent, filter }
+        //     data = { page: 1, filter, advanced:[] }
+        // }
+        // this.props.getTaskByPage(data)
     }
     // lay so cong viec theo muc cua rieng no
     getNumberFilterOwner = () => {
@@ -97,7 +97,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        addItemFilter: (item) => { return dispatch(action.addItemNeedFilter(item)) },
+        // addItemFilter: (item) => { return dispatch(action.addItemNeedFilter(item)) },
         getTaskByPage: (page) => { return dispatch(action.dispatchLimitedTaskRequest(page)) },
     }
 }

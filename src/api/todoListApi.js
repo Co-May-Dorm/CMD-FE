@@ -51,16 +51,20 @@ const todoListApi = {
     },
     //search by params
     searchByParams: (params) => {
-        let reqSearch="";
+        let reqSearch = "";
         params.mapSearch.forEach(element => {
-            reqSearch+=`${element.key}=${element.value}`
+            reqSearch += `${element.key}=${element.value}`
         });
         let url = `/${params.object}?${reqSearch}&page=${params.page}`;
         return axiosClient.get(url)
     },
     newTask: (params) => {
         const url = "/tasks/add"
-        axiosClient.post(url, params).then(q=>q)
+        axiosClient.post(url, params).then(q => q)
+    },
+    filterTask: (params) => {
+        const url = "/tasks/status"
+        return axiosClient.post(url, params)
     }
 
 }

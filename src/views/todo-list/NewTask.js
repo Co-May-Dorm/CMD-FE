@@ -58,7 +58,7 @@ const NewTask = (props) => {
 
     //set color prioritize level 
     const setColorPrioritizeLevel = (index) => {
-        const arrayColor = ["#2F6BB1", "#0DD2DE", "#3CEBC1", "#75FFD6"]
+        const arrayColor = ["#75FFD6", "#3CEBC1", "#0DD2DE", "#2F6BB1"]
         const nameLev = ["Thấp", "Bình thường", "Ưu tiên", "Rất ưu tiên"]
         let els = []
         for (let i = 0; i <= index; i++) {
@@ -89,7 +89,7 @@ const NewTask = (props) => {
             "createDate": startNewDateTask,
             "finishDate": endNewDateTask
         }
-       console.log(await dispacth(todoListAction.creatNewTask(data)))
+        console.log(await dispacth(todoListAction.creatNewTask(data)))
     }
     //processing actions of components select list dropdown with input
     useEffect(() => {
@@ -246,9 +246,10 @@ const NewTask = (props) => {
         <>
             <Modal scrollable
                 {...props}
-                size="lg    "
+                size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
-                centered
+                contentClassName="big-hight"
+                className="modalNonTop"
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter" >
@@ -256,6 +257,7 @@ const NewTask = (props) => {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+
                     <div>
                         <div className="row ms-5 me-5 mb-2">
                             <span className="fw-bold pe-0 ps-0 fs-4">Tên công việc</span>

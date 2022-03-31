@@ -11,7 +11,7 @@ let initialState = {
     // , nameTaskSearch:null
     tasks: [], totalTask: 0, startDateNewTask: null, endDateNewTask: null, listCreatorSearch: [],
     taskDetail: {}, posionModalOption: {}, pageCurrent: 1, filter: {}, startDateFilterTask: null, endDateFilterTask: null
-    , listEmployeeSearch: [], relatedObjectSearch: []
+    , listEmployeeSearch: [], relatedObjectSearch: [], collectionStatusFilter: []
 };
 // const todoListReducer = (state = initialState, action) => {
 //     switch (action.type) {
@@ -174,24 +174,40 @@ const todoListReducer = (state = initialState, action) => {
                 return { ...state, listCreatorSearch: result.employees }
             }
         }
-          // dispatch creator search when search employee
+        // dispatch creator search when search employee
         case types.DISPATCH_EMPLOYEE_SEARCH: {
             const result = action.data.data.data
             if (Object.keys(result).length > 0) {
                 return { ...state, listEmployeeSearch: result.employees }
             }
         }
-          // dispatch creator search when search related object
+        // dispatch creator search when search related object
         case types.DISPATCH_RELATED_OBJECT: {
             const result = action.data.data.data
             if (Object.keys(result).length > 0) {
                 return { ...state, relatedObjectSearch: result.employees }
             }
         }
+        // add status filter or remove status 
+        case types.ADD_STATUS_FILTER: {
+            const item = action.item
+            if (!state.collectionStatusFilter.includes(item)) {
+                return { ...state, collectionStatusFilter: [action.item, ...state.collectionStatusFilter] }
+            }
+            else {
+                return { ...state, collectionStatusFilter: [...state.collectionStatusFilter.filter(index => item !== index)] }
+            }
+        }
+        // save task filter to reducer store
+        case types.SAVE_TASK_FILTER: {
+            return {
+                ...state, tasks: action.tasks.data.data.tasks,
+                totalTask: action.tasks.data.data.pagination.totalItem
+            };
+        }
+
         default:
             return state;
     }
-
 }
-
 export default todoListReducer;

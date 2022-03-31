@@ -34,10 +34,6 @@ export const dispatchLimitedTaskRequest = (data) => {
 // export const dispatchAllTask = (tasks) => { return { type: types.DISPATCH_ALL_TASK, tasks } }
 // // kiem tra da duoc render xong chua
 // export const isRenderDone = () => { return { type: types.IS_RENDER_DONE } }//sua ngay 11/11/2021 tyqe sang type
-// //them item vao mang cac item can loc
-export const addItemNeedFilter = (item) => {
-    //  return { type: types.ADD_ITEM_NEED_FILTER, item }
-}
 // // set so trang hien tai 
 // export const numberPageCurrent = (numberPage) => { return { type: types.NUMBER_PAGE_CURRENT, numberPage } }
 // // se thay doi trang thai đóng mở của form filter advanced
@@ -243,8 +239,34 @@ export const creatNewTask = (param) => {
                 console.log("Can not load...!", error)
             }
         }
-        newTask().then(q=>q)
+        newTask().then(q => q)
     }
 }
-
-
+// add item to list status filter
+export const addStatusFilter = (item) => {
+    return { type: types.ADD_STATUS_FILTER, item }
+}
+// dispatch filter 
+export const dispatchFilter = params => {
+    return (dispatch) => {
+        const filterTask = async () => {
+            try {
+                // console.log(params.statusIds.length)
+                if (params.statusIds.length == 0) {
+                    console.log("đúng")
+                    dispatch(dispatchTaskRequest({ "page": 1, "filter": {} }))
+                } else {
+                    const reponse = await todoListApi.filterTask(params)
+                    dispatch(saveTaskFilter(reponse))
+                }
+            } catch (error) {
+                console.log("Can not load...!", error)
+            }
+        }
+        filterTask()
+    }
+}
+//save task filtered to reducer store
+export const saveTaskFilter = (tasks) => {
+    return { type: types.SAVE_TASK_FILTER, tasks }
+}
