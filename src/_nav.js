@@ -12,8 +12,8 @@ const _nav = [
         to: '/requests',
     },
     {
-        name: 'Nhân viên',
-        to: '/employees',
+        name: 'Sinh viên',
+        to: '/students',
     }
 ]
 

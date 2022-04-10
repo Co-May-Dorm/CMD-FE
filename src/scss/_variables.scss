@@ -824,8 +824,8 @@ $form-select-disabled-bg: $gray-200 !default;
 $form-select-disabled-border-color: $input-disabled-border-color !default;
 $form-select-bg-position: right $form-select-padding-x center !default;
 $form-select-bg-size: 16px 12px !default; // In pixels because image dimensions
-$form-select-indicator-color: $gray-800 !default;
-$form-select-indicator: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='#{$form-select-indicator-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/></svg>") !default;
+$form-select-indicator-color: $body-color !default;
+$form-select-indicator: url("data:image/svg+xml,<svg width='15' height='9' viewBox='0 0 15 9' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M7.45132 8.59753L0.71522 0.201196L14.1874 0.201195L7.45132 8.59753Z' fill='#{$body-color}' fill-opacity='0.5'/></svg>") !default;
 
 $form-select-feedback-icon-padding-end: $form-select-padding-x * 2.5 + $form-select-indicator-padding !default;
 $form-select-feedback-icon-position: center right $form-select-indicator-padding !default;
@@ -1024,8 +1024,8 @@ $dropdown-divider-bg: $dropdown-border-color !default;
 $dropdown-divider-margin-y: $spacer * 0.5 !default;
 $dropdown-box-shadow: $box-shadow !default;
 
-$dropdown-link-color: $gray-900 !default;
-$dropdown-link-hover-color: shade-color($gray-900, 10%) !default;
+$dropdown-link-color: $body-color !default;
+$dropdown-link-hover-color: shade-color($body-color, 10%) !default;
 $dropdown-link-hover-bg: $gray-200 !default;
 
 $dropdown-link-active-color: $component-active-color !default;

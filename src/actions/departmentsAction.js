@@ -84,3 +84,24 @@ export const deleteDepartmentRequest = (id) => {
     }
 }
 //
+
+// Xóa chức vụ trong phòng ban
+export const deletePosition = (id) => {
+    return {
+        type: actions.DELETE_DEPARTMENT,
+        payload: id
+    }
+}
+export const deletePositionRequest = (id) => {
+    return (dispatch) => {
+        departmentsApi.deletePosition(id)
+        .then(() => {
+            dispatch(deletePosition(id))
+        })
+        .catch(error => {
+            alert(error)
+            console.log(error)
+        })
+    }
+}
+//

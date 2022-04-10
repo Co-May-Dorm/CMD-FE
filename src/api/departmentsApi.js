@@ -12,15 +12,19 @@ const departmentsApi = {
         return axiosClient.get(requestUrl)
     },
     add: (data) => {
-        const requestUrl = `${baseUrl}`
+        const requestUrl = `${baseUrl}/add`
         return axiosClient.post(requestUrl, data)
     },
     update: (data) => {
-        const requestUrl = `${baseUrl}/${data.id}`
+        const requestUrl = `${baseUrl}/edit`
         return axiosClient.patch(requestUrl, data)
     },
     delete: (id) => {
         const requestUrl = `${baseUrl}/${id}`
+        return axiosClient.delete(requestUrl)
+    },
+    deletePosition: (id) => {
+        const requestUrl = `/positions/delete/${id}`
         return axiosClient.delete(requestUrl)
     }
 }

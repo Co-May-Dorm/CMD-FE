@@ -65,17 +65,17 @@ export const updateEmployeeRequest = (employee) => {
 //
 
 // Xóa nhân viên
-export const deleteEmployee = (id) => {
+export const deleteEmployee = (employeeId) => {
     return {
         type: actions.DELETE_EMPLOYEE,
-        payload: id
+        payload: employeeId
     }
 }
-export const deleteEmployeeRequest = (id) => {
+export const deleteEmployeeRequest = (employeeId) => {
     return (dispatch) => {
-        employeesApi.delete(id)
+        employeesApi.delete(employeeId)
         .then(() => {
-            dispatch(deleteEmployee(id))
+            dispatch(deleteEmployee(employeeId))
         })
         .catch(error => {
             alert(error)
