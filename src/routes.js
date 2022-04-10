@@ -8,7 +8,7 @@ const AssignedToMe = React.lazy(() => import('./views/todo-list/assigned-to-me/A
 const Requests = React.lazy(() => import('./views/requests/Requests'))
 const CreatedByMe = React.lazy(() => import('./views/requests/created-by-me/CreatedByMe'))
 const ApproveByMe = React.lazy(() => import('./views/requests/approve-by-me/ApproveByMe'))
-const Employees = React.lazy(() => import('./views/employees/Employees'))
+const Employees = React.lazy(() => import('./views/employees/EmployeesMainPage'))
 
 const Info = React.lazy(() => import('./views/info/Info'))
 
@@ -53,7 +53,7 @@ const routes = [
         element: ApproveByMe
     },
     {
-        path: 'employees',
+        path: 'students',
         name: 'Nhân viên',
         element: Employees,
     },

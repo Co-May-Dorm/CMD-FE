@@ -2,7 +2,7 @@ import * as actions from "../constants/ActionRole"
 
 // Khởi tạo state
 const initialState = {
-    taskList: [],
+    roles: [],
     pagination: {
         page: 1,
         limit: 10,
@@ -23,13 +23,13 @@ const rolesReducer = (state = initialState, action) => {
         case actions.ADD_ROLE: {
             return {
                 ...state,
-                taskList: [...state.taskList, action.payload]
+                roles: [...state.roles, action.payload]
             }
         }
 
         // Cập nhật thông tin vai trò
         case actions.UPDATE_ROLE: {
-            const listRolesUpdated = state.taskList
+            const listRolesUpdated = state.roles
             listRolesUpdated.forEach((role, index, array) => {
                 if (role.id === action.payload.id) {
                     array[index] = action.payload
@@ -37,16 +37,16 @@ const rolesReducer = (state = initialState, action) => {
             })
             return {
                 ...state,
-                taskList: [...listRolesUpdated]
+                roles: [...listRolesUpdated]
             }
         }
 
         // Xóa vai trò
         case actions.DELETE_ROLE: {
-            const listRolesDeleted = state.taskList.filter(role => role.id !== action.payload)
+            const listRolesDeleted = state.roles.filter(role => role.id !== action.payload)
             return {
                 ...state,
-                taskList: [...listRolesDeleted]
+                roles: [...listRolesDeleted]
             }
         }
         default:

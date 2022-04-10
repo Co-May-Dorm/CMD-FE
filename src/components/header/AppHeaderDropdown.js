@@ -1,22 +1,32 @@
 import React from 'react'
-import defaultAvatar from './../../assets/images/avatars/defaultAvatar.jpg'
+
 import { Dropdown, Image } from 'react-bootstrap'
 import { BsBoxArrowRight, BsPersonCircle } from 'react-icons/bs'
+
+import defaultAvatar from './../../assets/icons/avatar-default.png'
+import logoutIcon from './../../assets/icons/logout.svg'
 
 const AppHeaderDropdown = () => {
     return (
         <Dropdown className="col-auto">
-            <Dropdown.Toggle variant="none">
+            <Dropdown.Toggle variant="none" className="d-flex">
                 <Image
                     roundedCircle
                     src={defaultAvatar}
                     style={{
-                        maxWidth: "3rem",
-                        maxHeight: "3rem"
+                        width: "3rem",
+                        height: "3rem"
                     }}
-                    className="me-2"
+                    className="col-auto me-2"
                 />
-                Nguyễn Võ Song Toàn
+                <div className="col d-flex flex-column text-start">
+                    <span className="fw-bolder">
+                        Nguyễn Võ Song Toàn
+                    </span>
+                    <span>
+                        Sinh viên
+                    </span>
+                </div>
             </Dropdown.Toggle>
             <Dropdown.Menu className="animate__animated animate__slideInRight">
                 <Dropdown.Item>
@@ -24,7 +34,7 @@ const AppHeaderDropdown = () => {
                     Tài khoản
                 </Dropdown.Item>
                 <Dropdown.Item>
-                    <BsBoxArrowRight className="me-2" />
+                    <img src={logoutIcon} className="me-2" />
                     Đăng xuất
                 </Dropdown.Item>
             </Dropdown.Menu>

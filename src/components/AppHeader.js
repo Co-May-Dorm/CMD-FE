@@ -4,6 +4,7 @@ import AppNavbarNav from './AppNavbarNav'
 import AppHeaderDropdown from './header/AppHeaderDropdown'
 import logo from "../assets/brand/logo-full.png"
 import { NavLink } from 'react-router-dom'
+import AppNotification from './AppNotification'
 
 const AppHeader = () => {
 
@@ -29,6 +30,7 @@ const AppHeader = () => {
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
                     <AppNavbarNav />
+                    <AppNotification />
                     <AppHeaderDropdown />
                 </Navbar.Collapse>
             </Container>
