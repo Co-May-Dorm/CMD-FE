@@ -1093,7 +1093,7 @@ $pagination-transition: color 0.3s ease-in-out, background-color 0.3s ease-in-ou
   box-shadow 0.3s ease-in-out !default;
 
 $pagination-border-radius-sm: $border-radius-circle !default;
-$pagination-border-radius-lg: $border-radius-lg !default;
+$pagination-border-radius-lg: $border-radius-circle !default;
 // scss-docs-end pagination-variables
 
 // Cards

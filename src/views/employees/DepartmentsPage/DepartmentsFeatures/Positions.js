@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap'
 import { BiTrash } from 'react-icons/bi'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchRolesRequest } from '../../../../../actions/rolesAction'
+import { fetchRolesRequest } from '../../../../actions/rolesAction'
 
 const Positions = ({ info, setInfo }) => {
     const roles = useSelector(state => state.roles.roles)

@@ -6,7 +6,7 @@ import { Button, Form, Modal } from "react-bootstrap"
 import { addDepartmentRequest, fetchDepartmentsRequest, updateDepartmentRequest } from "../../../../actions/departmentsAction"
 import useOnClickOutside from "../../../../customHooks/useOnClickOutside"
 import SelectDepartment from "../../EmployeesFeatures/SelectDepartment"
-import Positions from "./positions/Positions"
+import Positions from "./Positions"
 
 const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
     const departments = useSelector(state => state.departments.data)
@@ -21,7 +21,7 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
         fatherDepartmentId: null,
         positions: []
     })
-    const [visibleDepartment, setVisibleDepartment] = useState(false)
+    const [visibleSelectDepartment, setVisibleSelectDepartment] = useState(false)
     const [currentParentDepartmentName, setCurrentParentDepartmentName] = useState("")
     //
 
@@ -30,7 +30,7 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
     //
 
     /* Hàm xử lý đóng các Dropdown khi click ra ngoài */
-    useOnClickOutside(refSelectDepartment, () => setVisibleDepartment(false))
+    useOnClickOutside(refSelectDepartment, () => setVisibleSelectDepartment(false))
     //
 
     useEffect(() => {
@@ -51,7 +51,7 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
         })
     }
     const handleDepartmentChange = (department) => {
-        setVisibleDepartment(false)
+        setVisibleSelectDepartment(false)
         setCurrentParentDepartmentName(department.name)
         setInfo({
             ...info,
@@ -160,27 +160,20 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
                         <hr />
                         <div className="mb-3">
                             <Form.Label htmlFor="department">Phòng ban cha:</Form.Label>
-                            <div
-                                ref={refSelectDepartment}
-                                className="position-relative"
-                            >
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Chọn phòng ban cha..."
-                                    value={currentParentDepartmentName}
-                                    onChange={handleChangeParrent}
-                                    onClick={() => setVisibleDepartment(!visibleDepartment)}
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    Vui lòng chọn phòng ban cha.
-                                </Form.Control.Feedback>
-                                <SelectDepartment
-                                    visible={visibleDepartment}
-                                    currentDepartment={currentDepartment}
-                                    departments={departments}
-                                    onDepartmentChange={handleDepartmentChange}
-                                />
+                        <div
+                            ref={refSelectDepartment}
+                            className="position-relative form-select"
+                        >
+                            <div onClick={() => setVisibleSelectDepartment(!visibleSelectDepartment)}>
+                                {info.department?.name || "Chọn phòng của sinh viên"}
                             </div>
+                            <SelectDepartment
+                                visible={visibleSelectDepartment}
+                                currentDepartment={info.department}
+                                departments={departments}
+                                onDepartmentChange={handleDepartmentChange}
+                            />
+                        </div>
                         </div>
                         <Positions info={info} setInfo={setInfo} />
                         <Modal.Footer>

@@ -1,7 +1,10 @@
 import React from 'react'
-import { BiSearchAlt } from 'react-icons/bi'
+
+import searchIcon from '../assets/icons/search.svg'
 /*
-    
+    Truyền vào 2 props:
+    1. value: giá trị của state giữ giá trị đang tìm kiếm
+    2. onSearch: hàm callback sẽ set lại giá trị của state khi người dung nhập giá trị mới
 */
 const AppSearch = ({ value, onSearch }) => {
     return (
@@ -11,6 +14,13 @@ const AppSearch = ({ value, onSearch }) => {
                 className="d-inline-flex form-control py-1"
                 style={{ borderRadius: "0.5rem" }}
             >
+                <img
+                    src={searchIcon}
+                    className="mx-auto h-100"
+                    style={{
+                        marginTop: "0.1rem"
+                    }}
+                />
                 <input
                     className="w-100"
                     type="search"
@@ -21,18 +31,8 @@ const AppSearch = ({ value, onSearch }) => {
                         fontSize: "14px"
                     }}
                     placeholder="Tìm kiếm..."
-                    value={value?.name || ""}
-                    onChange={(e) => onSearch({
-                        ...value,
-                        name: e.target.value
-                    })}
-                />
-                <BiSearchAlt
-                    className="mx-auto h-100"
-                    style={{
-                        marginTop: "0.1rem"
-                    }}
-                    size={20}
+                    value={value || ""}
+                    onChange={(e) => onSearch(e.target.value)}
                 />
             </div>
         </div>

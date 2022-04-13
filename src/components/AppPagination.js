@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
+
 import { Pagination } from 'react-bootstrap'
-import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
+
+import previousPageIcon from '../assets/icons/previous_page.svg'
+import nextPageIcon from '../assets/icons/next_page.svg'
 
 /*
-    Component này có thể được sử dụng lại ở bất cứ đâu
     Truyền vào 2 props:
     1. pagination: một đối tượng chứa 3 thuộc tính:
     + page: trang hiện tại
     + limit: số dòng trên mỗi trang
     + totalItem: tổng số Item của danh sách
-    2. onPageChange: một function được truyền vào tham số newPage là trang mới khi click vào button
+    2. onPageChange: một hàm callback nhận vào một đối số là giá trị trang mới khi click chuột vào button
 */
 const AppPagination = ({ pagination, onPageChange }) => {
     // Lấy các đối tượng từ props pagination
@@ -227,7 +229,7 @@ const AppPagination = ({ pagination, onPageChange }) => {
                     disabled={page <= 1}
                     onClick={() => handlePageChange(page - 1)}
                 >
-                    <BsChevronLeft />
+                    <img src={previousPageIcon} />
                 </Pagination.Item>
                 {
                     fetchListPage().map((pageItem, index) => {
@@ -267,7 +269,7 @@ const AppPagination = ({ pagination, onPageChange }) => {
                     disabled={page >= totalPage}
                     onClick={() => handlePageChange(page + 1)}
                 >
-                    <BsChevronRight />
+                    <img src={nextPageIcon} />
                 </Pagination.Item>
             </Pagination>
         </div>

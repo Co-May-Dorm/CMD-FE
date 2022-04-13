@@ -65,7 +65,7 @@ const EmployeesMainPage = () => {
     }
 
     // Hàm thay đổi state khi thực hiện tìm kiếm
-    const handleSearchTerm = (searchTerm) => {
+    const handleSearch = (searchTerm) => {
         setFilters({
             ...filters,
             page: 1,
@@ -113,7 +113,7 @@ const EmployeesMainPage = () => {
                 </div>
                 <div className="col" />
                 <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
-                    <AppSearch value={filters} onSearch={setFilters} />
+                    <AppSearch value={filters.name} onSearch={handleSearch} />
                 </div>
                 <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
                     <ButtonShowDepartments />
@@ -130,7 +130,7 @@ const EmployeesMainPage = () => {
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
                         <Dropdown.Item className="d-block m-auto">
-                            <AppSearch value={filters.name} onSearch={handleSearchTerm} />
+                            <AppSearch value={filters} onSearch={setFilters} />
                         </Dropdown.Item>
                         <Dropdown.Item className="d-block m-auto">
                             <ButtonShowDepartments />
