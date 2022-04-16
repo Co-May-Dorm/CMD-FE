@@ -1,4 +1,5 @@
 
+import { act } from "@testing-library/react";
 import * as types from "../constants/ActionTask"
 
 let initialState = {
@@ -118,6 +119,7 @@ const todoListReducer = (state = initialState, action) => {
     switch (action.type) {
         // dispatch task to store reducer when get list task
         case types.DISPATCH_TASKS: {
+            // console.log(action.tasks.data)
             return {
                 ...state, tasks: action.tasks.data.data.tasks,
                 totalTask: action.tasks.data.data.pagination.totalItem

@@ -230,16 +230,16 @@ export const dispatchCreator = (data) => { return { type: types.DISPATCH_CREATOR
 // dispatch creator related object searched to store reducer
 export const dispatchRelatedObject = (data) => { return { type: types.DISPATCH_RELATED_OBJECT, data } }
 // create new task
-export const creatNewTask = (param) => {
+export const creatNewTask = async (param) => {
     return () => {
-        const newTask = async () => {
+        const newTask = () => {
             try {
-                await todoListApi.newTask(param)
+               todoListApi.newTask(param).then(q=>q)
             } catch (error) {
                 console.log("Can not load...!", error)
             }
         }
-        newTask().then(q => q)
+        newTask()
     }
 }
 // add item to list status filter
@@ -253,8 +253,8 @@ export const dispatchFilter = params => {
             try {
                 // console.log(params.statusIds.length)
                 if (params.statusIds.length == 0) {
-                    console.log("đúng")
-                    dispatch(dispatchTaskRequest({ "page": 1, "filter": {} }))
+                    console.log(params.statusIds)
+                    dispatch(dispatchTaskRequest({ "page": 1, "search": {} }))
                 } else {
                     const reponse = await todoListApi.filterTask(params)
                     dispatch(saveTaskFilter(reponse))

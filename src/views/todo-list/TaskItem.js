@@ -1,12 +1,12 @@
 import { useState, useRef, useLayoutEffect } from "react"
 import { useDispatch } from "react-redux"
 import * as todoListAction from "../../actions/todoListAction"
-import { MdMoreVert } from "react-icons/md"
 import { BsArrowRight } from "react-icons/bs"
 import StarRatings from "react-star-ratings"
-import DropdownToggle from "react-bootstrap/esm/DropdownToggle"
-import { Col, Dropdown, Row } from 'react-bootstrap'
-import { BsFileLock, BsThreeDotsVertical } from "react-icons/bs"
+import {Dropdown } from 'react-bootstrap'
+import {BsThreeDotsVertical } from "react-icons/bs"
+import {AiFillEdit, AiFillDelete} from "react-icons/ai"
+
 const TaskItem = (props) => {
     const dispacth = useDispatch()
     const position = useRef(null);
@@ -37,6 +37,7 @@ const TaskItem = (props) => {
                 return "Qúa hạn"
         }
     }
+    // get detail task when user click every item
     const getDetailTask = async () => {
         const getDataDetailTask = todoListAction.getTaskDetailRequest(props.id)
         dispacth(getDataDetailTask)
@@ -61,9 +62,12 @@ const TaskItem = (props) => {
         updateSize()
         return () => window.removeEventListener("resize", updateSize)
     }, [])
+    const moreOption = (event) => {
+       event.stopPropagation()
+    }
     return (
         <div className="item d-flex flex-row p-2"
-        onClick={getDetailTask}
+            onClick={getDetailTask}
         >
             <div className="item-label"></div>
             <div className="col-sm-4 ms-5 d-flex" >
@@ -85,7 +89,7 @@ const TaskItem = (props) => {
                 <div className="me-0" style={{ margin: "auto" }} >
                     <StarRatings rating={rating} starRatedColor={"#2391F5"} starHoverColor={"#85B6FF"} name={"sao"} starEmptyColor={"#85B6FF"} starSpacing={"5px"} changeRating={(rate) => setRating(rate)} starDimension="15px" numberOfStars={3} />
                 </div>
-                <Dropdown className="d-flex">
+                <Dropdown onClick={moreOption} className="d-flex">
                     <Dropdown.Toggle
                         variant="none"
                         className="mx-auto"
@@ -93,8 +97,11 @@ const TaskItem = (props) => {
                         <BsThreeDotsVertical />
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
-                        <Dropdown.Item>
-                            <BsFileLock /> Cấp lại mật khẩu
+                        <Dropdown.Item className="moreOption">
+                            <AiFillEdit className="me-1" />Chỉnh sửa
+                        </Dropdown.Item>
+                        <Dropdown.Item className="moreOption">
+                            <AiFillDelete  className="me-1" />Xóa
                         </Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>

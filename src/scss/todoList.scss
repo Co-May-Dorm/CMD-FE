@@ -1,3 +1,4 @@
+$darkBlue: #2F6BB1;
 .space--nowrap {
     white-space: nowrap;
 }
@@ -62,5 +63,10 @@
 }
 .btn-outline-active :checked {
     color: #4ddbb0;
+    background-color: #4ddbb0;
+}
+.moreOption:hover{
+    border-radius: 5px;
+    color: $darkBlue;
     background-color: #4ddbb0;
 }

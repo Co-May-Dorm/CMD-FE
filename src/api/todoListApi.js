@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import axiosClient from "./axiosClient"
 
 const baseUrl = "/tasks"
@@ -10,6 +11,13 @@ const todoListApi = {
     getTasks: async (params) => {
         //cai nay dung de phan trang
         let url = `${baseUrl}?_page=${params.page}`
+        const values = Object.values(params.search)//all value of params
+        const keys = Object.keys(params.search)//all key of params
+        for (let i = 0; i < keys.length; i++) {
+            if (values[i] !== "") {
+                url += "&" + keys[i] + "=" + values[i]
+            }
+        }
         // if (params.filter.length > 0) {
         //     params.filter.forEach(element => {
         //         switch (element) {
@@ -47,7 +55,7 @@ const todoListApi = {
         //         url += element
         //     })
         // }
-        return await axiosClient.get(url, { params })
+        return await axiosClient.get(url)
     },
     //search by params
     searchByParams: (params) => {
@@ -60,11 +68,11 @@ const todoListApi = {
     },
     newTask: (params) => {
         const url = "/tasks/add"
-        axiosClient.post(url, params).then(q => q)
-    },
-    filterTask: (params) => {
-        const url = "/tasks/status"
         return axiosClient.post(url, params)
+    },
+    filterTask: async(params) => {
+        const url = "/tasks/status"
+        axiosClient.post(url, params).then(q=>q)
     }
 
 }

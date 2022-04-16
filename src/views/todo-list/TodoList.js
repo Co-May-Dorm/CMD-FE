@@ -14,12 +14,12 @@ import Detail from "./Detail";
 const nameButtonStatus = ["Mới nhất", "Cũ nhất", "Đang làm", "Hoàn thành", "Ưu tiên", "Chờ xác nhận", "Qúa hạn", "Đã hủy"]
 const TodoList = () => {
     const dispacth = useDispatch()
-    const page = useSelector(state => state.TodoListReducer.pageCurrent)
-    const filter = useSelector(state => state.TodoListReducer.filter)
-    const [modalNewTask, showModalNewTask] = useState(false)
-    const [modalFilterTask, showModalFilterTask] = useState(false)
+    const page = useSelector(state => state.TodoListReducer.pageCurrent)// get number page current
+    const [modalNewTask, showModalNewTask] = useState(false)//state is show modal new task
+    const [modalFilterTask, showModalFilterTask] = useState(false)// state is show filter task
     const [sizeWindown, setSizeWindown] = useState([0, 0])//size windown
     let [counterName, setCounterName] = useState(0);
+    const [search, setSearch] = useState({ title: "" })// state using search task
     // get task
     const tasks = useSelector(state => state.TodoListReducer.tasks)
     // const positionModalOption = useSelector(state => state.TodoListReducer.posionModalOption)
@@ -28,17 +28,16 @@ const TodoList = () => {
     // length of array status
     const num = useSelector(state => state.TodoListReducer.collectionStatusFilter)
     useEffect(() => {
-        dispacth(todoListAction.dispatchTaskRequest({ page, filter }))
-    }, [page, filter])
+        // delay search 0.5 seconds
+        const delaySearch = setTimeout(() => {
+            dispacth(todoListAction.dispatchTaskRequest({ page, search }))
+        }, 500);
+        return ()=> clearTimeout(delaySearch)
+    }, [page, search])
+    // close show detail task
     const closeDetailTask = () => {
         const request = todoListAction.showDetailTask()
         dispacth(request)
-    }
-    const requestTasks = () => {
-        console.log(num)
-        if (num.length == 0) {
-            dispacth(todoListAction.dispatchTaskRequest({ page, filter }))
-        }
     }
     // active when layout effected
     useLayoutEffect(() => {
@@ -60,7 +59,7 @@ const TodoList = () => {
                         <div className="d-flex justify-content-center">
                             <div className="d-inline-flex form-control p-0 ps-1" style={{ borderRadius: "4px" }}>
                                 <BiSearchAlt className="mx-auto h-100" size={20} />
-                                <input className="w-100" type="search" style={{ border: "none", outline: "none", color: "#2F6BB1", fontSize: "14px" }} placeholder="" />
+                                <input onChange={(event) => setSearch({ ...search, title: event.target.value })} className="w-100" type="search" style={{ border: "none", outline: "none", color: "#2F6BB1", fontSize: "14px" }} placeholder="" />
                             </div>
                             <button type="button" className="btn btn-primary btn-sm fw-bigBold ms-2" style={{ whiteSpace: "nowrap" }}>Tìm kiếm</button>
                         </div>
