@@ -418,6 +418,10 @@ textarea {
   line-height: inherit;
 }
 
+input::placeholder {
+  color: $body-color;
+}
+
 // Remove the inheritance of text transform in Firefox
 button,
 select {

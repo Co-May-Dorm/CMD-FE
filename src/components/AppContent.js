@@ -1,10 +1,10 @@
 import React, { Suspense } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
+
 import { Spinner } from 'react-bootstrap'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import './style.css'
 
-// routes config
+import './style.css'
 import routes from '../routes'
 
 const AppContent = () => {

@@ -1,5 +1,4 @@
 import axiosClient from "./axiosClient"
-import axios from 'axios'
 
 // API nhân viên
 const baseUrl = "/employees"
