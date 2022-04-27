@@ -172,7 +172,7 @@ const NewTask = React.memo((props) => {
             id: detailTask.id,
             description: "Chua co description nen day la default",
             creatorId: 97,
-            recieverId: employee.id,
+            receiverId: employee.id,
             title: title,
             createDate: startNewDateTask,
             finishDate: endNewDateTask,
