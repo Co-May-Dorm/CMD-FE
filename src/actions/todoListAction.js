@@ -1,5 +1,6 @@
 import * as types from "../constants/ActionTask"
 import todoListApi from '../api/todoListApi';
+import { type } from "@testing-library/user-event/dist/type";
 // Lấy danh sách công việc theo chỉ mục (lấy luôn dữ liệu trong action , không gọi api trong component)
 export const dispatchLimitedTaskRequest = (data) => {
     // return (dispatch) => {
@@ -139,7 +140,8 @@ export const dispatchTaskRequest = (data) => {
         const fetchTasksList = async () => {
             try {
                 const response = await todoListApi.getTasks(data)
-                dispatch(dispatchTasks(response))
+                await dispatch(dispatchTasks(response))
+                dispatch(isLoading(false))
             } catch (error) {
                 console.log("Can not load...!", error)
             }
@@ -230,16 +232,17 @@ export const dispatchCreator = (data) => { return { type: types.DISPATCH_CREATOR
 // dispatch creator related object searched to store reducer
 export const dispatchRelatedObject = (data) => { return { type: types.DISPATCH_RELATED_OBJECT, data } }
 // create new task
-export const creatNewTask = (param) => {
-    return () => {
+export const creatNewTask = async (param) => {
+    return (dispatch) => {
         const newTask = async () => {
             try {
-                await todoListApi.newTask(param)
+                await dispatch(isLoading(true))
+                todoListApi.newTask(param).then(q => q)
             } catch (error) {
                 console.log("Can not load...!", error)
             }
         }
-        newTask().then(q => q)
+        newTask()
     }
 }
 // add item to list status filter
@@ -253,8 +256,8 @@ export const dispatchFilter = params => {
             try {
                 // console.log(params.statusIds.length)
                 if (params.statusIds.length == 0) {
-                    console.log("đúng")
-                    dispatch(dispatchTaskRequest({ "page": 1, "filter": {} }))
+                    console.log(params.statusIds)
+                    dispatch(dispatchTaskRequest({ "page": 1, "search": {} }))
                 } else {
                     const reponse = await todoListApi.filterTask(params)
                     dispatch(saveTaskFilter(reponse))
@@ -269,4 +272,57 @@ export const dispatchFilter = params => {
 //save task filtered to reducer store
 export const saveTaskFilter = (tasks) => {
     return { type: types.SAVE_TASK_FILTER, tasks }
+}
+// name form 
+export const changeNameForm = (name) => {
+    return { type: types.NAME_FORM, name }
+}
+//show from task
+export const showFormTask = () => {
+    return { type: types.SHOW_FORM_TASK }
+}
+// refresh date new task
+export const refreshDateNewTask = () => {
+    return { type: types.REFRESH_DATE_NEW_TASK }
+}
+// update task
+export const updateTask = (taskUpdate) => {
+    return (dispatch) => {
+        const updateTask = async () => {
+            try {
+                // await dispatch(isLoading(true))
+                todoListApi.updateTask(taskUpdate)
+                // .then(q => dispatch(statusRequest(q.data.status)))
+
+            } catch (error) {
+                console.log("Can not load...!", error)
+            }
+        }
+        updateTask()
+    }
+}
+// update status request
+export const statusRequest = (status) => {
+    return { type: types.STATUS_REQUEST, status }
+}
+// is loading
+export const isLoading = (status) => {
+    return { type: types.IS_LOADING, status }
+}
+// show confirm
+export const showConfirm = id => {
+    return { type: types.SHOW_CONFIRM, id }
+}
+//delete task
+export const deleteTask = id => {
+    return () => {
+        const deleteTask = async () => {
+            try {
+                todoListApi.deteleTask(id)
+            } catch (error) {
+                console.log("Can not load...!", error)
+            }
+        }
+        deleteTask()
+    }
 }

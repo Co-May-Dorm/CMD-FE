@@ -59,9 +59,9 @@ const Detail = (props) => {
         return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`
     }
     return (
-        <Modal scrollable show={true}
+        <Modal scrollable
             {...props}
-            // size=""
+            size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
         // onExit={dispatchDateNewTask}

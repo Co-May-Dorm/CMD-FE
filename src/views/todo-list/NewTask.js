@@ -89,7 +89,8 @@ const NewTask = (props) => {
             "createDate": startNewDateTask,
             "finishDate": endNewDateTask
         }
-        console.log(await dispacth(todoListAction.creatNewTask(data)))
+        dispacth(todoListAction.creatNewTask(data).then(q => { console.log(q) }))
+
     }
     //processing actions of components select list dropdown with input
     useEffect(() => {
@@ -119,6 +120,7 @@ const NewTask = (props) => {
                 // break;
             }
         }
+        //Searching for employees by key such as searching for employees, related employees,...
         const req = {
             "object": "employees",
             "mapSearch": [
@@ -129,6 +131,7 @@ const NewTask = (props) => {
             ],
             "page": 1
         }
+        // each search will be delayed by 1 second
         const delaySearch = (setTimeout(() => {
             dispacth(todoListAction.searchEmployee({ "typeSearch": type, "request": req }))
         }, 1000))
@@ -253,7 +256,7 @@ const NewTask = (props) => {
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter" >
-                        <h3 className="text-center fw-bold">TẠO MỚI CÔNG VIỆC</h3>
+                        <h3 className="text-center fw-bold">{props.nameForm==="NewTask"?"TẠO MỚI CÔNG VIỆC":"CHỈNH SỬA CÔNG VIỆC"}</h3>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

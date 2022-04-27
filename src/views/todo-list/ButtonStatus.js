@@ -33,7 +33,7 @@ const ButtonStatus = (props) => {
     const addStatusFilter = async () => {
         const idStatus = statusID(props.nameStatus)
         const params = {
-            "statusIds": listStatus.includes(idStatus) ? listStatus.filter(item => item !== idStatus) : [...listStatus, idStatus],
+            statusIds: listStatus.includes(idStatus) ? listStatus.filter(item => item !== idStatus) : [...listStatus, idStatus],
         }
         await dispacth(todoListAction.addStatusFilter(idStatus))
         dispacth(todoListAction.dispatchFilter(params))
