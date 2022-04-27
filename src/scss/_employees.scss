@@ -46,10 +46,14 @@
     position: absolute;
     left: 0;
     right: 0;
-    z-index: 2;
+    top: 90%;
+    z-index: 3;
     max-height: 10rem;
     overflow-y: scroll;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.13);
+    border-left: $form-select-border-width solid $form-select-border-color;
+    border-right: $form-select-border-width solid $form-select-border-color;
+    border-bottom: $form-select-border-width solid $form-select-border-color;
     border-radius: 4px;
 }
 @media (min-width: 992px) {
@@ -61,7 +65,7 @@
         flex-direction: row;
         justify-content: space-evenly;
         align-items: center;
-        padding: 1rem 0;
+        padding: 0.5rem;
         word-wrap: break-word;
         word-break: break-word;
         .employee-active {

@@ -43,7 +43,7 @@ const DepartmentsMainPage = ({ visible, setVisible }) => {
     }
     const traverseDepartment = () => {
         departments?.forEach((department) => {
-            if (!department.fatherDepartmentId) {
+            if (department.fatherDepartmentId === -1) {
                 departmentsElement.push(
                     <DepartmentItem
                         key={department.id}

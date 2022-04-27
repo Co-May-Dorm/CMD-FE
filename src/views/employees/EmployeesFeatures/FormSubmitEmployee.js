@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react"
-import { Button, Card, Form, ListGroup, Modal } from "react-bootstrap"
+import { Button, Form, ListGroup, Modal } from "react-bootstrap"
 import { useDispatch, useSelector } from "react-redux"
 import { addEmployeeRequest, updateEmployeeRequest } from "../../../actions/employeesAction"
 import useOnClickOutside from "../../../customHooks/useOnClickOutside"
-import SelectDepartment from "./SelectDepartment"
+import FormSelectDepartment from "./FormSelectDepartment"
 import SelectPosition from "./SelectPosition"
 
 const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
@@ -33,17 +33,14 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     const departments = useSelector(state => state.departments.data)
     const dispatch = useDispatch()
 
-    const [visibleSelectDepartment, setVisibleSelectDepartment] = useState(false) // State quản lý hiển thị danh sách phòng ban để người dùng chọn
     const [visibleSelectPosition, setVisibleSelectPosition] = useState(false) // State quản lý hiển thị danh sách chức vụ để người dùng chọn
     //
 
     /* Quản lý các ref */
-    const refSelectDepartment = useRef()
     const refSelectPosition = useRef()
     //
 
     /* Hàm xử lý đóng các Dropdown khi click ra ngoài */
-    useOnClickOutside(refSelectDepartment, () => setVisibleSelectDepartment(false))
     useOnClickOutside(refSelectPosition, () => setVisibleSelectPosition(false))
     //
 
@@ -51,12 +48,12 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         if (employee?.id) {
             setInfo({
                 ...employee,
-                department: departments.find(dep => dep.id === employee.department.id),
-                positions: employee.positions[0],
+                departments: employee.departments,
+                positions: employee.positions,
                 user: (employee.user.enableLogin !== false) ? employee.user : { username: "" }
             })
         }
-    }, [employee])
+    }, [employee, departments])
 
     /* Các hàm thay đổi giá trị của state info mỗi khi người dùng nhập/chọn dữ liệu mới */
     const handleInputChange = (e) => {
@@ -88,7 +85,6 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         }
     }
     const handleDepartmentChange = (department) => {
-        setVisibleSelectDepartment(false);
         setInfo({
             ...info,
             department,
@@ -194,7 +190,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     return (
         <Modal
             className="modal-fullheight"
-            size="md"
+            size="lg"
             scrollable
             show={visible}
             onHide={() => setVisible(false)}
@@ -303,53 +299,50 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                         </Form.Control.Feedback>
                     </div>
                     <hr />
-                    <div className="mb-3">
-                        <Form.Label htmlFor="department">Phòng ban:</Form.Label>
-                        <div
-                            ref={refSelectDepartment}
-                            className="position-relative form-select"
-                        >
-                            <div onClick={() => setVisibleSelectDepartment(!visibleSelectDepartment)}>
-                                {info.department?.name || "Chọn phòng của sinh viên"}
-                            </div>
-                            <SelectDepartment
-                                visible={visibleSelectDepartment}
-                                currentDepartment={info.department}
-                                departments={departments}
-                                onDepartmentChange={handleDepartmentChange}
-                            />
+                    <div className="card">
+                        <div className="card-header fw-bolder fs-3">
+                            Phòng ban
                         </div>
-                    </div>
-                    <hr />
-                    <div className="mb-3">
-                        <Form.Label htmlFor="positions">Chức vụ:</Form.Label>
-                        <div ref={refSelectPosition}>
-                            <Form.Control
-                                type="text"
-                                name="positions"
-                                placeholder="Chọn chức vụ của sinh viên..."
-                                value={info.positions?.name}
-                                onChange={handleInputChange}
-                                onClick={() => setVisibleSelectPosition(!visibleSelectPosition)}
-                                required
-                            />
-                            {SelectPositionElement}
-                            <Form.Control.Feedback type="invalid">
-                                Vui lòng chọn chức vụ.
-                            </Form.Control.Feedback>
-                        </div>
-                    </div>
-                    <hr />
-                    <Card>
-                        <Card.Body>
-                            <Card.Header>
-                                <Form.Check
-                                    type="switch"
-                                    label="Cho phép đăng nhập"
-                                    checked={info.user.enableLogin}
-                                    onChange={handleToggleLogin}
+                        <div className="card-body d-flex flex-lg-row flex-column">
+                            <div className="mb-3 mb-lg-0 col">
+                                <Form.Label htmlFor="department">Phòng ban:</Form.Label>
+                                <FormSelectDepartment
+                                    currentDepartment={info.department}
+                                    departments={departments}
+                                    onDepartmentChange={handleDepartmentChange}
                                 />
-                            </Card.Header>
+                            </div>
+                            <div className="mb-3 ms-lg-3 col">
+                                <Form.Label htmlFor="positions">Chức vụ:</Form.Label>
+                                <div ref={refSelectPosition}>
+                                    <Form.Control
+                                        type="text"
+                                        name="positions"
+                                        placeholder="Chọn chức vụ của sinh viên..."
+                                        value={info.positions?.name}
+                                        onChange={handleInputChange}
+                                        onClick={() => setVisibleSelectPosition(!visibleSelectPosition)}
+                                        required
+                                    />
+                                    {SelectPositionElement}
+                                    <Form.Control.Feedback type="invalid">
+                                        Vui lòng chọn chức vụ.
+                                    </Form.Control.Feedback>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div className="card">
+                        <div className="card-header">
+                            <Form.Check
+                                type="switch"
+                                label="Cho phép đăng nhập"
+                                checked={info.user.enableLogin}
+                                onChange={handleToggleLogin}
+                            />
+                        </div>
+                        <div className="card-body">
                             {(info.user.enableLogin) ? (
                                 <>
                                     <div className="mb-3">
@@ -386,8 +379,8 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                     ) : null}
                                 </>
                             ) : null}
-                        </Card.Body>
-                    </Card>
+                        </div>
+                    </div>
                 </div>
                 <Modal.Footer>
                     <Button
@@ -399,7 +392,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                     </Button>
                 </Modal.Footer>
             </Form>
-        </Modal >
+        </Modal>
     )
 }
 
