@@ -256,7 +256,7 @@ const NewTask = (props) => {
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter" >
-                        <h3 className="text-center fw-bold">TẠO MỚI CÔNG VIỆC</h3>
+                        <h3 className="text-center fw-bold">{props.nameForm==="NewTask"?"TẠO MỚI CÔNG VIỆC":"CHỈNH SỬA CÔNG VIỆC"}</h3>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

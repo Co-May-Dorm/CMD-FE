@@ -1,5 +1,3 @@
-
-import { act } from "@testing-library/react";
 import * as types from "../constants/ActionTask"
 
 let initialState = {
@@ -10,10 +8,11 @@ let initialState = {
     // selectedDropdown: null, timeStartNewStart: null, timeCompleteNewStask: null
     // , showDatePickerStartNewTask: false, showDatePickerCompleteNewTask: false, department: [], itemNeedFilterAdvanced: []
     // , nameTaskSearch:null
-    tasks: [], totalTask: 0, startDateNewTask: null, endDateNewTask: null, listCreatorSearch: [],
+    tasks: [], totalTask: 0, startDateNewTask: undefined, endDateNewTask: undefined, listCreatorSearch: [],
     taskDetail: {}, posionModalOption: {}, pageCurrent: 1, filter: {}, startDateFilterTask: null, endDateFilterTask: null
-    , listEmployeeSearch: [], relatedObjectSearch: [], collectionStatusFilter: []
-};
+    , listEmployeeSearch: [], relatedObjectSearch: [], collectionStatusFilter: [], nameForm: "none", showFormTask: false,
+    statusRequest: null, isLoading: true, showConfirm: false, idDelete: null
+}
 // const todoListReducer = (state = initialState, action) => {
 //     switch (action.type) {
 //         // dispatch tat ca cac cong viec
@@ -145,7 +144,10 @@ const todoListReducer = (state = initialState, action) => {
         }
         // dispatch task detail to store reducer
         case types.DISPATCH_TASK_DETAIL: {
-            return { ...state, taskDetail: action.task.data.data }
+            return {
+                ...state, taskDetail: action.task.data.data, startDateNewTask: action.task.data.data.createDate
+                , endDateNewTask: action.task.data.data.finishDate
+            }
         }
         // 
         case types.GET_POSITION_MODAL_OPTION_TASK: {
@@ -202,10 +204,46 @@ const todoListReducer = (state = initialState, action) => {
         }
         // save task filter to reducer store
         case types.SAVE_TASK_FILTER: {
+            // return {
+            //     ...state, tasks: action.tasks.data.data.tasks,
+            //     totalTask: action.tasks.data.data.pagination.totalItem
+            // };
+        }
+        //case chaneg name form
+        case types.NAME_FORM: {
             return {
-                ...state, tasks: action.tasks.data.data.tasks,
-                totalTask: action.tasks.data.data.pagination.totalItem
-            };
+                ...state, nameForm: action.name
+            }
+        }
+        // show form task 
+        case types.SHOW_FORM_TASK: {
+            return {
+                ...state, showFormTask: !state.showFormTask
+            }
+        }
+        // refresh date new task 
+        case types.REFRESH_DATE_NEW_TASK: {
+            return {
+                ...state, startDateNewTask: null, endDateNewTask: null
+            }
+        }
+        //status request
+        case types.STATUS_REQUEST: {
+            return {
+                ...state, statusRequest: action.status
+            }
+        }
+        //case is loading
+        case types.IS_LOADING: {
+            return {
+                ...state, isLoading: action.status
+            }
+        }
+        // show confrim
+        case types.SHOW_CONFIRM: {
+            return {
+                ...state, showConfirm: ! state.showConfirm, idDelete: action.id
+            }
         }
 
         default:
