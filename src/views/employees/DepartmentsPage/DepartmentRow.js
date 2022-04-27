@@ -18,7 +18,7 @@ const DepartmentRow = ({ department, level }) => {
                 style={{ paddingLeft: level * 40 }}
                 onDoubleClick={() => setVisible(true)}
             >
-                <img src={departmentLevelIcon} />
+                <img src={departmentLevelIcon} alt="Panel" />
                 <span className="ps-2" />
                 {department.name}
                 <div
@@ -31,7 +31,7 @@ const DepartmentRow = ({ department, level }) => {
                 >
                     <Dropdown className="col-auto">
                         <Dropdown.Toggle variant="none" className="text-white">
-                            <img src={moreIcon} />
+                            <img src={moreIcon} alt="More icon" />
                         </Dropdown.Toggle>
                         <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
                             <EditDepartment department={department} />

@@ -21,12 +21,14 @@ const EmployeeRow = ({ employee }) => {
         activeStatusElement = <span className="d-inline-block rounded-circle bg-secondary" style={{ height: "10px", width: "10px" }}/>
     }
 
+    const mainDepartment = employee.departments.reduce((max, department) => max.level > department.level ? max : department)
+
     return (
         <div
             className="item employee list-group-item"
             style={{
                 border: "none"
-            }}
+            }}                                                                                                                                                                      
         >
             <div className="item-label" />
             <div className="ms-lg-5" />
@@ -53,7 +55,7 @@ const EmployeeRow = ({ employee }) => {
                 <div className="d-lg-none fw-bold col text-break">
                     Email:
                 </div>
-                <div className="col text-break">
+                <div className="col text-break">np
                     {employee.email}
                 </div>
             </div>
@@ -70,7 +72,7 @@ const EmployeeRow = ({ employee }) => {
                     Phòng:
                 </div>
                 <div className="col text-break">
-                    {employee.department.name}
+                    {mainDepartment.name}
                 </div>
             </div>
             <div className="employee-position">
