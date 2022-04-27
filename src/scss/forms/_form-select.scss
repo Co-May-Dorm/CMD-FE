@@ -5,6 +5,7 @@
 
 .form-select {
   display: block;
+  position: relative;
   width: 100%;
   padding: $form-select-padding-y $form-select-indicator-padding $form-select-padding-y $form-select-padding-x;
   // stylelint-disable-next-line property-no-vendor-prefix
@@ -23,6 +24,7 @@
   @include border-radius($form-select-border-radius, 0);
   @include box-shadow($form-select-box-shadow);
   @include transition($form-select-transition);
+  cursor: pointer;
   appearance: none;
 
   &:focus {

@@ -33,10 +33,6 @@ const ResetPassword = ({ employee }) => {
         setVisibleResetPassword(false)
     }
 
-    let errors = [
-        ""
-    ]
-
     return (
         <>
             <Dropdown.Item

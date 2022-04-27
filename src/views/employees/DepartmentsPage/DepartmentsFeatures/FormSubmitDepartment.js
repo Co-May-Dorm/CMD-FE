@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Button, Form, Modal } from "react-bootstrap"
 
 import { addDepartmentRequest, fetchDepartmentsRequest, updateDepartmentRequest } from "../../../../actions/departmentsAction"
-import useOnClickOutside from "../../../../customHooks/useOnClickOutside"
-import SelectDepartment from "../../EmployeesFeatures/SelectDepartment"
+import FormSelectDepartment from "../../EmployeesFeatures/FormSelectDepartment"
 import Positions from "./Positions"
 
 const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
@@ -21,16 +20,7 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
         fatherDepartmentId: null,
         positions: []
     })
-    const [visibleSelectDepartment, setVisibleSelectDepartment] = useState(false)
     const [currentParentDepartmentName, setCurrentParentDepartmentName] = useState("")
-    //
-
-    /* Quản lý các ref */
-    const refSelectDepartment = useRef()
-    //
-
-    /* Hàm xử lý đóng các Dropdown khi click ra ngoài */
-    useOnClickOutside(refSelectDepartment, () => setVisibleSelectDepartment(false))
     //
 
     useEffect(() => {
@@ -51,15 +41,11 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
         })
     }
     const handleDepartmentChange = (department) => {
-        setVisibleSelectDepartment(false)
         setCurrentParentDepartmentName(department.name)
         setInfo({
             ...info,
             fatherDepartmentId: department.id
         })
-    }
-    const handleChangeParrent = (e) => {
-        setCurrentParentDepartmentName(e.target.value)
     }
     //
 
@@ -160,20 +146,11 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
                         <hr />
                         <div className="mb-3">
                             <Form.Label htmlFor="department">Phòng ban cha:</Form.Label>
-                        <div
-                            ref={refSelectDepartment}
-                            className="position-relative form-select"
-                        >
-                            <div onClick={() => setVisibleSelectDepartment(!visibleSelectDepartment)}>
-                                {info.department?.name || "Chọn phòng của sinh viên"}
-                            </div>
-                            <SelectDepartment
-                                visible={visibleSelectDepartment}
+                            <FormSelectDepartment
                                 currentDepartment={info.department}
                                 departments={departments}
                                 onDepartmentChange={handleDepartmentChange}
                             />
-                        </div>
                         </div>
                         <Positions info={info} setInfo={setInfo} />
                         <Modal.Footer>

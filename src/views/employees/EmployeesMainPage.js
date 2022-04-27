@@ -48,7 +48,7 @@ const EmployeesMainPage = () => {
                 ...newParams
             })
         }
-    }, [])
+    }, [])                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
 
     useEffect(() => {
         const requestUrl = location.pathname + "?" + queryString.stringify(filters)         // Lấy RequestURL đã gửi API tới Back End
@@ -104,9 +104,9 @@ const EmployeesMainPage = () => {
             })
         }
     }
-
+    
     return (
-        <>
+        <Container fluid>
             <div className="row justify-content-xl-between justify-content-end align-items-center">
                 <div className="col-auto fw-bolder fs-5 mb-xl-0 mb-3">
                     DANH SÁCH SINH VIÊN
@@ -130,7 +130,7 @@ const EmployeesMainPage = () => {
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
                         <Dropdown.Item className="d-block m-auto">
-                            <AppSearch value={filters} onSearch={setFilters} />
+                            <AppSearch value={filters.name} onSearch={handleSearch} />
                         </Dropdown.Item>
                         <Dropdown.Item className="d-block m-auto">
                             <ButtonShowDepartments />
@@ -148,7 +148,7 @@ const EmployeesMainPage = () => {
             <Container fluid>
                 <div className="employee employee-title">
                     <div className="ms-lg-5" />
-                    <div className="employee-active"/>
+                    <div className="employee-active" />
                     <div className="employee-name">
                         <span
                             className="fw-bolder cursor-pointer"
@@ -227,7 +227,7 @@ const EmployeesMainPage = () => {
                     onPageChange={handlePageChange}
                 />
             </Container>
-        </>
+        </Container>
     )
 }
 
