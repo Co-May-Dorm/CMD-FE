@@ -260,7 +260,7 @@ const NewTask = React.memo((props) => {
   useEffect(() => {
     setEmployee({ id: detailTask.recieverId, name: detailTask.recieverName });
     setTitle(detailTask.title);
-    setDescription(detailTask.description)
+    setDescription(detailTask.description);
   }, [detailTask]);
   // refresh state employee and title to initial state
   useEffect(() => {
@@ -269,6 +269,35 @@ const NewTask = React.memo((props) => {
       setTitle("");
     }
   }, [props.name_form]);
+  // // function update task
+  // const updateTask = async () => {
+  //   const task = {
+  //     id: detailTask.id,
+  //     description: "Chua co description nen day la default",
+  //     creatorId: 97,
+  //     receiverId: employee.id,
+  //     title: title,
+  //     createDate: startNewDateTask,
+  //     finishDate: endNewDateTask,
+  //     statusId: 1,
+  //   };
+  //   dispacth(todoListAction.updateTask(task));
+  //   dispacth(todoListAction.dispatchTaskRequest({ page, search }));
+  //   props.onHide();
+  // };
+  // // channge state of title, employee
+  useEffect(() => {
+    setEmployee({ id: detailTask.recieverId, name: detailTask.recieverName });
+    setTitle(detailTask.title);
+  }, [detailTask]);
+  // refresh state employee and title to initial state
+  useEffect(() => {
+    if (props.name_form) {
+      setEmployee(initialEmployee);
+      setTitle("");
+    }
+  }, [props.name_form]);
+  //end
   //*function logic component*//
   return (
     <>
