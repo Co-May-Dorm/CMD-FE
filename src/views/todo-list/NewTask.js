@@ -89,7 +89,7 @@ const NewTask = (props) => {
             "createDate": startNewDateTask,
             "finishDate": endNewDateTask
         }
-        dispacth(todoListAction.creatNewTask(data).then(q => { console.log(q) }))
+        // dispacth(todoListAction.creatNewTask(data).then(q => { console.log(q) }))
 
     }
     //processing actions of components select list dropdown with input

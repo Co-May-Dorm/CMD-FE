@@ -4,7 +4,7 @@ const Posts = React.lazy(() => import('./views/posts/Posts'))
 const DetailPost = React.lazy(() => import('./views/posts/DetailPost'))
 
 const TodoList = React.lazy(() => import('./views/todo-list/TodoList'))
-const AssignedToMe = React.lazy(() => import('./views/todo-list/assigned-to-me/AssignedToMe'))
+// const AssignedToMe = React.lazy(() => import('./views/todo-list/assigned-to-me/AssignedToMe'))
 const Requests = React.lazy(() => import('./views/requests/Requests'))
 const CreatedByMe = React.lazy(() => import('./views/requests/created-by-me/CreatedByMe'))
 const ApproveByMe = React.lazy(() => import('./views/requests/approve-by-me/ApproveByMe'))
@@ -32,11 +32,11 @@ const routes = [
         name: 'Tất cả công việc',
         element: TodoList
     },
-    {
-        path: 'todo-list/assigned-to-me',
-        name: 'Công việc của tôi',
-        element: AssignedToMe
-    },
+    // {
+    //     path: 'todo-list/assigned-to-me',
+    //     name: 'Công việc của tôi',
+    //     element: AssignedToMe
+    // },
     {
         path: 'requests',
         name: 'Tất cả đề xuất',
