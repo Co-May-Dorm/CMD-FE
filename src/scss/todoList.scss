@@ -1,4 +1,4 @@
-$darkBlue: #2F6BB1;
+$darkBlue: #2f6bb1;
 .space--nowrap {
     white-space: nowrap;
 }
@@ -65,7 +65,7 @@ $darkBlue: #2F6BB1;
     color: #4ddbb0;
     background-color: #4ddbb0;
 }
-.moreOption:hover{
+.moreOption:hover {
     border-radius: 5px;
     color: $darkBlue;
     background-color: #4ddbb0;
@@ -107,4 +107,14 @@ $darkBlue: #2F6BB1;
         position: absolute;
         right: 0;
     }
+}
+
+.avartar-dt {
+    width: 43.83px;
+    height: 43.83px;
+    margin-right: 20px;
+
+}
+.ct{
+    margin: auto;
 }

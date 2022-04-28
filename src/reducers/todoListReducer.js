@@ -204,10 +204,10 @@ const todoListReducer = (state = initialState, action) => {
         }
         // save task filter to reducer store
         case types.SAVE_TASK_FILTER: {
-            // return {
-            //     ...state, tasks: action.tasks.data.data.tasks,
-            //     totalTask: action.tasks.data.data.pagination.totalItem
-            // };
+            return {
+                ...state, tasks: action.tasks.data.data.tasks,
+                totalTask: action.tasks.data.data.pagination.totalItem
+            };
         }
         //case chaneg name form
         case types.NAME_FORM: {
