@@ -11,16 +11,14 @@ const LockEmployee = ({ employee }) => {
     const dispatch = useDispatch()      // Dùng để dispatch các action
 
     const [visibleLockEmployee, setVisibleLockEmployee] = useState(false)              // State hiển thị thông báo xác nhận khóa tài khoản nhân viên
-    const [active, setActive] = useState(true)
 
-    // Hàm xử lý
+    // Hàm xử lý khóa tài khoản
     const handleLock = (employee) => {
         dispatch(updateEmployeeRequest({
             ...employee,
-            isActived: !active
+            active: !employee.active
         }))
-        setVisibleLockEmployee(false)
-        setActive(!active)
+        window.location.reload()
     }
 
     return (
@@ -30,7 +28,7 @@ const LockEmployee = ({ employee }) => {
                 onClick={() => setVisibleLockEmployee(!visibleLockEmployee)}
             >
                 {
-                    active ? <><BsFillLockFill /> Khóa tài khoản</> : <><BsFillUnlockFill /> Mở khóa tài khoản</>
+                    employee.active ? <><BsFillLockFill /> Khóa tài khoản</> : <><BsFillUnlockFill /> Mở khóa tài khoản</>
                 }
             </Dropdown.Item>
             <Modal
@@ -41,13 +39,13 @@ const LockEmployee = ({ employee }) => {
                 <Modal.Header closeButton>
                     <Modal.Title>
                         {
-                            active ? <>Khóa tài khoản - {employee.name}</> : <>Mở khóa tài khoản - {employee.name}</>
+                            employee.active ? <>Khóa tài khoản - {employee.name}</> : <>Mở khóa tài khoản - {employee.name}</>
                         }
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {
-                        active ? <>
+                        employee.active ? <>
                             Bạn có chắc chắn muốn khóa tài khoản {" "}
                             <span className="fw-bolder">
                                 {employee.name}

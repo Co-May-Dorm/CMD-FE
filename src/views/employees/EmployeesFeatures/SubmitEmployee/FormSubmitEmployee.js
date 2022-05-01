@@ -1,48 +1,34 @@
-import React, { useEffect, useRef, useState } from "react"
-import { Button, Form, ListGroup, Modal } from "react-bootstrap"
+import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { addEmployeeRequest, updateEmployeeRequest } from "../../../actions/employeesAction"
-import useOnClickOutside from "../../../customHooks/useOnClickOutside"
+
+import { Button, Form, Modal } from "react-bootstrap"
+import { BiTrash } from 'react-icons/bi'
+import { addEmployeeRequest, updateEmployeeRequest } from "../../../../actions/employeesAction"
 import FormSelectDepartment from "./FormSelectDepartment"
-import SelectPosition from "./SelectPosition"
+import FormSelectPosition from "./FormSelectPosition"
 
 const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
+    const departments = useSelector(state => state.departments.data)    
+    const dispatch = useDispatch()
+
     /* Quản lý các state */
     const [info, setInfo] = useState({
         // State lưu thông tin của sinh viên khi người dùng nhập dữ liệu
         code: "",
         name: "",
+        avatar: "",
         dateOfBirth: "",
         gender: "",
         email: "",
         phoneNumber: "",
-        department: {
-            id: "",
-            name: "",
-            code: ""
-        },
-        positions: {
-            id: "",
-            name: ""
-        },
+        teams: [],
+        departments: [],
+        positions: [],
         user: {
             username: null,
             enableLogin: false
         }
     })
-    const departments = useSelector(state => state.departments.data)
-    const dispatch = useDispatch()
-
-    const [visibleSelectPosition, setVisibleSelectPosition] = useState(false) // State quản lý hiển thị danh sách chức vụ để người dùng chọn
-    //
-
-    /* Quản lý các ref */
-    const refSelectPosition = useRef()
-    //
-
-    /* Hàm xử lý đóng các Dropdown khi click ra ngoài */
-    useOnClickOutside(refSelectPosition, () => setVisibleSelectPosition(false))
-    //
 
     useEffect(() => {
         if (employee?.id) {
@@ -84,23 +70,6 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
             })
         }
     }
-    const handleDepartmentChange = (department) => {
-        setInfo({
-            ...info,
-            department,
-            positions: {
-                id: "",
-                name: ""
-            },
-        })
-    }
-    const handlePositionChange = (positions) => {
-        setVisibleSelectPosition(false);
-        setInfo({
-            ...info,
-            positions
-        })
-    }
     const handleUserChange = (e) => {
         setInfo({
             ...info,
@@ -132,6 +101,68 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     }
     //
 
+    /* Xử lý khi click vào button Thêm phòng ban */
+    const handleShowFormSelectDepartment = () => {
+        if (info.departments?.length === 0) {
+            setInfo({
+                ...info,
+                departments: [{}]
+            })
+        }
+        else {
+            setInfo({
+                ...info,
+                departments: [
+                    ...info.departments,
+                    {}
+                ]
+            })
+        }
+    }
+
+    const handleDepartmentChange = (index, department) => {
+        const start = info.departments.slice(0, index) || []
+        const end = info.departments.slice(index + 1, info.departments.length + 1) || []
+        const startPosition = info.departments.slice(0, index) || []
+        const endPosition = info.departments.slice(index + 1, info.departments.length + 1) || []
+        setInfo({
+            ...info,
+            departments: [
+                ...start,
+                department,
+                ...end
+            ],
+            positions: [
+                ...startPosition,
+                {},
+                ...endPosition
+            ]
+        })
+    }
+
+    const handlePositionChange = (index, position) => {
+        const start = info.positions.slice(0, index) || []
+        const end = info.positions.slice(index + 1, info.positions.length + 1) || []
+        setInfo({
+            ...info,
+            positions: [
+                ...start,
+                position,
+                ...end]
+        })
+    }
+
+    const handleDeleteFormSelectDepartment = (index) => {
+        const updateDepartments = info.departments.filter((e, idx) => index !== idx)
+        const updatePositions = info.positions.filter((e, idx) => index !== idx)
+        setInfo({
+            ...info,
+            departments: updateDepartments,
+            positions: updatePositions
+        })
+    }
+    //
+
     /* Xử lý Submit Form */
     const [validated, setValidated] = useState(false)
     const handleSubmit = (e) => {
@@ -147,45 +178,22 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
             if (info.id) {
                 const data = {
                     ...info,
-                    department: info.department.id,
-                    positions: [info.positions.id]
+                    modifyBy: 1
                 }
-                console.log(data)
                 dispatch(updateEmployeeRequest(data))
+                window.location.reload()
             }
             else {
                 const data = {
                     ...info,
-                    department: info.department.id,
-                    positions: [info.positions.id]
+                    createBy: 1
                 }
-                console.log(data)
                 dispatch(addEmployeeRequest(data))
+                window.location.reload()
             }
-            setVisible(false)
-            window.location.reload()
         }
     }
     //
-
-    //
-    let SelectPositionElement = null
-    if (visibleSelectPosition) {
-        if (info.department?.id && !info.department?.positions.length) {
-            SelectPositionElement = <ListGroup.Item className="bg-light" align="center">Phòng ban hiện chưa có chức vụ nào!</ListGroup.Item>
-        }
-        else if (!info.department.id) {
-            SelectPositionElement = <ListGroup.Item className="bg-light" align="center">Chưa chọn phòng ban!</ListGroup.Item>
-        }
-        else {
-            SelectPositionElement = <SelectPosition
-                visible={visibleSelectPosition}
-                currentPosition={info.positions}
-                data={info.department.positions}
-                onPositionChange={handlePositionChange}
-            />
-        }
-    }
 
     return (
         <Modal
@@ -208,7 +216,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
             >
                 <div className="modal-body-content">
                     <div className="mb-3">
-                        <Form.Label htmlFor="code">Mã sinh viên:</Form.Label>
+                        <Form.Label>Mã sinh viên:</Form.Label>
                         <Form.Control
                             type="text"
                             name="code"
@@ -223,7 +231,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                     </div>
                     <hr />
                     <div className="mb-3">
-                        <Form.Label htmlFor="name">Họ và tên:</Form.Label>
+                        <Form.Label>Họ và tên:</Form.Label>
                         <Form.Control
                             type="text"
                             name="name"
@@ -238,7 +246,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                     </div>
                     <hr />
                     <div className="mb-3">
-                        <Form.Label htmlFor="dateOfBirth">Ngày sinh:</Form.Label>
+                        <Form.Label>Ngày sinh:</Form.Label>
                         <Form.Control
                             type="date"
                             name="dateOfBirth"
@@ -253,7 +261,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                     </div>
                     <hr />
                     <div className="mb-3">
-                        <Form.Label htmlFor="gender">Giới tính:</Form.Label>
+                        <Form.Label>Giới tính:</Form.Label>
                         <Form.Select
                             type="date"
                             name="gender"
@@ -270,7 +278,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                     </div>
                     <hr />
                     <div className="mb-3">
-                        <Form.Label htmlFor="email">Email:</Form.Label>
+                        <Form.Label>Email:</Form.Label>
                         <Form.Control
                             type="email"
                             name="email"
@@ -285,7 +293,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                     </div>
                     <hr />
                     <div className="mb-3">
-                        <Form.Label htmlFor="phoneNumber">Số điện thoại:</Form.Label>
+                        <Form.Label>Số điện thoại:</Form.Label>
                         <Form.Control
                             type="number"
                             name="phoneNumber"
@@ -300,36 +308,50 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                     </div>
                     <hr />
                     <div className="card">
-                        <div className="card-header fw-bolder fs-3">
+                        <div className="card-header bg-gradient fw-bolder fs-3">
                             Phòng ban
                         </div>
-                        <div className="card-body d-flex flex-lg-row flex-column">
-                            <div className="mb-3 mb-lg-0 col">
-                                <Form.Label htmlFor="department">Phòng ban:</Form.Label>
-                                <FormSelectDepartment
-                                    currentDepartment={info.department}
-                                    departments={departments}
-                                    onDepartmentChange={handleDepartmentChange}
-                                />
-                            </div>
-                            <div className="mb-3 ms-lg-3 col">
-                                <Form.Label htmlFor="positions">Chức vụ:</Form.Label>
-                                <div ref={refSelectPosition}>
-                                    <Form.Control
-                                        type="text"
-                                        name="positions"
-                                        placeholder="Chọn chức vụ của sinh viên..."
-                                        value={info.positions?.name}
-                                        onChange={handleInputChange}
-                                        onClick={() => setVisibleSelectPosition(!visibleSelectPosition)}
-                                        required
-                                    />
-                                    {SelectPositionElement}
-                                    <Form.Control.Feedback type="invalid">
-                                        Vui lòng chọn chức vụ.
-                                    </Form.Control.Feedback>
+                        {
+                            info.departments.map((department, index) => (
+                                <div key={index} className="list-group-item bg-light mb-3">
+                                    <div className="d-flex flex-lg-row flex-column">
+                                        <div className="mb-3 mb-lg-0 col">
+                                            <Form.Label>Phòng ban:</Form.Label>
+                                            <FormSelectDepartment
+                                                index={index}
+                                                currentDepartment={department}
+                                                departments={departments}
+                                                onDepartmentChange={handleDepartmentChange}
+                                            />
+                                        </div>
+                                        <div className="mb-3 ms-lg-3 col">
+                                            <Form.Label>Chức vụ:</Form.Label>
+                                            <FormSelectPosition
+                                                index={index}
+                                                currentPosition={info.positions[index]}
+                                                positions={info.departments[index]?.positions}
+                                                onPositionChange={handlePositionChange}
+                                            />
+                                        </div>
+                                    </div>
+                                    <Button
+                                        variant="outline-danger"
+                                        className="d-block m-auto"
+                                        onClick={() => handleDeleteFormSelectDepartment(index)}
+                                    >
+                                        <BiTrash /> Xóa
+                                    </Button>
                                 </div>
-                            </div>
+                            ))
+                        }
+                        <div className="mb-3 mt-3">
+                            <Button
+                                variant="outline-primary"
+                                className="d-block m-auto"
+                                onClick={handleShowFormSelectDepartment}
+                            >
+                                Thêm phòng ban
+                            </Button>
                         </div>
                     </div>
                     <hr />
@@ -382,15 +404,13 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                         </div>
                     </div>
                 </div>
-                <Modal.Footer>
-                    <Button
-                        className="d-table m-auto"
-                        size="lg"
-                        type="submit"
-                    >
-                        {(employee?.id) ? "Cập nhật thông tin" : "Xác nhận tạo mới"}
-                    </Button>
-                </Modal.Footer>
+                <Button
+                    size="lg"
+                    type="submit"
+                    className="d-table m-auto"
+                >
+                    {(employee?.id) ? "Cập nhật thông tin" : "Xác nhận tạo mới"}
+                </Button>
             </Form>
         </Modal>
     )

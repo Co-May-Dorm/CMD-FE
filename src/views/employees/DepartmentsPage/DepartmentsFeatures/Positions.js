@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap'
 import { BiTrash } from 'react-icons/bi'
-import { useDispatch, useSelector } from 'react-redux'
+
 import { fetchRolesRequest } from '../../../../actions/rolesAction'
 
 const Positions = ({ info, setInfo }) => {
@@ -61,7 +63,7 @@ const Positions = ({ info, setInfo }) => {
     //
 
     // Thêm một form nhập chức vụ mới mỗi khi click vào Button Thêm chức vụ
-    const showFormAddPostion = () => {
+    const handleShowFormAddPostion = () => {
         if (info.positions?.length === 0) {
             setInfo({
                 ...info,
@@ -175,7 +177,7 @@ const Positions = ({ info, setInfo }) => {
                 ))
             }
             <div className="mb-3 mt-3">
-                <Button className="d-table m-auto" onClick={showFormAddPostion}>
+                <Button variant="outline-primary" className="d-table m-auto" onClick={handleShowFormAddPostion}>
                     Thêm chức vụ
                 </Button>
             </div>

@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
 import { Button, Form, Modal } from "react-bootstrap"
 
 import { addDepartmentRequest, fetchDepartmentsRequest, updateDepartmentRequest } from "../../../../actions/departmentsAction"
-import FormSelectDepartment from "../../EmployeesFeatures/FormSelectDepartment"
+import FormSelectDepartment from "../../EmployeesFeatures/SubmitEmployee/FormSelectDepartment"
 import Positions from "./Positions"
 
 const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
@@ -20,7 +20,6 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
         fatherDepartmentId: null,
         positions: []
     })
-    const [currentParentDepartmentName, setCurrentParentDepartmentName] = useState("")
     //
 
     useEffect(() => {
@@ -29,7 +28,6 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
     useEffect(() => {
         if (department?.id) {
             setInfo(department)
-            setCurrentParentDepartmentName(departments.find(dp => dp.id === department.fatherDepartmentId)?.name || "")
         }
     }, [department])
 
@@ -40,10 +38,10 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
             [e.target.name]: e.target.value
         })
     }
-    const handleDepartmentChange = (department) => {
-        setCurrentParentDepartmentName(department.name)
+    const handleDepartmentChange = (index, department) => {
         setInfo({
             ...info,
+            level: department.level + 1,
             fatherDepartmentId: department.id
         })
     }
@@ -78,7 +76,12 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
     }
     //
 
-    const currentDepartment = departments.find(dp => dp.id === info.fatherDepartmentId)
+    // Tìm phòng ban cha dựa theo id
+    const fatherDepartment = departments.find(department => department.id === info.fatherDepartmentId) || {
+        id: null,
+        name: "Không có phòng ban cha"
+    }
+    console.log(info)
     return (
         <>
             <Modal
@@ -103,7 +106,7 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
                         onSubmit={handleSubmit}
                     >
                         <div className="mb-3">
-                            <Form.Label htmlFor="code">Mã phòng ban:</Form.Label>
+                            <Form.Label>Mã phòng ban:</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="code"
@@ -118,7 +121,7 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
                         </div>
                         <hr />
                         <div className="mb-3">
-                            <Form.Label htmlFor="name">Tên phòng ban:</Form.Label>
+                            <Form.Label>Tên phòng ban:</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="name"
@@ -133,7 +136,7 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
                         </div>
                         <hr />
                         <div className="mb-3">
-                            <Form.Label htmlFor="email">Mô tả:</Form.Label>
+                            <Form.Label>Mô tả:</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={10}
@@ -145,9 +148,10 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
                         </div>
                         <hr />
                         <div className="mb-3">
-                            <Form.Label htmlFor="department">Phòng ban cha:</Form.Label>
+                            <Form.Label>Phòng ban cha:</Form.Label>
                             <FormSelectDepartment
-                                currentDepartment={info.department}
+                                index={null}
+                                currentDepartment={fatherDepartment}
                                 departments={departments}
                                 onDepartmentChange={handleDepartmentChange}
                             />

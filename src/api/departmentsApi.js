@@ -17,10 +17,10 @@ const departmentsApi = {
     },
     update: (data) => {
         const requestUrl = `${baseUrl}/edit`
-        return axiosClient.patch(requestUrl, data)
+        return axiosClient.put(requestUrl, data)
     },
     delete: (id) => {
-        const requestUrl = `${baseUrl}/${id}`
+        const requestUrl = `${baseUrl}/delete/${id}`
         return axiosClient.delete(requestUrl)
     },
     deletePosition: (id) => {

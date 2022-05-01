@@ -109,7 +109,7 @@
   padding: $modal-header-padding;
   border-bottom: $modal-header-border-width solid $modal-header-border-color;
   @include border-top-radius($modal-content-inner-border-radius);
-  background:$linear;
+  background: $linear;
 
   .btn-close {
     padding: ($modal-header-padding-y * .5) ($modal-header-padding-x * .5);

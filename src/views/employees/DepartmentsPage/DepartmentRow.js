@@ -8,14 +8,14 @@ import DepartmentDetail from './DepartmentDetail'
 import EditDepartment from './DepartmentsFeatures/EditDepartment'
 import DeleteDepartment from './DepartmentsFeatures/DeleteDepartment'
 
-const DepartmentRow = ({ department, level }) => {
+const DepartmentRow = ({ department }) => {
     const [visible, setVisible] = useState(false)
     return (
         <>
             <ListGroup.Item
                 action
                 className="position-relative"
-                style={{ paddingLeft: level * 40 }}
+                style={{ paddingLeft: department.level * 40 }}
                 onDoubleClick={() => setVisible(true)}
             >
                 <img src={departmentLevelIcon} alt="Panel" />

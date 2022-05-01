@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { Dropdown } from 'react-bootstrap'
 import { BiEdit } from 'react-icons/bi'
-import FormSubmitEmployee from './FormSubmitEmployee'
+import FormSubmitEmployee from './SubmitEmployee/FormSubmitEmployee'
 
 const EditEmployee = ({ employee }) => {
     const [visible, setVisible] = useState(false)

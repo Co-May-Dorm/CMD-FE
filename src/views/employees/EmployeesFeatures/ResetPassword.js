@@ -22,16 +22,29 @@ const ResetPassword = ({ employee }) => {
         })
     }
 
-    const handleResetPassword = (employee) => {
-        dispatch(updateEmployeeRequest({
-            ...employee,
-            user: {
-                ...info.user,
-                password: info.password
-            }
-        }))
-        setVisibleResetPassword(false)
+    /* Xử lý Submit Form */
+    const [validated, setValidated] = useState(false)
+    const handleResetPassword = (e) => {
+        const form = e.currentTarget
+        if (form.checkValidity() === false) {
+            e.preventDefault()
+            e.stopPropagation()
+        }
+        setValidated(true)
+        if (form.checkValidity() === true) {
+            e.preventDefault()
+            e.stopPropagation()
+            dispatch(updateEmployeeRequest({
+                ...employee,
+                user: {
+                    ...info.user,
+                    password: info.password
+                }
+            }))
+            setVisibleResetPassword(false)
+        }
     }
+    //
 
     return (
         <>
@@ -54,37 +67,44 @@ const ResetPassword = ({ employee }) => {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form.Label htmlFor="password">Mật khẩu:</Form.Label>
-                    <Form.Control
-                        type="password"
-                        name="password"
-                        placeholder="Nhập mật khẩu..."
-                        value={info.password}
-                        onChange={handleInputChange}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        Vui lòng nhập mật khẩu.
-                    </Form.Control.Feedback>
-                    <Form.Label htmlFor="repassword">Nhập lại mật khẩu:</Form.Label>
-                    <Form.Control
-                        type="password"
-                        name="repassword"
-                        placeholder="Nhập lại mật khẩu..."
-                        value={info.repassword}
-                        onChange={handleInputChange}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        Vui lòng nhập mật khẩu.
-                    </Form.Control.Feedback>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        variant="primary"
-                        onClick={() => handleResetPassword(employee)}
+                    <Form
+                        className="modal-body"
+                        noValidate
+                        validated={validated}
+                        onSubmit={handleResetPassword}
                     >
-                        Xác nhận
-                    </Button>
-                </Modal.Footer>
+                        <div className="mb-3">
+                            <Form.Label htmlFor="password">Mật khẩu:</Form.Label>
+                            <Form.Control
+                                type="password"
+                                name="password"
+                                placeholder="Nhập mật khẩu..."
+                                value={info.password}
+                                onChange={handleInputChange}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Vui lòng nhập mật khẩu.
+                            </Form.Control.Feedback>
+                        </div>
+                        <div className="mb-3">
+                            <Form.Label htmlFor="repassword">Nhập lại mật khẩu:</Form.Label>
+                            <Form.Control
+                                type="password"
+                                name="repassword"
+                                placeholder="Nhập lại mật khẩu..."
+                                value={info.repassword}
+                                onChange={handleInputChange}
+                                isInvalid={!(info.password === info.repassword)}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Mật khẩu nhập lại không trùng khớp
+                            </Form.Control.Feedback>
+                        </div>
+                        <Button variant="primary">
+                            Xác nhận
+                        </Button>
+                    </Form>
+                </Modal.Body>
             </Modal>
         </>
     )

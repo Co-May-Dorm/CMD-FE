@@ -48,13 +48,13 @@ const EmployeesMainPage = () => {
                 ...newParams
             })
         }
-    }, [])                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+    }, [])
 
     useEffect(() => {
         const requestUrl = location.pathname + "?" + queryString.stringify(filters)         // Lấy RequestURL đã gửi API tới Back End
         navigation(requestUrl)          // Thực hiện điều hướng rới RequestURL đã lấy ở trên
         dispatch(actions.fetchEmployeesRequest(filters))        // Dispatch action fetchEmployeesRequest với tham số truyền vào là filters
-    }, [filters])
+    }, [])
 
     //  Hàm thay đổi state khi ấn vào trang mới ở phần phân trang
     const handlePageChange = (newPage) => {
@@ -104,47 +104,49 @@ const EmployeesMainPage = () => {
             })
         }
     }
-    
+
     return (
         <Container fluid>
-            <div className="row justify-content-xl-between justify-content-end align-items-center">
-                <div className="col-auto fw-bolder fs-5 mb-xl-0 mb-3">
-                    DANH SÁCH SINH VIÊN
+            <Container fluid>
+                <div className="row justify-content-xl-between justify-content-end align-items-center">
+                    <div className="col-auto fw-bolder fs-5 mb-xl-0 mb-3">
+                        DANH SÁCH SINH VIÊN
+                    </div>
+                    <div className="col" />
+                    <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
+                        <AppSearch value={filters.name} onSearch={handleSearch} />
+                    </div>
+                    <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
+                        <ButtonShowDepartments />
+                    </div>
+                    <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
+                        <ButtonShowRoles />
+                    </div>
+                    <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
+                        <AddEmployee />
+                    </div>
+                    <Dropdown autoClose="outside" className="col-auto d-sm-none">
+                        <Dropdown.Toggle>
+                            <BiArrowFromTop />
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
+                            <Dropdown.Item className="d-block m-auto">
+                                <AppSearch value={filters.name} onSearch={handleSearch} />
+                            </Dropdown.Item>
+                            <Dropdown.Item className="d-block m-auto">
+                                <ButtonShowDepartments />
+                            </Dropdown.Item>
+                            <Dropdown.Item className="d-block m-auto">
+                                <ButtonShowRoles />
+                            </Dropdown.Item>
+                            <Dropdown.Item className="d-block m-auto">
+                                <AddEmployee />
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
                 </div>
-                <div className="col" />
-                <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
-                    <AppSearch value={filters.name} onSearch={handleSearch} />
-                </div>
-                <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
-                    <ButtonShowDepartments />
-                </div>
-                <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
-                    <ButtonShowRoles />
-                </div>
-                <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
-                    <AddEmployee />
-                </div>
-                <Dropdown autoClose="outside" className="col-auto d-sm-none">
-                    <Dropdown.Toggle>
-                        <BiArrowFromTop />
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
-                        <Dropdown.Item className="d-block m-auto">
-                            <AppSearch value={filters.name} onSearch={handleSearch} />
-                        </Dropdown.Item>
-                        <Dropdown.Item className="d-block m-auto">
-                            <ButtonShowDepartments />
-                        </Dropdown.Item>
-                        <Dropdown.Item className="d-block m-auto">
-                            <ButtonShowRoles />
-                        </Dropdown.Item>
-                        <Dropdown.Item className="d-block m-auto">
-                            <AddEmployee />
-                        </Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
-            </div>
-            <hr />
+                <hr />
+            </Container>
             <Container fluid>
                 <div className="employee employee-title">
                     <div className="ms-lg-5" />

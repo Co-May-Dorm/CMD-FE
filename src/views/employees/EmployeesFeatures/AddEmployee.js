@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { Button } from 'react-bootstrap'
 
-import FormSubmitEmployee from './FormSubmitEmployee'
+import FormSubmitEmployee from './SubmitEmployee/FormSubmitEmployee'
 
 const AddEmployee = () => {
     const [visibleFormAddEmployee, setVisibleFormAddEmployee] = useState(false)       // State hiển thị Form thêm sinh viên
