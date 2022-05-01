@@ -1,20 +1,21 @@
-import * as types from "../constants/ActionTask"
-import todoListApi from '../api/todoListApi';
+import * as types from "../constants/ActionTask";
+import todoListApi from "../api/todoListApi";
+import { type } from "@testing-library/user-event/dist/type";
 // Lấy danh sách công việc theo chỉ mục (lấy luôn dữ liệu trong action , không gọi api trong component)
 export const dispatchLimitedTaskRequest = (data) => {
-    // return (dispatch) => {
-    //     const fetchTasksList = async () => {
-    //         try {
-    //             const response = await todoListApi.getTaskLimited(data)
-    //             dispatch(dispatchTaskByFilterStatus(response))
-    //         } catch (error) {
-    //             console.log("Can not load...!", error)
-    //         }
-    //     }
-    //     fetchTasksList()
-    // }
-}
-// // // lấy luôn dữ liệu trong action , không gọi api trong component 
+  // return (dispatch) => {
+  //     const fetchTasksList = async () => {
+  //         try {
+  //             const response = await todoListApi.getTaskLimited(data)
+  //             dispatch(dispatchTaskByFilterStatus(response))
+  //         } catch (error) {
+  //             console.log("Can not load...!", error)
+  //         }
+  //     }
+  //     fetchTasksList()
+  // }
+};
+// // // lấy luôn dữ liệu trong action , không gọi api trong component
 // export const getAllTaskRequest = () => {
 //     return (dispatch) => {
 //         const fetchTasksList = async () => {
@@ -34,7 +35,7 @@ export const dispatchLimitedTaskRequest = (data) => {
 // export const dispatchAllTask = (tasks) => { return { type: types.DISPATCH_ALL_TASK, tasks } }
 // // kiem tra da duoc render xong chua
 // export const isRenderDone = () => { return { type: types.IS_RENDER_DONE } }//sua ngay 11/11/2021 tyqe sang type
-// // set so trang hien tai 
+// // set so trang hien tai
 // export const numberPageCurrent = (numberPage) => { return { type: types.NUMBER_PAGE_CURRENT, numberPage } }
 // // se thay doi trang thai đóng mở của form filter advanced
 // export const isShowFilterAdvanced = () => { return { type: types.IS_SHOW_FILTER_ADVANCED } }
@@ -95,7 +96,7 @@ export const dispatchLimitedTaskRequest = (data) => {
 // }
 // // luu nhung thong tin nhan vien theo search
 // export const dispatchDepartmentSearch = (data) => { return { type: types.DISPATCH_DEPARTMENT_SEARCH, data } }
-// // lấy luôn dữ liệu trong action , không gọi api trong component 
+// // lấy luôn dữ liệu trong action , không gọi api trong component
 // export const dispatchFilterAdvanced = (data) => {
 //     return (dispatch) => {
 //         const fetchTasksList = async () => {
@@ -127,146 +128,224 @@ export const dispatchLimitedTaskRequest = (data) => {
 // }
 // // luu nhung cong viec duoc tim kiem
 // export const dispatchSearchTask = (data) => { return { type: types.DISPATCH_TASK_SEARCH, data } }
-// // thay đổi tên công việc ở ô tìm kiếm 
+// // thay đổi tên công việc ở ô tìm kiếm
 // export const changeNameTaskSearch = (nameTask) => { return { type: types.CHANGE_NAME_TASK_SEARCH, nameTask } }
-
 
 //renew
 
 //get request tasks
 export const dispatchTaskRequest = (data) => {
-    return (dispatch) => {
-        const fetchTasksList = async () => {
-            try {
-                const response = await todoListApi.getTasks(data)
-                dispatch(dispatchTasks(response))
-            } catch (error) {
-                console.log("Can not load...!", error)
-            }
-        }
-        fetchTasksList()
-    }
-}
+  return (dispatch) => {
+    const fetchTasksList = async () => {
+      try {
+        const response = await todoListApi.getTasks(data);
+        await dispatch(dispatchTasks(response));
+        dispatch(isLoading(false));
+      } catch (error) {
+        console.log("Can not load...!", error);
+      }
+    };
+    fetchTasksList();
+  };
+};
 //dispatch tasks to todolist reducer
-export const dispatchTasks = (tasks) => { return { type: types.DISPATCH_TASKS, tasks } }
+export const dispatchTasks = (tasks) => {
+  return { type: types.DISPATCH_TASKS, tasks };
+};
 //Date and time start when you create a new task
-export const startDateNewTask = (date) => { return { type: types.START_DATE_NEW_TASK, date } }
+export const startDateNewTask = (date) => {
+  return { type: types.START_DATE_NEW_TASK, date };
+};
 //Date and time end task when you create a new task
-export const endDateNewTask = (date) => { return { type: types.END_DATE_NEW_TASK, date } }
+export const endDateNewTask = (date) => {
+  return { type: types.END_DATE_NEW_TASK, date };
+};
 // is show detail task
-export const showDetailTask = () => { return { type: types.IS_SHOW_DETAIL_TASK } }
+export const showDetailTask = () => {
+  return { type: types.IS_SHOW_DETAIL_TASK };
+};
 //get data detail a task
 export const getTaskDetailRequest = (params) => {
-    return (dispatch) => {
-        const fetchTasksDetail = async () => {
-            try {
-                const response = await todoListApi.getDetailTask(params)
-                await dispatch(dispatchTaskDetail(response))
-            } catch (error) {
-                console.log("Can not load...!", error)
-            }
-        }
-        fetchTasksDetail()
-    }
-}
+  return (dispatch) => {
+    const fetchTasksDetail = async () => {
+      try {
+        const response = await todoListApi.getDetailTask(params);
+        await dispatch(dispatchTaskDetail(response));
+      } catch (error) {
+        console.log("Can not load...!", error);
+      }
+    };
+    fetchTasksDetail();
+  };
+};
 // dispatch detail task
-export const dispatchTaskDetail = (task) => { return { type: types.DISPATCH_TASK_DETAIL, task } }
+export const dispatchTaskDetail = (task) => {
+  return { type: types.DISPATCH_TASK_DETAIL, task };
+};
 //get position modal option task
-export const getPositionModalTask = (position) => { return { type: types.GET_POSITION_MODAL_OPTION_TASK, position } }
-// set so trang hien tai 
-export const pageCurrent = (page) => { return { type: types.PAGE_CURRENT, page } }
+export const getPositionModalTask = (position) => {
+  return { type: types.GET_POSITION_MODAL_OPTION_TASK, position };
+};
+// set so trang hien tai
+export const pageCurrent = (page) => {
+  return { type: types.PAGE_CURRENT, page };
+};
 //Date and time start when you filter tasks
-export const startDateFilterTasks = (date) => { return { type: types.START_DATE_FILTER, date } }
+export const startDateFilterTasks = (date) => {
+  return { type: types.START_DATE_FILTER, date };
+};
 //Date and time end when you filter tasks
-export const endDateFilterTasks = (date) => { return { type: types.END_DATE_FILTER, date } }
-//Search creator 
+export const endDateFilterTasks = (date) => {
+  return { type: types.END_DATE_FILTER, date };
+};
+//Search creator
 export const searchCreator = (params) => {
-    return (dispatch) => {
-        const fetchSearchByParams = async () => {
-            try {
-                const response = await todoListApi.searchByParams(params)
-                dispatch(dispatchSearchCreator(response))
-            } catch (error) {
-                console.log("Can not load...!", error)
-            }
-        }
-        fetchSearchByParams()
-    }
-}
+  return (dispatch) => {
+    const fetchSearchByParams = async () => {
+      try {
+        const response = await todoListApi.searchByParams(params);
+        dispatch(dispatchSearchCreator(response));
+      } catch (error) {
+        console.log("Can not load...!", error);
+      }
+    };
+    fetchSearchByParams();
+  };
+};
 // dispatch employees searched to store reducer
-export const dispatchSearchCreator = (data) => { return { type: types.DISPATCH_CREATOR_SEARCH, data } }
-//Search list employees 
+export const dispatchSearchCreator = (data) => {
+  return { type: types.DISPATCH_CREATOR_SEARCH, data };
+};
+//Search list employees
 export const searchEmployee = (params) => {
-    return (dispatch) => {
-        const fetchSearchByParams = async () => {
-            try {
-                const response = await todoListApi.searchByParams(params.request)
-                switch (params.typeSearch) {
-                    case types.DISPATCH_CREATOR_SEARCH: {
-                        dispatch(dispatchCreator(response))
-                        break;
-                    }
-                    case types.DISPATCH_EMPLOYEE_SEARCH: {
-                        dispatch(dispatchSearchEmployees(response))
-                        break;
-                    }
-                    case types.DISPATCH_RELATED_OBJECT: {
-                        dispatch(dispatchRelatedObject(response))
-                        break;
-                    }
-
-                }
-            } catch (error) {
-                console.log("Can not load...!", error)
-            }
+  return (dispatch) => {
+    const fetchSearchByParams = async () => {
+      try {
+        const response = await todoListApi.searchByParams(params.request);
+        switch (params.typeSearch) {
+          case types.DISPATCH_CREATOR_SEARCH: {
+            dispatch(dispatchCreator(response));
+            break;
+          }
+          case types.DISPATCH_EMPLOYEE_SEARCH: {
+            dispatch(dispatchSearchEmployees(response));
+            break;
+          }
+          case types.DISPATCH_RELATED_OBJECT: {
+            dispatch(dispatchRelatedObject(response));
+            break;
+          }
         }
-        fetchSearchByParams()
-    }
-}
+      } catch (error) {
+        console.log("Can not load...!", error);
+      }
+    };
+    fetchSearchByParams();
+  };
+};
 // dispatch employees searched to store reducer
-export const dispatchSearchEmployees = (data) => { return { type: types.DISPATCH_EMPLOYEE_SEARCH, data } }
+export const dispatchSearchEmployees = (data) => {
+  return { type: types.DISPATCH_EMPLOYEE_SEARCH, data };
+};
 // dispatch creator searched to store reducer
-export const dispatchCreator = (data) => { return { type: types.DISPATCH_CREATOR_SEARCH, data } }
+export const dispatchCreator = (data) => {
+  return { type: types.DISPATCH_CREATOR_SEARCH, data };
+};
 // dispatch creator related object searched to store reducer
-export const dispatchRelatedObject = (data) => { return { type: types.DISPATCH_RELATED_OBJECT, data } }
+export const dispatchRelatedObject = (data) => {
+  return { type: types.DISPATCH_RELATED_OBJECT, data };
+};
 // create new task
-export const creatNewTask = (param) => {
-    return () => {
-        const newTask = async () => {
-            try {
-                await todoListApi.newTask(param)
-            } catch (error) {
-                console.log("Can not load...!", error)
-            }
-        }
-        newTask().then(q => q)
-    }
-}
+export const createNewTask = (param) => {
+  return () => {
+    const newTask = async () => {
+      try {
+        // await dispatch(isLoading(true))
+        console.log("action");
+        todoListApi.newTask(param);
+      } catch (error) {
+        console.log("Can not load...!", error);
+      }
+    };
+    newTask();
+  };
+};
 // add item to list status filter
 export const addStatusFilter = (item) => {
-    return { type: types.ADD_STATUS_FILTER, item }
-}
-// dispatch filter 
-export const dispatchFilter = params => {
-    return (dispatch) => {
-        const filterTask = async () => {
-            try {
-                // console.log(params.statusIds.length)
-                if (params.statusIds.length == 0) {
-                    console.log("đúng")
-                    dispatch(dispatchTaskRequest({ "page": 1, "filter": {} }))
-                } else {
-                    const reponse = await todoListApi.filterTask(params)
-                    dispatch(saveTaskFilter(reponse))
-                }
-            } catch (error) {
-                console.log("Can not load...!", error)
-            }
+  return { type: types.ADD_STATUS_FILTER, item };
+};
+// dispatch filter
+export const dispatchFilter = (params) => {
+  return (dispatch) => {
+    const filterTask = async () => {
+      try {
+        // console.log(params.statusIds.length)
+        if (params.statusIds.length == 0) {
+          dispatch(dispatchTaskRequest({ page: 1, search: {} }));
+        } else {
+          const reponse = await todoListApi.filterTask(params);
+          dispatch(saveTaskFilter(reponse));
         }
-        filterTask()
-    }
-}
+      } catch (error) {
+        console.log("Can not load...!", error);
+      }
+    };
+    filterTask();
+  };
+};
 //save task filtered to reducer store
 export const saveTaskFilter = (tasks) => {
-    return { type: types.SAVE_TASK_FILTER, tasks }
-}
+  return { type: types.SAVE_TASK_FILTER, tasks };
+};
+// name form
+export const changeNameForm = (name) => {
+  return { type: types.NAME_FORM, name };
+};
+//show from task
+export const showFormTask = () => {
+  return { type: types.SHOW_FORM_TASK };
+};
+// refresh date new task
+export const refreshDateNewTask = () => {
+  return { type: types.REFRESH_DATE_NEW_TASK };
+};
+// update task
+export const updateTask = (taskUpdate) => {
+  return (dispatch) => {
+    const updateTask = async () => {
+      try {
+        // await dispatch(isLoading(true))
+        todoListApi.updateTask(taskUpdate);
+        // .then(q => dispatch(statusRequest(q.data.status)))
+      } catch (error) {
+        console.log("Can not load...!", error);
+      }
+    };
+    updateTask();
+  };
+};
+// update status request
+export const statusRequest = (status) => {
+  return { type: types.STATUS_REQUEST, status };
+};
+// is loading
+export const isLoading = (status) => {
+  return { type: types.IS_LOADING, status };
+};
+// show confirm
+export const showConfirm = (id) => {
+  return { type: types.SHOW_CONFIRM, id };
+};
+//delete task
+export const deleteTask = (id) => {
+  return () => {
+    const deleteTask = async () => {
+      try {
+        todoListApi.deteleTask(id);
+      } catch (error) {
+        console.log("Can not load...!", error);
+      }
+    };
+    deleteTask();
+  };
+};
