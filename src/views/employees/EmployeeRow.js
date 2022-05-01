@@ -17,11 +17,11 @@ const EmployeeRow = ({ employee }) => {
     }
 
     let activeStatusElement = <span className="d-inline-block rounded-circle bg-success" style={{ height: "10px", width: "10px" }}/>
-    if (employee.isActive === false) {
+    if (employee.active === false) {
         activeStatusElement = <span className="d-inline-block rounded-circle bg-secondary" style={{ height: "10px", width: "10px" }}/>
     }
 
-    const mainDepartment = employee.departments.reduce((max, department) => max.level > department.level ? max : department)
+    const mainDepartment = employee.departments.reduce((min, department) => min.level < department.level ? min : department)
 
     return (
         <div

@@ -1,23 +1,38 @@
 import React, { useRef, useState } from 'react'
 
-import { ListGroup } from 'react-bootstrap'
-import departmentLevelIcon from '../../../assets/icons/department_level.svg'
+import { Form, ListGroup } from 'react-bootstrap'
+import departmentLevelIcon from '../../../../assets/icons/department_level.svg'
 
-import useOnClickOutside from '../../../customHooks/useOnClickOutside'
+import useOnClickOutside from '../../../../customHooks/useOnClickOutside'
 
-const FormSelectDepartment = ({ currentDepartment, departments, onDepartmentChange }) => {
+const FormSelectDepartment = ({ index, currentDepartment, departments, onDepartmentChange }) => {
+    const [visible, setVisible] = useState(false)       // State quản lý hiển thị danh sách phòng ban
 
-    const [visible, setVisible] = useState(false)
+    const ref = useRef()        // Ref form select department
 
-    //
-    const ref = useRef()
-
-    /* Hàm xử lý đóng các Dropdown khi click ra ngoài */
-    useOnClickOutside(ref, () => setVisible(false))
-    //
+    useOnClickOutside(ref, () => setVisible(false))     // Hàm xử lý đóng form select department khi click ra ngoài
 
     // Chuỗi lệnh hiển thị tên phòng ban phân cấp
     const selectDepartmentElement = []
+    if (index === null) {
+        selectDepartmentElement.push(
+            <ListGroup.Item
+                action
+                style={{
+                    borderRadius: "none",
+                    textAlign: "center"
+                }}
+                onClick={() => onDepartmentChange(index, {
+                    id: null,
+                    level: 0,
+                    name: "Không có phòng ban cha"
+                })}
+                active={currentDepartment.fatherDepartmentId === null}
+            >
+                Không có phòng ban cha
+            </ListGroup.Item>
+        )
+    }
     const recursiveDepartmentChild = (department_parent) => {
         departments.forEach((department_child) => {
             if (department_parent.id === department_child.fatherDepartmentId) {
@@ -29,7 +44,7 @@ const FormSelectDepartment = ({ currentDepartment, departments, onDepartmentChan
                             paddingLeft: department_child.level * 20,
                             borderRadius: "none"
                         }}
-                        onClick={() => onDepartmentChange(department_child)}
+                        onClick={() => onDepartmentChange(index, department_child)}
                         active={currentDepartment?.name === department_child.name}
                     >
                         <img src={departmentLevelIcon} alt="Panel" />
@@ -51,7 +66,7 @@ const FormSelectDepartment = ({ currentDepartment, departments, onDepartmentChan
                             paddingLeft: department.level * 20,
                             borderRadius: "none"
                         }}
-                        onClick={() => onDepartmentChange(department)}
+                        onClick={() => onDepartmentChange(index, department)}
                         active={currentDepartment?.name === department.name}
                     >
                         <img src={departmentLevelIcon} alt="Panel" />
@@ -71,7 +86,27 @@ const FormSelectDepartment = ({ currentDepartment, departments, onDepartmentChan
             onClick={() => setVisible(!visible)}
             className="form-select"
         >
-            {currentDepartment?.name || "Chọn phòng của sinh viên"}
+            <input
+                type="text"
+                name="phoneNumber"
+                placeholder="Chọn phòng ban"
+                value={currentDepartment?.name}
+                readOnly
+                required
+                style={{
+                    width: "100%",
+                    backgroundColor: "none",
+                    border: "none",
+                    outline: "none",
+                    cursor: "pointer",
+                    color: "#2f6bb1",
+                    padding: "0"
+                }}
+            />
+            <Form.Control.Feedback type="invalid">
+                Vui lòng chọn phòng ban
+            </Form.Control.Feedback>
+
             <div className="select">
                 {(visible) ? selectDepartmentElement : null}
             </div>

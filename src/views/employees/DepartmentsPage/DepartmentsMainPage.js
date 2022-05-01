@@ -33,7 +33,6 @@ const DepartmentsMainPage = ({ visible, setVisible }) => {
                 departmentsElement.push(
                     <DepartmentItem
                         key={department_child.id}
-                        level={level}
                         department={department_child}
                     />
                 )
@@ -43,11 +42,10 @@ const DepartmentsMainPage = ({ visible, setVisible }) => {
     }
     const traverseDepartment = () => {
         departments?.forEach((department) => {
-            if (department.fatherDepartmentId === -1) {
+            if (department.fatherDepartmentId === null) {
                 departmentsElement.push(
                     <DepartmentItem
                         key={department.id}
-                        level={1}
                         department={department}
                     />
                 )
