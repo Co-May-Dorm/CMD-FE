@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 
 import { Button } from 'react-bootstrap'
 
-import Departments from './DepartmentsMainPage'
+import Teams from './TeamsMainPage'
 
-const ButtonShowDepartments = () => {
+const ButtonShowTeams = () => {
     const [visible, setVisible] = useState(false)
     return (
         <>
@@ -13,12 +13,12 @@ const ButtonShowDepartments = () => {
                 onClick={() => setVisible(!visible)}
             >
                 <span className="fw-bold">
-                Phòng ban
+                CLB/Đội nhóm
                 </span>
             </Button>
-            <Departments visible={visible} setVisible={setVisible} />
+            <Teams visible={visible} setVisible={setVisible} />
         </>
     )
 }
 
-export default ButtonShowDepartments
+export default ButtonShowTeams

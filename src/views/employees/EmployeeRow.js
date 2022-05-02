@@ -80,7 +80,7 @@ const EmployeeRow = ({ employee }) => {
                     Chức vụ:
                 </div>
                 <div className="col text-break">
-                    {employee.positions[0].name}
+                    {mainDepartment.position.name}
                 </div>
             </div>
             <Dropdown className="employee-more">

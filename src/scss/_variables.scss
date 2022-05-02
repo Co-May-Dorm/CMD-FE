@@ -39,7 +39,6 @@ $grays: (
 $start-linear: #0b7ce3;
 $end-linear: #67f3c9;
 $linear: linear-gradient(to right, $start-linear 25%, $end-linear 125%) !default;
-$linear2: linear-gradient($start-linear 25%, $end-linear 125%) !default;
 $blue: #2391f5 !default;
 $indigo: #6610f2 !default;
 $purple: #6f42c1 !default;
@@ -58,7 +57,6 @@ $grayBlue: #96baec !default;
 // scss-docs-start colors-map
 $colors: (
   "linear": $linear,
-  "linear2": $linear2,
   "blue": $blue,
   "indigo": $indigo,
   "purple": $purple,
@@ -248,7 +246,6 @@ $variable-prefix: bs- !default;
 // This gradient is also added to elements with `.bg-gradient`
 // scss-docs-start variable-gradient
 $gradient: $linear !default;
-$gradient2: $linear2 !default;
 // scss-docs-end variable-gradient
 
 // Spacing
@@ -951,8 +948,8 @@ $nav-tabs-border-color: $gray-300 !default;
 $nav-tabs-border-width: $border-width !default;
 $nav-tabs-border-radius: $border-radius !default;
 $nav-tabs-link-hover-border-color: $gray-200 $gray-200 $nav-tabs-border-color !default;
-$nav-tabs-link-active-color: $gray-700 !default;
-$nav-tabs-link-active-bg: $body-bg !default;
+$nav-tabs-link-active-color: $white !default;
+$nav-tabs-link-active-bg: $start-linear !default;
 $nav-tabs-link-active-border-color: $gray-300 $gray-300 $nav-tabs-link-active-bg !default;
 
 $nav-pills-border-radius: $border-radius !default;

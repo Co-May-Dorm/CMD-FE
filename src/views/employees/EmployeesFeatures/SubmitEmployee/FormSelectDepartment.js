@@ -23,11 +23,11 @@ const FormSelectDepartment = ({ index, currentDepartment, departments, onDepartm
                     textAlign: "center"
                 }}
                 onClick={() => onDepartmentChange(index, {
-                    id: null,
+                    id: -1,
                     level: 0,
                     name: "Không có phòng ban cha"
                 })}
-                active={currentDepartment.fatherDepartmentId === null}
+                active={currentDepartment.id === null}
             >
                 Không có phòng ban cha
             </ListGroup.Item>
@@ -45,7 +45,7 @@ const FormSelectDepartment = ({ index, currentDepartment, departments, onDepartm
                             borderRadius: "none"
                         }}
                         onClick={() => onDepartmentChange(index, department_child)}
-                        active={currentDepartment?.name === department_child.name}
+                        active={currentDepartment?.id === department_child.id}
                     >
                         <img src={departmentLevelIcon} alt="Panel" />
                         <span className="ps-2" />

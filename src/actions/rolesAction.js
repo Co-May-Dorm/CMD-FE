@@ -23,64 +23,49 @@ export const fetchRolesRequest = (params) => {
 //
 
 // Thêm vai trò
-export const addRole = (role) => {
-    return {
-        type: actions.ADD_ROLE,
-        payload: role
-    }
-}
 export const addRoleRequest = (role) => {
-    return (dispatch) => {
-        rolesApi.add(role)
-            .then(response => {
-                dispatch(addRole(response.data))
-            })
-            .catch(error => {
-                alert(error)
-                console.log(error)
-            })
-    }
-}
-//
-
-// Cập nhật thông tin của vai trò
-export const updateRole = (role) => {
-    return {
-        type: actions.UPDATE_ROLE,
-        payload: role
-    }
-}
-export const updateRoleRequest = (role) => {
-    return (dispatch) => {
-        rolesApi.update(role)
-            .then(response => {
-                dispatch(updateRole(response.data))
-            })
-            .catch(error => {
-                alert(error)
-                console.log(error)
-            })
-    }
-}
-//
-
-// Xóa vai trò
-export const deleteRole = (id) => {
-    return {
-        type: actions.DELETE_ROLE,
-        payload: id
-    }
-}
-export const deleteRoleRequest = (id) => {
-    return (dispatch) => {
-        rolesApi.delete(id)
-        .then(() => {
-            dispatch(deleteRole(id))
+    rolesApi.add(role)
+        .then(response => {
+            alert("Thêm vai trò thành công! Nhấn OK để chuyển hướng...")
+            setTimeout(() => {
+                window.location.reload()
+            }, 0)
         })
         .catch(error => {
             alert(error)
             console.log(error)
         })
-    }
+}
+//
+
+// Cập nhật thông tin của vai trò
+export const updateRoleRequest = (role) => {
+    rolesApi.update(role)
+        .then(response => {
+            alert("Chỉnh sửa thông tin của vai trò thành công! Nhấn OK để chuyển hướng...")
+            setTimeout(() => {
+                window.location.reload()
+            }, 0)
+        })
+        .catch(error => {
+            alert(error)
+            console.log(error)
+        })
+}
+//
+
+// Xóa vai trò
+export const deleteRoleRequest = (id) => {
+    rolesApi.delete(id)
+        .then(() => {
+            alert("Xóa vai trò thành công! Nhấn OK để chuyển hướng...")
+            setTimeout(() => {
+                window.location.reload()
+            }, 0)
+        })
+        .catch(error => {
+            alert(error)
+            console.log(error)
+        })
 }
 //
