@@ -4,38 +4,38 @@ import { useDispatch } from 'react-redux'
 import { Button, Dropdown, Modal } from 'react-bootstrap'
 import { BiTrash } from 'react-icons/bi'
 
-import { deleteDepartmentRequest } from '../../../../actions/departmentsAction'
+import { deleteTeamRequest } from '../../../../actions/teamsAction'
 
 
-const DeleteDepartment = ({ id }) => {
+const DeleteTeam = ({ id }) => {
     const dispatch = useDispatch()
-    const [visibleDeleteDepartment, setVisibleDeleteDepartment] = useState(false)
+    const [visibleDeleteTeam, setVisibleDeleteTeam] = useState(false)
     const handleDelete = (id) => {
-        dispatch(deleteDepartmentRequest(id))
-        setVisibleDeleteDepartment(false)
+        dispatch(deleteTeamRequest(id))
+        setVisibleDeleteTeam(false)
     }
 
     return (
         <>
-            <Dropdown.Item onClick={() => setVisibleDeleteDepartment(!visibleDeleteDepartment)}>
+            <Dropdown.Item onClick={() => setVisibleDeleteTeam(!visibleDeleteTeam)}>
                 <BiTrash /> Xóa
             </Dropdown.Item>
             <Modal
                 scrollable
-                show={visibleDeleteDepartment}
-                onHide={() => setVisibleDeleteDepartment(false)}
+                show={visibleDeleteTeam}
+                onHide={() => setVisibleDeleteTeam(false)}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>XÓA PHÒNG BAN</Modal.Title>
+                    <Modal.Title>XÓA CLB - ĐỘI NHÓM</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    Bạn có chắc muốn xóa phòng ban này khỏi công ty?
+                    Bạn có chắc muốn xóa clb - đội nhóm này khỏi công ty?
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
                         variant="secondary"
                         className="text-white"
-                        onClick={() => setVisibleDeleteDepartment(false)}
+                        onClick={() => setVisibleDeleteTeam(false)}
                     >
                         Hủy
                     </Button>
@@ -52,4 +52,4 @@ const DeleteDepartment = ({ id }) => {
     )
 }
 
-export default DeleteDepartment
+export default DeleteTeam

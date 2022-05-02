@@ -23,85 +23,49 @@ export const fetchDepartmentsRequest = (params) => {
 //
 
 // Thêm phòng ban
-export const addDepartment = (department) => {
-    return {
-        type: actions.ADD_DEPARTMENT,
-        payload: department
-    }
-}
 export const addDepartmentRequest = (department) => {
-    return (dispatch) => {
-        departmentsApi.add(department)
-            .then(response => {
-                dispatch(addDepartment(response.data))
-            })
-            .catch(error => {
-                alert(error)
-                console.log(error)
-            })
-    }
+    departmentsApi.add(department)
+        .then(response => {
+            alert("Thêm phòng ban thành công! Nhấn OK để chuyển hướng...")
+            setTimeout(() => {
+                window.location.reload()
+            }, 0)
+        })
+        .catch(error => {
+            alert(error)
+            console.log(error)
+        })
 }
 //
 
 // Cập nhật thông tin của phòng ban
-export const updateDepartment = (department) => {
-    return {
-        type: actions.UPDATE_DEPARTMENT,
-        payload: department
-    }
-}
 export const updateDepartmentRequest = (department) => {
-    return (dispatch) => {
-        departmentsApi.update(department)
-            .then(response => {
-                dispatch(updateDepartment(response.data))
-            })
-            .catch(error => {
-                alert(error)
-                console.log(error)
-            })
-    }
+    departmentsApi.update(department)
+        .then(response => {
+            alert("Chỉnh sửa thông tin phòng ban thành công! Nhấn OK để chuyển hướng...")
+            setTimeout(() => {
+                window.location.reload()
+            }, 0)
+        })
+        .catch(error => {
+            alert(error)
+            console.log(error)
+        })
 }
 //
 
 // Xóa phòng ban
-export const deleteDepartment = (id) => {
-    return {
-        type: actions.DELETE_DEPARTMENT,
-        payload: id
-    }
-}
 export const deleteDepartmentRequest = (id) => {
-    return (dispatch) => {
-        departmentsApi.delete(id)
+    departmentsApi.delete(id)
         .then(() => {
-            dispatch(deleteDepartment(id))
+            alert("Xóa phòng ban thành công! Nhấn OK để chuyển hướng...")
+            setTimeout(() => {
+                window.location.reload()
+            }, 0)
         })
         .catch(error => {
             alert(error)
             console.log(error)
         })
-    }
-}
-//
-
-// Xóa chức vụ trong phòng ban
-export const deletePosition = (id) => {
-    return {
-        type: actions.DELETE_DEPARTMENT,
-        payload: id
-    }
-}
-export const deletePositionRequest = (id) => {
-    return (dispatch) => {
-        departmentsApi.deletePosition(id)
-        .then(() => {
-            dispatch(deletePosition(id))
-        })
-        .catch(error => {
-            alert(error)
-            console.log(error)
-        })
-    }
 }
 //

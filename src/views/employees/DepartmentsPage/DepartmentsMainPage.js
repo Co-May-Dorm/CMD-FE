@@ -3,7 +3,7 @@ import { ListGroup, Modal } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import * as actions from '../../../actions/departmentsAction'
 import AppSearch from '../../../components/AppSearch'
-import DepartmentItem from './DepartmentRow'
+import DepartmentRow from './DepartmentRow'
 import AddDepartment from './DepartmentsFeatures/AddDepartment'
 
 const DepartmentsMainPage = ({ visible, setVisible }) => {
@@ -31,7 +31,7 @@ const DepartmentsMainPage = ({ visible, setVisible }) => {
         departments?.forEach((department_child) => {
             if (department_parent.id === department_child.fatherDepartmentId) {
                 departmentsElement.push(
-                    <DepartmentItem
+                    <DepartmentRow
                         key={department_child.id}
                         department={department_child}
                     />
@@ -42,9 +42,9 @@ const DepartmentsMainPage = ({ visible, setVisible }) => {
     }
     const traverseDepartment = () => {
         departments?.forEach((department) => {
-            if (department.fatherDepartmentId === null) {
+            if (department.fatherDepartmentId === -1) {
                 departmentsElement.push(
-                    <DepartmentItem
+                    <DepartmentRow
                         key={department.id}
                         department={department}
                     />
@@ -64,17 +64,11 @@ const DepartmentsMainPage = ({ visible, setVisible }) => {
             show={visible}
             onHide={() => setVisible(false)}
         >
-            <div className="modal-header row justify-content-between">
-                <div className="col text-white">
-                    <Modal.Title>Phòng</Modal.Title>
-                </div>
-                <div className="col-auto">
-                    <button
-                        className="btn-close"
-                        onClick={() => setVisible(false)}
-                    />
-                </div>
-            </div>
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                        Phòng ban
+                    </Modal.Title>
+                </Modal.Header>
             <Modal.Body>
                 <div className="row align-content-between justify-content-between bg-light p-3">
                     <div className="col">
@@ -86,7 +80,7 @@ const DepartmentsMainPage = ({ visible, setVisible }) => {
                     <div className="col-auto">
                         <AddDepartment />
                     </div>
-                </div>
+                </div>                                              
                 <ListGroup
                     className="mt-3"
                     variant="flush"

@@ -1,48 +1,35 @@
 import React, { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 
 import { Button, Form, Modal } from "react-bootstrap"
 
-import { addDepartmentRequest, fetchDepartmentsRequest, updateDepartmentRequest } from "../../../../actions/departmentsAction"
-import FormSelectDepartment from "../../EmployeesFeatures/SubmitEmployee/FormSelectDepartment"
+import { addTeamRequest, updateTeamRequest } from "../../../../actions/teamsAction"
 import Positions from "./Positions"
 
-const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
-    const departments = useSelector(state => state.departments.data)
+const FormSubmitTeam = ({ visible, setVisible, team = null }) => {
     const dispatch = useDispatch()
 
     /* Quản lý các state */
     const [info, setInfo] = useState({
-        // State lưu thông tin của phòng ban khi người dùng nhập dữ liệu
+        // State lưu thông tin của CLB/Đội nhóm khi người dùng nhập dữ liệu
         code: "",
         name: "",
         description: "",
-        fatherDepartmentId: null,
         positions: []
     })
     //
 
     useEffect(() => {
-        dispatch(fetchDepartmentsRequest())
-    }, [])
-    useEffect(() => {
-        if (department?.id) {
-            setInfo(department)
+        if (team?.id) {
+            setInfo(team)
         }
-    }, [department])
+    }, [team])
 
     /* Các hàm thay đổi giá trị của state info mỗi khi người dùng nhập/chọn dữ liệu mới */
     const handleInputChange = (e) => {
         setInfo({
             ...info,
             [e.target.name]: e.target.value
-        })
-    }
-    const handleDepartmentChange = (index, department) => {
-        setInfo({
-            ...info,
-            level: department.level + 1,
-            fatherDepartmentId: department.id
         })
     }
     //
@@ -59,28 +46,22 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
         if (form.checkValidity() === true) {
             e.preventDefault()
             e.stopPropagation()
-            if (info.fatherDepartmentId === "") {
+            if (info.fatherTeamId === "") {
                 setInfo({
                     ...info,
-                    fatherDepartmentId: null
+                    fatherTeamId: null
                 })
             }
             if (info.id) {
-                dispatch(updateDepartmentRequest(info))
+                dispatch(updateTeamRequest(info))
             }
             else {
-                dispatch(addDepartmentRequest(info))
+                dispatch(addTeamRequest(info))
             }
         }
     }
     //
 
-    // Tìm phòng ban cha dựa theo id
-    const fatherDepartment = departments.find(department => department.id === info.fatherDepartmentId) || {
-        id: null,
-        name: "Không có phòng ban cha"
-    }
-    console.log(info)
     return (
         <>
             <Modal
@@ -92,7 +73,7 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
             >
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        {department?.id ? "CHỈNH SỬA PHÒNG BAN" : "THÊM PHÒNG BAN MỚI"}
+                        {team?.id ? "CHỈNH SỬA CLB/Đội nhóm" : "THÊM CLB/Đội nhóm MỚI"}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -102,32 +83,32 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
                         onSubmit={handleSubmit}
                     >
                         <div className="mb-3">
-                            <Form.Label>Mã phòng ban:</Form.Label>
+                            <Form.Label>Mã CLB/Đội nhóm:</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="code"
-                                placeholder="Nhập mã phòng ban..."
+                                placeholder="Nhập mã CLB/Đội nhóm..."
                                 value={info.code}
                                 onChange={handleInputChange}
                                 required
                             />
                             <Form.Control.Feedback type="invalid">
-                                Vui lòng nhập mã phòng ban.
+                                Vui lòng nhập mã CLB/Đội nhóm.
                             </Form.Control.Feedback>
                         </div>
                         <hr />
                         <div className="mb-3">
-                            <Form.Label>Tên phòng ban:</Form.Label>
+                            <Form.Label>Tên CLB/Đội nhóm:</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="name"
-                                placeholder="Nhập tên phòng ban..."
+                                placeholder="Nhập tên CLB/Đội nhóm..."
                                 value={info.name}
                                 onChange={handleInputChange}
                                 required
                             />
                             <Form.Control.Feedback type="invalid">
-                                Vui lòng nhập tên phòng ban.
+                                Vui lòng nhập tên CLB/Đội nhóm.
                             </Form.Control.Feedback>
                         </div>
                         <hr />
@@ -137,21 +118,12 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
                                 as="textarea"
                                 rows={10}
                                 name="description"
-                                placeholder="Nhập mô tả phòng ban..."
+                                placeholder="Nhập mô tả CLB/Đội nhóm..."
                                 value={info.description}
                                 onChange={handleInputChange}
                             />
                         </div>
                         <hr />
-                        <div className="mb-3">
-                            <Form.Label>Phòng ban cha:</Form.Label>
-                            <FormSelectDepartment
-                                index={null}
-                                currentDepartment={fatherDepartment}
-                                departments={departments}
-                                onDepartmentChange={handleDepartmentChange}
-                            />
-                        </div>
                         <Positions info={info} setInfo={setInfo} />
                         <Modal.Footer>
                             <Button
@@ -159,7 +131,7 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
                                 size="lg"
                                 type="submit"
                             >
-                                {(department?.id) ? "Cập nhật thông tin" : "Xác nhận tạo mới"}
+                                {(team?.id) ? "Cập nhật thông tin" : "Xác nhận tạo mới"}
                             </Button>
                         </Modal.Footer>
                     </Form>
@@ -169,4 +141,4 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
     )
 }
 
-export default FormSubmitDepartment
+export default FormSubmitTeam

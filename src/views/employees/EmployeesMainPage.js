@@ -11,8 +11,10 @@ import AppPagination from '../../components/AppPagination'
 import EmployeeRow from './EmployeeRow'
 import AddEmployee from './EmployeesFeatures/AddEmployee'
 import ButtonShowDepartments from './DepartmentsPage/ButtonShowDepartments'
+import ButtonShowTeams from './TeamsPage/ButtonShowTeams'
 import AppSearch from '../../components/AppSearch'
 import ButtonShowRoles from './RolesPage/ButtonShowRoles'
+import ExportDataToCSV from './EmployeesFeatures/ExportDataToCSV'
 
 const queryString = require('query-string')
 
@@ -54,7 +56,7 @@ const EmployeesMainPage = () => {
         const requestUrl = location.pathname + "?" + queryString.stringify(filters)         // Lấy RequestURL đã gửi API tới Back End
         navigation(requestUrl)          // Thực hiện điều hướng rới RequestURL đã lấy ở trên
         dispatch(actions.fetchEmployeesRequest(filters))        // Dispatch action fetchEmployeesRequest với tham số truyền vào là filters
-    }, [])
+    }, [filters])
 
     //  Hàm thay đổi state khi ấn vào trang mới ở phần phân trang
     const handlePageChange = (newPage) => {
@@ -120,10 +122,16 @@ const EmployeesMainPage = () => {
                         <ButtonShowDepartments />
                     </div>
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
+                        <ButtonShowTeams />
+                    </div>
+                    <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
                         <ButtonShowRoles />
                     </div>
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
                         <AddEmployee />
+                    </div>
+                    <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
+                        <ExportDataToCSV data={employees} />
                     </div>
                     <Dropdown autoClose="outside" className="col-auto d-sm-none">
                         <Dropdown.Toggle>
@@ -141,6 +149,9 @@ const EmployeesMainPage = () => {
                             </Dropdown.Item>
                             <Dropdown.Item className="d-block m-auto">
                                 <AddEmployee />
+                            </Dropdown.Item>
+                            <Dropdown.Item className="d-block m-auto">
+                                <ExportDataToCSV data={employees} />
                             </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>

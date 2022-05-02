@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
-import { Button, Form, Modal } from "react-bootstrap"
-import { BiTrash } from 'react-icons/bi'
+import { Button, Form, Modal, Tab, Tabs } from "react-bootstrap"
+import { BiPlusMedical, BiTrash } from 'react-icons/bi'
 import { addEmployeeRequest, updateEmployeeRequest } from "../../../../actions/employeesAction"
 import FormSelectDepartment from "./FormSelectDepartment"
 import FormSelectPosition from "./FormSelectPosition"
+import FormSelectTeam from "./FormSelectTeam"
 
 const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
-    const departments = useSelector(state => state.departments.data)    
+    const departments = useSelector(state => state.departments.data)
     const dispatch = useDispatch()
 
     /* Quản lý các state */
@@ -22,22 +23,25 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         email: "",
         phoneNumber: "",
         teams: [],
-        departments: [],
-        positions: [],
+        departments: [{}],
         user: {
-            username: null,
+            username: "",
             enableLogin: false
         }
     })
+    const [tab, setTab] = useState('departments')       // State chuyển từ điều chỉnh phòng ban - điều chỉnh đội nhóm
+    //
 
     useEffect(() => {
         if (employee?.id) {
-            setInfo({
+            let data = {
                 ...employee,
-                departments: employee.departments,
-                positions: employee.positions,
                 user: (employee.user.enableLogin !== false) ? employee.user : { username: "" }
+            }
+            employee.departments.forEach((department, index, array) => {
+                array[index].positions = departments.find(dp => dp.id === department.id).positions
             })
+            setInfo(data)
         }
     }, [employee, departments])
 
@@ -93,7 +97,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
             setInfo({
                 ...info,
                 user: {
-                    username: null,
+                    username: "",
                     enableLogin: false
                 }
             })
@@ -123,45 +127,106 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     const handleDepartmentChange = (index, department) => {
         const start = info.departments.slice(0, index) || []
         const end = info.departments.slice(index + 1, info.departments.length + 1) || []
-        const startPosition = info.departments.slice(0, index) || []
-        const endPosition = info.departments.slice(index + 1, info.departments.length + 1) || []
         setInfo({
             ...info,
             departments: [
                 ...start,
-                department,
+                {
+                    ...department,
+                    position: {}
+                },
                 ...end
-            ],
-            positions: [
-                ...startPosition,
-                {},
-                ...endPosition
             ]
         })
     }
 
-    const handlePositionChange = (index, position) => {
-        const start = info.positions.slice(0, index) || []
-        const end = info.positions.slice(index + 1, info.positions.length + 1) || []
+    const handlePositionOfDepartmentChange = (index, position) => {
+        const start = info.departments.slice(0, index) || []
+        const end = info.departments.slice(index + 1, info.departments.length + 1) || []
+        const department = info.departments[index]
         setInfo({
             ...info,
-            positions: [
+            departments: [
                 ...start,
-                position,
-                ...end]
+                {
+                    ...department,
+                    position
+                },
+                ...end
+            ]
         })
     }
 
     const handleDeleteFormSelectDepartment = (index) => {
         const updateDepartments = info.departments.filter((e, idx) => index !== idx)
-        const updatePositions = info.positions.filter((e, idx) => index !== idx)
         setInfo({
             ...info,
-            departments: updateDepartments,
-            positions: updatePositions
+            departments: updateDepartments
         })
     }
     //
+
+    /* Xử lý khi click vào button Thêm CLB/Đội nhóm */
+    const handleShowFormSelectTeam = () => {
+        if (info.teams?.length === 0) {
+            setInfo({
+                ...info,
+                teams: [{}]
+            })
+        }
+        else {
+            setInfo({
+                ...info,
+                teams: [
+                    ...info.teams,
+                    {}
+                ]
+            })
+        }
+    }
+
+    const handleTeamChange = (index, team) => {
+        const start = info.teams.slice(0, index) || []
+        const end = info.teams.slice(index + 1, info.teams.length + 1) || []
+        setInfo({
+            ...info,
+            teams: [
+                ...start,
+                {
+                    ...team,
+                    position: {}
+                },
+                ...end
+            ]
+        })
+    }
+
+    const handlePositionOfTeamChange = (index, position) => {
+        const start = info.teams.slice(0, index) || []
+        const end = info.teams.slice(index + 1, info.teams.length + 1) || []
+        const team = info.teams[index]
+        setInfo({
+            ...info,
+            teams: [
+                ...start,
+                {
+                    ...team,
+                    position
+                },
+                ...end
+            ]
+        })
+    }
+
+    const handleDeleteFormSelectTeam = (index) => {
+        const updateTeams = info.teams.filter((e, idx) => index !== idx)
+        setInfo({
+            ...info,
+            teams: updateTeams
+        })
+    }
+    //
+    console.log(info)
 
     /* Xử lý Submit Form */
     const [validated, setValidated] = useState(false)
@@ -176,20 +241,33 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
             e.preventDefault()
             e.stopPropagation()
             if (info.id) {
-                const data = {
+                let data = {
                     ...info,
                     modifyBy: 1
                 }
+                data.departments?.forEach((department, index, array) => {
+                    delete array[index].positions
+                })
+                if (data.hasOwnProperty("team") === false) {
+                    data.teams = []
+                }
+                data.teams?.forEach((team, index, array) => {
+                    delete array[index].positions
+                })
                 dispatch(updateEmployeeRequest(data))
-                window.location.reload()
             }
             else {
-                const data = {
+                let data = {
                     ...info,
                     createBy: 1
                 }
+                data.departments?.forEach((department, index, array) => {
+                    delete array[index].positions
+                })
+                data.teams?.forEach((team, index, array) => {
+                    delete array[index].positions
+                })
                 dispatch(addEmployeeRequest(data))
-                window.location.reload()
             }
         }
     }
@@ -307,55 +385,106 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                         </Form.Control.Feedback>
                     </div>
                     <hr />
-                    <div className="card">
-                        <div className="card-header bg-gradient fw-bolder fs-3">
-                            Phòng ban
-                        </div>
-                        {
-                            info.departments.map((department, index) => (
-                                <div key={index} className="list-group-item bg-light mb-3">
-                                    <div className="d-flex flex-lg-row flex-column">
-                                        <div className="mb-3 mb-lg-0 col">
-                                            <Form.Label>Phòng ban:</Form.Label>
-                                            <FormSelectDepartment
-                                                index={index}
-                                                currentDepartment={department}
-                                                departments={departments}
-                                                onDepartmentChange={handleDepartmentChange}
-                                            />
-                                        </div>
-                                        <div className="mb-3 ms-lg-3 col">
-                                            <Form.Label>Chức vụ:</Form.Label>
-                                            <FormSelectPosition
-                                                index={index}
-                                                currentPosition={info.positions[index]}
-                                                positions={info.departments[index]?.positions}
-                                                onPositionChange={handlePositionChange}
-                                            />
-                                        </div>
-                                    </div>
+                    <div className="card mb-3">
+                        <Tabs
+                            activeKey={tab}
+                            onSelect={(k) => setTab(k)}
+                        >
+                            <Tab eventKey="departments" title="Phòng ban">
+                                <div className="card-body">
+                                    {
+                                        info.departments.map((department, index) => (
+                                            <div key={index} className="list-group-item bg-light mb-3">
+                                                <div className="d-flex flex-lg-row flex-column">
+                                                    <div className="mb-3 mb-lg-0 col">
+                                                        <Form.Label>Phòng ban số {index + 1}:</Form.Label>
+                                                        <FormSelectDepartment
+                                                            index={index}
+                                                            currentDepartment={department}
+                                                            departments={departments}
+                                                            onDepartmentChange={handleDepartmentChange}
+                                                        />
+                                                    </div>
+                                                    <div className="mb-3 ms-lg-3 col">
+                                                        <Form.Label>Chức vụ của phòng ban số {index + 1}:</Form.Label>
+                                                        <FormSelectPosition
+                                                            index={index}
+                                                            currentPosition={info.departments[index]?.position}
+                                                            positions={info.departments[index]?.positions}
+                                                            onPositionChange={handlePositionOfDepartmentChange}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <Button
+                                                    variant="outline-danger"
+                                                    className="d-block m-auto"
+                                                    onClick={() => handleDeleteFormSelectDepartment(index)}
+                                                >
+                                                    <BiTrash /> Xóa
+                                                </Button>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                                <div className="mb-3">
                                     <Button
-                                        variant="outline-danger"
+                                        variant="outline-primary"
                                         className="d-block m-auto"
-                                        onClick={() => handleDeleteFormSelectDepartment(index)}
+                                        onClick={handleShowFormSelectDepartment}
                                     >
-                                        <BiTrash /> Xóa
+                                        <BiPlusMedical />{" "} Thêm phòng ban {" "}<BiPlusMedical />
                                     </Button>
                                 </div>
-                            ))
-                        }
-                        <div className="mb-3 mt-3">
-                            <Button
-                                variant="outline-primary"
-                                className="d-block m-auto"
-                                onClick={handleShowFormSelectDepartment}
-                            >
-                                Thêm phòng ban
-                            </Button>
-                        </div>
+                            </Tab>
+                            <Tab eventKey="teams" title="CLB/Đội nhóm">
+                                <div className="card-body">
+                                    {
+                                        info.teams?.map((team, index) => (
+                                            <div key={index} className="list-group-item bg-light mb-3">
+                                                <div className="d-flex flex-lg-row flex-column">
+                                                    <div className="mb-3 mb-lg-0 col">
+                                                        <Form.Label>CLB/Đội nhóm số {index + 1}:</Form.Label>
+                                                        <FormSelectTeam
+                                                            index={index}
+                                                            currentTeam={team}
+                                                            onTeamChange={handleTeamChange}
+                                                        />
+                                                    </div>
+                                                    <div className="mb-3 ms-lg-3 col">
+                                                        <Form.Label>Chức vụ của CLB/Đội nhóm số {index + 1}:</Form.Label>
+                                                        <FormSelectPosition
+                                                            index={index}
+                                                            currentPosition={info.teams[index]?.position}
+                                                            positions={info.teams[index]?.positions}
+                                                            onPositionChange={handlePositionOfTeamChange}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <Button
+                                                    variant="outline-danger"
+                                                    className="d-block m-auto"
+                                                    onClick={() => handleDeleteFormSelectTeam(index)}
+                                                >
+                                                    <BiTrash /> Xóa
+                                                </Button>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                                <div className="mb-3">
+                                    <Button
+                                        variant="outline-primary"
+                                        className="d-block m-auto"
+                                        onClick={handleShowFormSelectTeam}
+                                    >
+                                        <BiPlusMedical />{" "} Thêm CLB/Đội nhóm {" "}<BiPlusMedical />
+                                    </Button>
+                                </div>
+                            </Tab>
+                        </Tabs>
                     </div>
                     <hr />
-                    <div className="card">
+                    <div className="card mb-3">
                         <div className="card-header">
                             <Form.Check
                                 type="switch"

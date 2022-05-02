@@ -1,20 +1,8 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 
 import { ListGroup, Modal, Table } from 'react-bootstrap'
 
-const DepartmentDetail = ({ department, visible, setVisible }) => {
-    const departments = useSelector(state => state.departments.data)    // Lấy danh sách phòng ban từ redux
-
-    let parentName = ""     // Khởi tạo tên phòng ban cha mặc định là rỗng
-
-    // Duyệt qua danh sách phòng ban để tìm ra tên phòng ban cha
-    departments.forEach(dp => {
-        if (dp.id === department.fatherDepartmentId) {
-            parentName = dp.name
-        }
-    })
-
+const TeamDetail = ({ team, visible, setVisible }) => {
     return (
         <Modal
             className="modal-fullheight"
@@ -25,22 +13,19 @@ const DepartmentDetail = ({ department, visible, setVisible }) => {
         >
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        Chi tiết phòng ban
+                        Chi tiết CLB/Đội nhóm
                     </Modal.Title>
                 </Modal.Header>
             <Modal.Body>
                 <ListGroup variant="flush">
                     <ListGroup.Item>
-                        Mã phòng ban: {department.code}
+                        Mã CLB/Đội nhóm: {team.code}
                     </ListGroup.Item>
                     <ListGroup.Item>
-                        Tên phòng ban: {department.name}
+                        Tên CLB/Đội nhóm: {team.name}
                     </ListGroup.Item>
                     <ListGroup.Item>
-                        Thuộc sự quản lý của phòng ban: {parentName || department.name}
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                        Mô tả về phòng ban: {(department.description === "") ? "Chưa có mô tả" : department.description}
+                        Mô tả về CLB/Đội nhóm: {(team.description === "") ? "Chưa có mô tả" : team.description}
                     </ListGroup.Item>
                     <ListGroup.Item>
                         <Table
@@ -65,10 +50,10 @@ const DepartmentDetail = ({ department, visible, setVisible }) => {
                             </thead>
                             <tbody>
                                 {
-                                    department.positions.map((position, index) => (
+                                    team.positions?.map((position, index) => (
                                         <tr key={index}>
                                             <td>{position.name}</td>
-                                            <td>{position?.role.name}</td>
+                                            <td>{position.role.name}</td>
                                         </tr>
                                     ))
                                 }
@@ -82,4 +67,4 @@ const DepartmentDetail = ({ department, visible, setVisible }) => {
     )
 }
 
-export default DepartmentDetail
+export default TeamDetail

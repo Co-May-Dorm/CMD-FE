@@ -23,78 +23,52 @@ export const fetchEmployeesRequest = (params) => {
 //
 
 // Thêm nhân viên
-export const addEmployee = (employee) => {
-    return {
-        type: actions.ADD_EMPLOYEE,
-        payload: employee
-    }
-}
 export const addEmployeeRequest = (employee) => {
-    return (dispatch) => {
-        employeesApi.add(employee)
-            .then(response => {
-                dispatch(addEmployee(response.data.data))
-            })
-            .catch(error => {
-                alert(error)
-                console.log(error)
-            })
-    }
+    employeesApi.add(employee)
+        .then(() => {
+            alert("Thêm sinh viên thành công! Nhấn OK để chuyển hướng...")
+            setTimeout(() => {
+                window.location.reload()
+            }, 0)
+        })
+        .catch(error => {
+            alert(error)
+            console.log(error)
+        })
 }
 //
 
 // Cập nhật thông tin của nhân viên
-export const updateEmployee = (employee) => {
-    return {
-        type: actions.UPDATE_EMPLOYEE,
-        payload: employee
-    }
-}
 export const updateEmployeeRequest = (employee) => {
-    return (dispatch) => {
-        employeesApi.update(employee)
-            .then(response => {
-                dispatch(updateEmployee(response.data))
-            })
-            .catch((error) => {
-                if (error.response) {
-                    // The request was made and the server responded with a status code
-                    // that falls out of the range of 2xx
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                } else if (error.request) {
-                    // The request was made but no response was received
-                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                    // http.ClientRequest in node.js
-                    console.log(error.request);
-                } else {
-                    // Something happened in setting up the request that triggered an Error
-                    console.log('Error', error.message);
-                }
-                console.log(error.config);
-            })
-    }
+    employeesApi.update(employee)
+        .then(response => {
+            alert("Chỉnh sửa thông tin sinh viên thành công! Nhấn OK để chuyển hướng...")
+            setTimeout(() => {
+                window.location.reload()
+            }, 0)
+        })
+        .then(() => {
+            alert("Chỉnh sửa thông tin của sinh viên ")
+        })
+        .catch((error) => {
+            alert(error)
+            console.log(error)
+        })
 }
 //
 
 // Xóa nhân viên
-export const deleteEmployee = (employeeId) => {
-    return {
-        type: actions.DELETE_EMPLOYEE,
-        payload: employeeId
-    }
-}
 export const deleteEmployeeRequest = (employeeId) => {
-    return (dispatch) => {
-        employeesApi.delete(employeeId)
-            .then(() => {
-                dispatch(deleteEmployee(employeeId))
-            })
-            .catch(error => {
-                alert(error)
-                console.log(error)
-            })
-    }
+    employeesApi.delete(employeeId)
+        .then(() => {
+            alert("Xóa sinh viên thành công! Nhấn OK để chuyển hướng...")
+            setTimeout(() => {
+                window.location.reload()
+            }, 0)
+        })
+        .catch(error => {
+            alert(error)
+            console.log(error)
+        })
 }
 //
