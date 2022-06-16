@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react'
 
 import { Accordion, Modal } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import * as actions from '../../../actions/rolesAction'
+import { fetchRolesRequest } from '../../../actions/rolesAction'
 import AppPagination from '../../../components/AppPagination'
 import AppSearch from '../../../components/AppSearch'
 import RoleItem from './RoleItem'
 import AddRole from './RolesFeatures/AddRole'
 
 const Roles = ({ visible, setVisible }) => {
-    const roles = useSelector(state => state.roles.taskList)    // Lấy danh sách vai trò từ redux
+    const roles = useSelector(state => state.roles.roles)    // Lấy danh sách vai trò từ redux
     const pagination = useSelector(state => state.roles.pagination)
     const dispatch = useDispatch()
 
@@ -18,10 +18,7 @@ const Roles = ({ visible, setVisible }) => {
     })
 
     useEffect(() => {
-        document.title = "Vai trò - Cảnh Báo Sớm"
-    }, [])
-    useEffect(() => {
-        dispatch(actions.fetchRolesRequest(filters))
+        dispatch(fetchRolesRequest(filters))
     }, [filters])
 
     const handlePageChange = newPage => {

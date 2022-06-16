@@ -2,10 +2,13 @@ import axios from 'axios'
 import queryString from 'query-string'
 
 // Thiết lập cấu hình mặc định cho http request
+const accessToken = localStorage.getItem("accessToken") || ""
+
 const axiosClient = axios.create({
     baseURL: "http://27.74.244.150:9090/",
     headers: {
         'content-type': 'application/json',
+        'Authorization': accessToken,
         'Access-Control-Allow-Origin': '*',
     },
     paramsSerializer: params => queryString.stringify(params)

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
 
 import { Button, Dropdown, Modal } from 'react-bootstrap'
 import { BsFillLockFill, BsFillUnlockFill } from 'react-icons/bs'
@@ -8,16 +7,15 @@ import { updateEmployeeRequest } from '../../../actions/employeesAction'
 
 
 const LockEmployee = ({ employee }) => {
-    const dispatch = useDispatch()      // Dùng để dispatch các action
 
     const [visibleLockEmployee, setVisibleLockEmployee] = useState(false)              // State hiển thị thông báo xác nhận khóa tài khoản nhân viên
 
     // Hàm xử lý khóa tài khoản
     const handleLock = (employee) => {
-        dispatch(updateEmployeeRequest({
+        updateEmployeeRequest({
             ...employee,
             active: !employee.active
-        }))
+        })
         window.location.reload()
     }
 

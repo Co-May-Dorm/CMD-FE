@@ -7,10 +7,9 @@ import { useDispatch } from 'react-redux'
 import { deleteEmployeeRequest } from '../../../actions/employeesAction'
 
 const DeleteEmployee = ({ employee }) => {
-    const dispatch = useDispatch()
     const [visibleDeleteEmployee, setVisibleDeleteEmployee] = useState(false)              // State hiển thị thông báo xác nhận xóa sinh viên
     const handleDelete = (employeeId) => {
-        dispatch(deleteEmployeeRequest(employeeId))
+        deleteEmployeeRequest(employeeId)
         setVisibleDeleteEmployee(false)
     }
 

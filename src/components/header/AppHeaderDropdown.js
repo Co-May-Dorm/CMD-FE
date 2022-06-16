@@ -43,7 +43,10 @@ const AppHeaderDropdown = () => {
                     <img src={manualsIcon} className="me-2" />
                     Hướng dẫn sử dụng
                 </Dropdown.Item>
-                <Dropdown.Item>
+                <Dropdown.Item onClick={() => {
+                    localStorage.removeItem("token")
+                    window.location.reload()
+                }}>
                     <img src={logoutIcon} className="me-2" />
                     Đăng xuất
                 </Dropdown.Item>

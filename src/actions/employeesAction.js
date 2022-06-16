@@ -41,14 +41,11 @@ export const addEmployeeRequest = (employee) => {
 // Cập nhật thông tin của nhân viên
 export const updateEmployeeRequest = (employee) => {
     employeesApi.update(employee)
-        .then(response => {
+        .then(() => {
             alert("Chỉnh sửa thông tin sinh viên thành công! Nhấn OK để chuyển hướng...")
             setTimeout(() => {
                 window.location.reload()
             }, 0)
-        })
-        .then(() => {
-            alert("Chỉnh sửa thông tin của sinh viên ")
         })
         .catch((error) => {
             alert(error)

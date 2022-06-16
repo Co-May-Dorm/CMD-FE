@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap'
 import { BiEdit } from 'react-icons/bi'
 import FormSubmitRole from './FormSubmitRole'
 
-const EditRole = ({ role }) => {
+const EditRole = ({ roleId }) => {
     const [visibleEdit, setVisibleEdit] = useState(false)
     return (
         <>
@@ -14,7 +14,7 @@ const EditRole = ({ role }) => {
             >
                 <BiEdit /> <span className="ps-1">Chỉnh sửa</span>
             </Button>
-            <FormSubmitRole visible={visibleEdit} setVisible={setVisibleEdit} role={role} />
+            <FormSubmitRole visible={visibleEdit} setVisible={setVisibleEdit} roleId={roleId} />
         </>
     )
 }

@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { Accordion, ListGroup, Table } from 'react-bootstrap'
+
 import DeleteRole from './DeleteRole'
 import EditRole from './RolesFeatures/EditRole'
 
@@ -12,11 +14,11 @@ const RoleItem = ({ role }) => {
             <Accordion.Body>
                 <ListGroup.Item>
                     <div className="row justify-content-around">
-                        <EditRole role={role} />
-                        <DeleteRole id={role.id} />
+                        <EditRole roleId={role.id} />
+                        <DeleteRole roleId={role.id} />
                     </div>
                 </ListGroup.Item>
-                {/* {
+                {
                     role.positions?.length === 0 ? <div className="list-group-item bg-light">Vai trò này chưa có chức vụ nào nắm giữ</div> : (
                         <Table
                             striped
@@ -42,7 +44,7 @@ const RoleItem = ({ role }) => {
                             </tbody>
                         </Table>
                     )
-                } */}
+                }
             </Accordion.Body>
         </>
     )

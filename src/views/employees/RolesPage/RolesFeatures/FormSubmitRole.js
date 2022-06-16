@@ -1,82 +1,581 @@
 import React, { useEffect, useState } from "react"
 import { Button, Form, Modal, Table } from "react-bootstrap"
-import { AiOutlineClose } from "react-icons/ai"
-import { useDispatch } from "react-redux"
 import * as actions from "../../../../actions/rolesAction"
-import AppToaster from "../../../../components/AppToaster"
 
-const FormSubmitRole = ({ visible, setVisible, role = null }) => {
-    const dispatch = useDispatch()
-
-    // Biến lưu tất cả các quyền
-    const detailPermissions = [{ name: "economic_contract", label: "Hợp đồng kinh tế" }, { name: "contract", label: "Hợp đồng" }, { name: "alarm", label: "Cảnh báo/nhắc nhở" }, { name: "device", label: "Thiết bị" }, { name: "accessory", label: "Phụ tùng" }, { name: "sensor", label: "Cảm biến" }, { name: "category", label: "Danh mục" }, { name: "kpi", label: "Danh mục kiểm tra" }, { name: "todolist", label: "Công việc" }, { name: "request", label: "Đề xuất" }, { name: "type", label: "Loại đề xuất" }, { name: "employee", label: "Nhân viên" }, { name: "department", label: "Phòng ban" }, { name: "position", label: "Chức vụ" }, { name: "inventory", label: "Kho" }, { name: "userrole", label: "Vai trò" }, { name: "form", label: "Báo cáo" }, { name: "customer", label: "Khách hàng" }, { name: "user", label: "Người dùng" }, { name: "company_function", label: "Chức năng công ty" }, { name: "tag", label: "Thẻ" }, { name: "pipeline", label: "Phân loại khách hàng" }, { name: "product", label: "Sản phẩm" }]
-    // Biến lưu tất cả các chức năng của các quyền trên
-    const detailFunctions = [{ name: "view", label: "Xem" }, { name: "create", label: "Tạo" }, { name: "update", label: "Sửa" }, { name: "delete", label: "Xóa" }, { name: "view_all", label: "Xem hết" }, { name: "update_all", label: "Sửa hết" }, { name: "delete_all", label: "Xóa hết" }]
-
+const FormSubmitRole = ({ visible, setVisible, roleId = null }) => {
     /* Quản lý các state */
-    const [info, setInfo] = useState({ // State lưu thông tin của vai trò khi người dùng nhập dữ liệu
+    const [roleInfo, setRoleInfo] = useState({ // State lưu thông tin của vai trò khi người dùng nhập dữ liệu
         name: "",
-        permissions: {
-            economic_contract: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            contract: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            alarm: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            device: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            accessory: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            sensor: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            category: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            kpi: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            todolist: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            request: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            type: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            employee: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            department: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            position: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            inventory: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            userrole: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            form: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            customer: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            user: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            company_function: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            tag: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            pipeline: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-            product: { view: false, create: false, update: false, delete: false, view_all: false, update_all: false, delete_all: false },
-        },
+        createBy: null,
+        modifyBy: null,
+        options: [
+            {
+                "id": 1,
+                "name": "todolist",
+                "label": "Công việc",
+                "permissions": [
+                    {
+                        "id": 1,
+                        "name": "view",
+                        "label": "Xem",
+                        "selected": false
+                    },
+                    {
+                        "id": 2,
+                        "name": "create",
+                        "label": "Tạo",
+                        "selected": false
+                    },
+                    {
+                        "id": 3,
+                        "name": "update",
+                        "label": "Sửa",
+                        "selected": false
+                    },
+                    {
+                        "id": 4,
+                        "name": "delete",
+                        "label": "Xoá",
+                        "selected": false
+                    },
+                    {
+                        "id": 5,
+                        "name": "view_all",
+                        "label": "Xem hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 6,
+                        "name": "update_all",
+                        "label": "Sửa hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 7,
+                        "name": "delete_all",
+                        "label": "Xoá hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 8,
+                        "name": "import",
+                        "label": "Thêm sinh viên bằng file excel",
+                        "selected": false
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "name": "request",
+                "label": "Đề xuất",
+                "permissions": [
+                    {
+                        "id": 1,
+                        "name": "view",
+                        "label": "Xem",
+                        "selected": false
+                    },
+                    {
+                        "id": 2,
+                        "name": "create",
+                        "label": "Tạo",
+                        "selected": false
+                    },
+                    {
+                        "id": 3,
+                        "name": "update",
+                        "label": "Sửa",
+                        "selected": false
+                    },
+                    {
+                        "id": 4,
+                        "name": "delete",
+                        "label": "Xoá",
+                        "selected": false
+                    },
+                    {
+                        "id": 5,
+                        "name": "view_all",
+                        "label": "Xem hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 6,
+                        "name": "update_all",
+                        "label": "Sửa hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 7,
+                        "name": "delete_all",
+                        "label": "Xoá hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 8,
+                        "name": "import",
+                        "label": "Thêm sinh viên bằng file excel",
+                        "selected": false
+                    }
+                ]
+            },
+            {
+                "id": 3,
+                "name": "type",
+                "label": "Loại đề xuất",
+                "permissions": [
+                    {
+                        "id": 1,
+                        "name": "view",
+                        "label": "Xem",
+                        "selected": false
+                    },
+                    {
+                        "id": 2,
+                        "name": "create",
+                        "label": "Tạo",
+                        "selected": false
+                    },
+                    {
+                        "id": 3,
+                        "name": "update",
+                        "label": "Sửa",
+                        "selected": false
+                    },
+                    {
+                        "id": 4,
+                        "name": "delete",
+                        "label": "Xoá",
+                        "selected": false
+                    },
+                    {
+                        "id": 5,
+                        "name": "view_all",
+                        "label": "Xem hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 6,
+                        "name": "update_all",
+                        "label": "Sửa hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 7,
+                        "name": "delete_all",
+                        "label": "Xoá hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 8,
+                        "name": "import",
+                        "label": "Thêm sinh viên bằng file excel",
+                        "selected": false
+                    }
+                ]
+            },
+            {
+                "id": 4,
+                "name": "employee",
+                "label": "Nhân viên",
+                "permissions": [
+                    {
+                        "id": 1,
+                        "name": "view",
+                        "label": "Xem",
+                        "selected": false
+                    },
+                    {
+                        "id": 2,
+                        "name": "create",
+                        "label": "Tạo",
+                        "selected": false
+                    },
+                    {
+                        "id": 3,
+                        "name": "update",
+                        "label": "Sửa",
+                        "selected": false
+                    },
+                    {
+                        "id": 4,
+                        "name": "delete",
+                        "label": "Xoá",
+                        "selected": false
+                    },
+                    {
+                        "id": 5,
+                        "name": "view_all",
+                        "label": "Xem hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 6,
+                        "name": "update_all",
+                        "label": "Sửa hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 7,
+                        "name": "delete_all",
+                        "label": "Xoá hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 8,
+                        "name": "import",
+                        "label": "Thêm sinh viên bằng file excel",
+                        "selected": false
+                    }
+                ]
+            },
+            {
+                "id": 5,
+                "name": "department",
+                "label": "Phòng ban",
+                "permissions": [
+                    {
+                        "id": 1,
+                        "name": "view",
+                        "label": "Xem",
+                        "selected": false
+                    },
+                    {
+                        "id": 2,
+                        "name": "create",
+                        "label": "Tạo",
+                        "selected": false
+                    },
+                    {
+                        "id": 3,
+                        "name": "update",
+                        "label": "Sửa",
+                        "selected": false
+                    },
+                    {
+                        "id": 4,
+                        "name": "delete",
+                        "label": "Xoá",
+                        "selected": false
+                    },
+                    {
+                        "id": 5,
+                        "name": "view_all",
+                        "label": "Xem hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 6,
+                        "name": "update_all",
+                        "label": "Sửa hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 7,
+                        "name": "delete_all",
+                        "label": "Xoá hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 8,
+                        "name": "import",
+                        "label": "Thêm sinh viên bằng file excel",
+                        "selected": false
+                    }
+                ]
+            },
+            {
+                "id": 6,
+                "name": "position",
+                "label": "Chức vụ",
+                "permissions": [
+                    {
+                        "id": 1,
+                        "name": "view",
+                        "label": "Xem",
+                        "selected": false
+                    },
+                    {
+                        "id": 2,
+                        "name": "create",
+                        "label": "Tạo",
+                        "selected": false
+                    },
+                    {
+                        "id": 3,
+                        "name": "update",
+                        "label": "Sửa",
+                        "selected": false
+                    },
+                    {
+                        "id": 4,
+                        "name": "delete",
+                        "label": "Xoá",
+                        "selected": false
+                    },
+                    {
+                        "id": 5,
+                        "name": "view_all",
+                        "label": "Xem hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 6,
+                        "name": "update_all",
+                        "label": "Sửa hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 7,
+                        "name": "delete_all",
+                        "label": "Xoá hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 8,
+                        "name": "import",
+                        "label": "Thêm sinh viên bằng file excel",
+                        "selected": false
+                    }
+                ]
+            },
+            {
+                "id": 7,
+                "name": "inventory",
+                "label": "Kho",
+                "permissions": [
+                    {
+                        "id": 1,
+                        "name": "view",
+                        "label": "Xem",
+                        "selected": false
+                    },
+                    {
+                        "id": 2,
+                        "name": "create",
+                        "label": "Tạo",
+                        "selected": false
+                    },
+                    {
+                        "id": 3,
+                        "name": "update",
+                        "label": "Sửa",
+                        "selected": false
+                    },
+                    {
+                        "id": 4,
+                        "name": "delete",
+                        "label": "Xoá",
+                        "selected": false
+                    },
+                    {
+                        "id": 5,
+                        "name": "view_all",
+                        "label": "Xem hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 6,
+                        "name": "update_all",
+                        "label": "Sửa hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 7,
+                        "name": "delete_all",
+                        "label": "Xoá hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 8,
+                        "name": "import",
+                        "label": "Thêm sinh viên bằng file excel",
+                        "selected": false
+                    }
+                ]
+            },
+            {
+                "id": 8,
+                "name": "team",
+                "label": "Đội nhóm",
+                "permissions": [
+                    {
+                        "id": 1,
+                        "name": "view",
+                        "label": "Xem",
+                        "selected": false
+                    },
+                    {
+                        "id": 2,
+                        "name": "create",
+                        "label": "Tạo",
+                        "selected": false
+                    },
+                    {
+                        "id": 3,
+                        "name": "update",
+                        "label": "Sửa",
+                        "selected": false
+                    },
+                    {
+                        "id": 4,
+                        "name": "delete",
+                        "label": "Xoá",
+                        "selected": false
+                    },
+                    {
+                        "id": 5,
+                        "name": "view_all",
+                        "label": "Xem hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 6,
+                        "name": "update_all",
+                        "label": "Sửa hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 7,
+                        "name": "delete_all",
+                        "label": "Xoá hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 8,
+                        "name": "import",
+                        "label": "Thêm sinh viên bằng file excel",
+                        "selected": false
+                    }
+                ]
+            },
+            {
+                "id": 9,
+                "name": "role",
+                "label": "Vai trò",
+                "permissions": [
+                    {
+                        "id": 1,
+                        "name": "view",
+                        "label": "Xem",
+                        "selected": false
+                    },
+                    {
+                        "id": 2,
+                        "name": "create",
+                        "label": "Tạo",
+                        "selected": false
+                    },
+                    {
+                        "id": 3,
+                        "name": "update",
+                        "label": "Sửa",
+                        "selected": false
+                    },
+                    {
+                        "id": 4,
+                        "name": "delete",
+                        "label": "Xoá",
+                        "selected": false
+                    },
+                    {
+                        "id": 5,
+                        "name": "view_all",
+                        "label": "Xem hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 6,
+                        "name": "update_all",
+                        "label": "Sửa hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 7,
+                        "name": "delete_all",
+                        "label": "Xoá hết",
+                        "selected": false
+                    },
+                    {
+                        "id": 8,
+                        "name": "import",
+                        "label": "Thêm sinh viên bằng file excel",
+                        "selected": false
+                    }
+                ]
+            }
+        ],
         positions: []
     })
     //
 
-    useEffect(() => {
-        if (role?.id) {
-            setInfo(role)
-        }
-    }, [role])
+    // Biến lưu tất cả các chức năng của các quyền trên
+    const detailOptions = roleInfo.options
+    // Biến lưu tất cả các quyền
+    const detailPermissions = roleInfo.options[0].permissions
 
-    /* Các hàm thay đổi giá trị của state info mỗi khi người dùng nhập/chọn dữ liệu mới */
+    useEffect(() => {
+        if (roleId) {
+            actions.getRoleDetail(roleId)
+                .then(response => {
+                    setRoleInfo(response.data.data)
+                })
+        }
+    }, [])
+
+    /* Các hàm thay đổi giá trị của state roleInfo mỗi khi người dùng nhập/chọn dữ liệu mới */
     const handleInputChange = (e) => {
-        setInfo({
-            ...info,
+        setRoleInfo({
+            ...roleInfo,
             [e.target.name]: e.target.value
         })
     }
-    const handleCheck = (e) => {
-        setInfo({
-            ...info,
-            permissions: {
-                ...info.permissions,
-                [e.target.name]: {
-                    ...info.permissions[e.target.name],
-                    [e.target.accessKey]: e.target.checked
-                }
-            }
+    const handleCheck = (option_index, permission_index) => {
+        const startOptions = roleInfo.options.slice(0, option_index) || []
+        const endOptions = roleInfo.options.slice(option_index + 1, roleInfo.options.length + 1) || []
+
+        const startPermissions = roleInfo.options[option_index].permissions.slice(0, permission_index) || []
+        const endPermissions = roleInfo.options[option_index].permissions.slice(permission_index + 1, roleInfo.options[option_index].permissions.length + 1) || []
+        setRoleInfo({
+            ...roleInfo,
+            options: [
+                ...startOptions,
+                {
+                    ...roleInfo.options[option_index],
+                    permissions: [
+                        ...startPermissions,
+                        {
+                            ...roleInfo.options[option_index].permissions[permission_index],
+                            selected: !roleInfo.options[option_index].permissions[permission_index].selected
+                        },
+                        ...endPermissions
+                    ]
+                },
+                ...endOptions
+                
+            ]
         })
     }
-    const handleCheckAll = (e) => {
-        setInfo({
-            ...info,
-            permissions: {
-                ...info.permissions,
-                [e.target.name]: { view: e.target.checked, create: e.target.checked, update: e.target.checked, delete: e.target.checked, view_all: e.target.checked, update_all: e.target.checked, delete_all: e.target.checked }
-            }
+    const handleCheckAll = (option_index) => {
+        const startOptions = roleInfo.options.slice(0, option_index) || []
+        const endOptions = roleInfo.options.slice(option_index + 1, roleInfo.options.length + 1) || []
+        const isAllTrue = roleInfo.options[option_index]?.permissions.every(permission => permission.selected === true)
+        setRoleInfo({
+            ...roleInfo,
+            options: [
+                ...startOptions,
+                {
+                    ...roleInfo.options[option_index],
+                    permissions: roleInfo.options[option_index]?.permissions.map((permission) => {
+                        return {
+                            ...permission,
+                            selected: isAllTrue ? false: true
+                        }
+                    })
+                },
+                ...endOptions
+                
+            ]
         })
     }
     //
@@ -93,11 +592,18 @@ const FormSubmitRole = ({ visible, setVisible, role = null }) => {
         if (form.checkValidity() === true) {
             e.preventDefault()
             e.stopPropagation()
-            if (info.id) {
-                dispatch(actions.updateRoleRequest(info))
+            if (roleInfo.id) {
+                actions.updateRoleRequest({
+                    ...roleInfo,
+                    modifyBy: JSON.parse(localStorage.getItem("userInfo")).id
+                })
             }
             else {
-                dispatch(actions.addRoleRequest(info))
+                actions.addRoleRequest({
+                    ...roleInfo,
+                    createBy: JSON.parse(localStorage.getItem("userInfo")).id,
+                    modifyBy: null
+                })
             }
             setVisible(false)
         }
@@ -107,17 +613,14 @@ const FormSubmitRole = ({ visible, setVisible, role = null }) => {
     return (
         <Modal
             className="modal-fullheight"
-            size="md"
+            size="lg"
             scrollable
             show={visible}
             onHide={() => setVisible(false)}
         >
-            <Modal.Header
-                closeButton
-                className="bg-gradient"
-            >
+            <Modal.Header closeButton>
                 <Modal.Title>
-                    {role?.id ? "CHỈNH SỬA VAI TRÒ" : "THÊM VAI TRÒ MỚI"}
+                    {roleInfo.id ? "CHỈNH SỬA VAI TRÒ" : "THÊM VAI TRÒ MỚI"}
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -132,7 +635,7 @@ const FormSubmitRole = ({ visible, setVisible, role = null }) => {
                             type="text"
                             name="name"
                             placeholder="Nhập tên vai trò..."
-                            value={info.name}
+                            value={roleInfo.name}
                             onChange={handleInputChange}
                             required
                         />
@@ -146,37 +649,36 @@ const FormSubmitRole = ({ visible, setVisible, role = null }) => {
                             <thead>
                                 <tr>
                                     <td></td>
-                                    <td>Xem</td>
-                                    <td>Tạo</td>
-                                    <td>Sửa</td>
-                                    <td>Xóa</td>
-                                    <td>Xem hết</td>
-                                    <td>Sửa hết</td>
-                                    <td>Xóa hết</td>
+                                    {
+                                        detailPermissions.map((detailPermission, permission_index) => (
+                                            <td key={permission_index}>
+                                                {detailPermission.label}
+                                            </td>
+                                        ))
+                                    }
                                 </tr>
                             </thead>
                             <tbody>
                                 {
-                                    detailPermissions.map((detailPermission, index) => (
-                                        <tr key={index}>
+                                    detailOptions.map((detailOption, option_index) => (
+                                        <tr key={option_index}>
                                             <td>
                                                 <Form.Check
                                                     type="checkbox"
-                                                    name={detailPermission.name}
-                                                    label={detailPermission.label + ":"}
-                                                    checked={info.permissions[detailPermission.name].view && info.permissions[detailPermission.name].create && info.permissions[detailPermission.name].update && info.permissions[detailPermission.name].delete && info.permissions[detailPermission.name].view_all && info.permissions[detailPermission.name].update_all && info.permissions[detailPermission.name].delete_all}
-                                                    onChange={handleCheckAll}
+                                                    name={detailOption.name}
+                                                    label={detailOption.label + ":"}
+                                                    checked={roleInfo.options[option_index].permissions.every(detailPermission => detailPermission.selected === true)}
+                                                    onChange={() => handleCheckAll(option_index)}
                                                 />
                                             </td>
                                             {
-                                                detailFunctions.map((detailFunction, index) => (
-                                                    <td key={index + 1}>
+                                                detailPermissions.map((detailPermission, permission_index) => (
+                                                    <td key={permission_index + 1}>
                                                         <Form.Check
                                                             type="checkbox"
                                                             name={detailPermission.name}
-                                                            accessKey={detailFunction.name}
-                                                            checked={info.permissions[detailPermission.name][detailFunction.name]}
-                                                            onChange={handleCheck}
+                                                            checked={roleInfo.options[option_index].permissions[permission_index].selected}
+                                                            onChange={() => handleCheck(option_index, permission_index)}
                                                         />
                                                     </td>
                                                 ))
@@ -193,7 +695,7 @@ const FormSubmitRole = ({ visible, setVisible, role = null }) => {
                             size="lg"
                             type="submit"
                         >
-                            {(role?.id) ? "Cập nhật thông tin" : "Xác nhận tạo mới"}
+                            {(roleInfo.id) ? "Cập nhật thông tin" : "Xác nhận tạo mới"}
                         </Button>
                     </Modal.Footer>
                 </Form>

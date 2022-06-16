@@ -12,15 +12,15 @@ const rolesApi = {
         return axiosClient.get(requestUrl)
     },
     add: (data) => {
-        const requestUrl = `${baseUrl}`
+        const requestUrl = `${baseUrl}/add`
         return axiosClient.post(requestUrl, data)
     },
     update: (data) => {
-        const requestUrl = `${baseUrl}/${data.id}`
-        return axiosClient.patch(requestUrl, data)
+        const requestUrl = `${baseUrl}/edit`
+        return axiosClient.put(requestUrl, data)
     },
     delete: (id) => {
-        const requestUrl = `${baseUrl}/${id}`
+        const requestUrl = `${baseUrl}/delete/${id}`
         return axiosClient.delete(requestUrl)
     }
 }
