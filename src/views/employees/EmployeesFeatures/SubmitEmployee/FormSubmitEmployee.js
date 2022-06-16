@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 
 import { Button, Form, Modal, Tab, Tabs } from "react-bootstrap"
 import { BiPlusMedical, BiTrash } from 'react-icons/bi'
@@ -10,7 +10,6 @@ import FormSelectTeam from "./FormSelectTeam"
 
 const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     const departments = useSelector(state => state.departments.data)
-    const dispatch = useDispatch()
 
     /* Quản lý các state */
     const [info, setInfo] = useState({
@@ -226,7 +225,6 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         })
     }
     //
-    console.log(info)
 
     /* Xử lý Submit Form */
     const [validated, setValidated] = useState(false)
@@ -254,7 +252,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                 data.teams?.forEach((team, index, array) => {
                     delete array[index].positions
                 })
-                dispatch(updateEmployeeRequest(data))
+                updateEmployeeRequest(data)
             }
             else {
                 let data = {
@@ -267,7 +265,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                 data.teams?.forEach((team, index, array) => {
                     delete array[index].positions
                 })
-                dispatch(addEmployeeRequest(data))
+                addEmployeeRequest(data)
             }
         }
     }
@@ -510,7 +508,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                             Vui lòng nhập tên đăng nhập.
                                         </Form.Control.Feedback>
                                     </div>
-                                    {((employee?.id && employee?.user.username === "" && employee?.user.password === "cmacmacma") || !employee) ? (
+                                    {((employee?.id && employee?.user.username === "" && employee?.user.password === "cmdcmdcmd") || !employee) ? (
                                         <>
                                             <hr />
                                             <div className="mb-3">

@@ -25,7 +25,7 @@ export const fetchDepartmentsRequest = (params) => {
 // Thêm phòng ban
 export const addDepartmentRequest = (department) => {
     departmentsApi.add(department)
-        .then(response => {
+        .then(() => {
             alert("Thêm phòng ban thành công! Nhấn OK để chuyển hướng...")
             setTimeout(() => {
                 window.location.reload()
@@ -41,7 +41,7 @@ export const addDepartmentRequest = (department) => {
 // Cập nhật thông tin của phòng ban
 export const updateDepartmentRequest = (department) => {
     departmentsApi.update(department)
-        .then(response => {
+        .then(() => {
             alert("Chỉnh sửa thông tin phòng ban thành công! Nhấn OK để chuyển hướng...")
             setTimeout(() => {
                 window.location.reload()

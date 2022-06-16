@@ -22,10 +22,16 @@ export const fetchRolesRequest = (params) => {
 }
 //
 
+
+// Lấy chi tiết vai trò
+export const getRoleDetail = (id) => {
+    return rolesApi.get(id)
+}
+
 // Thêm vai trò
 export const addRoleRequest = (role) => {
     rolesApi.add(role)
-        .then(response => {
+        .then(() => {
             alert("Thêm vai trò thành công! Nhấn OK để chuyển hướng...")
             setTimeout(() => {
                 window.location.reload()

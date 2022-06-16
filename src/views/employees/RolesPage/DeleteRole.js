@@ -1,16 +1,12 @@
 import React, { useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
 import { BiTrash } from 'react-icons/bi'
-import { useDispatch } from 'react-redux'
-import * as actions from '../../../actions/rolesAction'
-import AppToaster from '../../../components/AppToaster'
+import { deleteRoleRequest } from '../../../actions/rolesAction'
 
 const DeleteRole = ({ id }) => {
-    const dispatch = useDispatch()
     const [visible, setVisible] = useState(false)
-    const [notification, setNotification] = useState(false)
     const handleDelete = (id) => {
-        dispatch(actions.deleteRoleRequest(id))
+        deleteRoleRequest(id)
         setVisible(false)
     }
 

@@ -1,5 +1,5 @@
 import React, { Component, lazy, Suspense } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import './scss/style.scss'
 
 const loading = (
@@ -15,14 +15,22 @@ const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
 const Login = lazy(() => import('./views/pages/login/Login'))
 const Page404 = lazy(() => import('./views/pages/page404/Page404'))
 
+const RequireLogin = () => {
+    return localStorage.getItem("token") ? <DefaultLayout /> : <Navigate to="/login" />
+}
+
+const LoginSuccess = () => {
+    return !localStorage.getItem("token") ? <Login /> : <Navigate to="/" />
+}
+
 class App extends Component {
     render() {
         return (
             <Suspense fallback={loading}>
                 <Routes>
-                    <Route path="/login" name="Đăng Nhập" element={<Login />} />
+                    <Route path="/login" name="Đăng Nhập" element={<LoginSuccess />} />
                     <Route path="/404" name="Lỗi Trang 404" element={<Page404 />} />
-                    <Route path="/*" name="Trang Chủ" element={<DefaultLayout />} />
+                    <Route path="/*" name="Trang Chủ" element={<RequireLogin />}/>
                     <Route path="*" name="Lỗi Trang 404" element={<Page404 />} />
                 </Routes>
             </Suspense>
