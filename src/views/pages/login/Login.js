@@ -39,7 +39,7 @@ const Login = () => {
             axiosClient.post("/api/auth/signin", loginInfo)
                 .then(response => {
                     localStorage.setItem("accessToken", "Bearer " + response.data.data.accessToken)
-                    localStorage.setItem("userInfo", JSON.stringify(response.data.userInfo))
+                    localStorage.setItem("userInfo", JSON.stringify(response.data.data.userInfo))
                     window.location.reload()
                 })
         }

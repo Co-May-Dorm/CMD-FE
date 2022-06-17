@@ -4,7 +4,7 @@ import { ListGroup } from 'react-bootstrap'
 import useOnClickOutside from '../../../../customHooks/useOnClickOutside'
 
 /*
-    AppSelect dùng để hiển thị form chọn tùy chọn, có tác dụng tương tự như thẻ select của html
+    Option dùng để hiển thị form chọn tùy chọn, có tác dụng tương tự như thẻ select của html
     Truyền vào 4 props:
     + defaultLabel: Nhãn hiển thị mặc định khi chưa chọn option
     + data: là một mảng đối tượng gồm 2 thuộc tính
@@ -13,7 +13,7 @@ import useOnClickOutside from '../../../../customHooks/useOnClickOutside'
     +
 */
 
-const AppSelect = ({ value, data = null, onChange }) => {
+const Option = ({ value, defaultValue, data = null, onChange }) => {
     const [visible, setVisible] = useState(false)       // State quản lý hiển thị danh sách phòng ban
 
     const ref = useRef()        // Ref form select Value
@@ -26,17 +26,17 @@ const AppSelect = ({ value, data = null, onChange }) => {
             onClick={() => setVisible(!visible)}
             className="form-select"
         >
-            {value || "Chọn chức vụ"}
+            {value || defaultValue}
             <div className="select">
                 {
-                    (visible) ? data?.map((Item) => (
+                    (visible) ? data?.map((item) => (
                         <ListGroup.Item
                             action
-                            key={Item.id}
-                            onClick={() => onChange(Item)}
-                            active={value?.name === Item.name}
+                            key={item.id}
+                            onClick={() => onChange(item)}
+                            active={value === item.name}
                         >
-                            {value.name}
+                            {value}
                         </ListGroup.Item>
                     )) : null
                 }
@@ -45,4 +45,4 @@ const AppSelect = ({ value, data = null, onChange }) => {
     )
 }
 
-export default AppSelect
+export default Option
