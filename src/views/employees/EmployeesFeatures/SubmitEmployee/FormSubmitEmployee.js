@@ -12,7 +12,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     const departments = useSelector(state => state.departments.data)
 
     /* Quản lý các state */
-    const [info, setInfo] = useState({
+    const [employeeInfo, setEmployeeInfo] = useState({
         // State lưu thông tin của sinh viên khi người dùng nhập dữ liệu
         code: "",
         name: "",
@@ -28,7 +28,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
             enableLogin: false
         }
     })
-    const [tab, setTab] = useState('departments')       // State chuyển từ điều chỉnh phòng ban - điều chỉnh đội nhóm
+    const [tab, setTab] = useState('departments')       // State chuyển từ điều chỉnh phòng ban <=> điều chỉnh đội nhóm
     //
 
     useEffect(() => {
@@ -40,16 +40,16 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
             employee.departments.forEach((department, index, array) => {
                 array[index].positions = departments.find(dp => dp.id === department.id).positions
             })
-            setInfo(data)
+            setEmployeeInfo(data)
         }
     }, [employee, departments])
 
-    /* Các hàm thay đổi giá trị của state info mỗi khi người dùng nhập/chọn dữ liệu mới */
+    /* Các hàm thay đổi giá trị của state employeeInfo mỗi khi người dùng nhập/chọn dữ liệu mới */
     const handleInputChange = (e) => {
         if (e.target.type === "checkbox") {
             if (e.target.checked) {
-                setInfo({
-                    ...info,
+                setEmployeeInfo({
+                    ...employeeInfo,
                     user: {
                         username: null,
                         enableLogin: false
@@ -57,44 +57,44 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                 })
             }
             else {
-                setInfo({
-                    ...info,
+                setEmployeeInfo({
+                    ...employeeInfo,
                     user: {
-                        username: info.email,
+                        username: employeeInfo.email,
                         enableLogin: true
                     }
                 })
             }
         }
         else {
-            setInfo({
-                ...info,
+            setEmployeeInfo({
+                ...employeeInfo,
                 [e.target.name]: e.target.value
             })
         }
     }
     const handleUserChange = (e) => {
-        setInfo({
-            ...info,
+        setEmployeeInfo({
+            ...employeeInfo,
             user: {
-                ...info.user,
+                ...employeeInfo.user,
                 [e.target.name]: e.target.value
             }
         })
     }
     const handleToggleLogin = (e) => {
         if (e.target.checked) {
-            setInfo({
-                ...info,
+            setEmployeeInfo({
+                ...employeeInfo,
                 user: {
-                    username: info.user.username || info.email,
+                    username: employeeInfo.user.username || employeeInfo.email,
                     enableLogin: true
                 }
             })
         }
         else {
-            setInfo({
-                ...info,
+            setEmployeeInfo({
+                ...employeeInfo,
                 user: {
                     username: "",
                     enableLogin: false
@@ -106,17 +106,17 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
 
     /* Xử lý khi click vào button Thêm phòng ban */
     const handleShowFormSelectDepartment = () => {
-        if (info.departments?.length === 0) {
-            setInfo({
-                ...info,
+        if (employeeInfo.departments?.length === 0) {
+            setEmployeeInfo({
+                ...employeeInfo,
                 departments: [{}]
             })
         }
         else {
-            setInfo({
-                ...info,
+            setEmployeeInfo({
+                ...employeeInfo,
                 departments: [
-                    ...info.departments,
+                    ...employeeInfo.departments,
                     {}
                 ]
             })
@@ -124,10 +124,10 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     }
 
     const handleDepartmentChange = (index, department) => {
-        const start = info.departments.slice(0, index) || []
-        const end = info.departments.slice(index + 1, info.departments.length + 1) || []
-        setInfo({
-            ...info,
+        const start = employeeInfo.departments.slice(0, index) || []
+        const end = employeeInfo.departments.slice(index + 1, employeeInfo.departments.length + 1) || []
+        setEmployeeInfo({
+            ...employeeInfo,
             departments: [
                 ...start,
                 {
@@ -140,11 +140,11 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     }
 
     const handlePositionOfDepartmentChange = (index, position) => {
-        const start = info.departments.slice(0, index) || []
-        const end = info.departments.slice(index + 1, info.departments.length + 1) || []
-        const department = info.departments[index]
-        setInfo({
-            ...info,
+        const start = employeeInfo.departments.slice(0, index) || []
+        const end = employeeInfo.departments.slice(index + 1, employeeInfo.departments.length + 1) || []
+        const department = employeeInfo.departments[index]
+        setEmployeeInfo({
+            ...employeeInfo,
             departments: [
                 ...start,
                 {
@@ -157,9 +157,9 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     }
 
     const handleDeleteFormSelectDepartment = (index) => {
-        const updateDepartments = info.departments.filter((e, idx) => index !== idx)
-        setInfo({
-            ...info,
+        const updateDepartments = employeeInfo.departments.filter((e, idx) => index !== idx)
+        setEmployeeInfo({
+            ...employeeInfo,
             departments: updateDepartments
         })
     }
@@ -167,17 +167,17 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
 
     /* Xử lý khi click vào button Thêm CLB/Đội nhóm */
     const handleShowFormSelectTeam = () => {
-        if (info.teams?.length === 0) {
-            setInfo({
-                ...info,
+        if (employeeInfo.teams?.length === 0) {
+            setEmployeeInfo({
+                ...employeeInfo,
                 teams: [{}]
             })
         }
         else {
-            setInfo({
-                ...info,
+            setEmployeeInfo({
+                ...employeeInfo,
                 teams: [
-                    ...info.teams,
+                    ...employeeInfo.teams,
                     {}
                 ]
             })
@@ -185,10 +185,10 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     }
 
     const handleTeamChange = (index, team) => {
-        const start = info.teams.slice(0, index) || []
-        const end = info.teams.slice(index + 1, info.teams.length + 1) || []
-        setInfo({
-            ...info,
+        const start = employeeInfo.teams.slice(0, index) || []
+        const end = employeeInfo.teams.slice(index + 1, employeeInfo.teams.length + 1) || []
+        setEmployeeInfo({
+            ...employeeInfo,
             teams: [
                 ...start,
                 {
@@ -201,11 +201,11 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     }
 
     const handlePositionOfTeamChange = (index, position) => {
-        const start = info.teams.slice(0, index) || []
-        const end = info.teams.slice(index + 1, info.teams.length + 1) || []
-        const team = info.teams[index]
-        setInfo({
-            ...info,
+        const start = employeeInfo.teams.slice(0, index) || []
+        const end = employeeInfo.teams.slice(index + 1, employeeInfo.teams.length + 1) || []
+        const team = employeeInfo.teams[index]
+        setEmployeeInfo({
+            ...employeeInfo,
             teams: [
                 ...start,
                 {
@@ -218,9 +218,9 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     }
 
     const handleDeleteFormSelectTeam = (index) => {
-        const updateTeams = info.teams.filter((e, idx) => index !== idx)
-        setInfo({
-            ...info,
+        const updateTeams = employeeInfo.teams.filter((e, idx) => index !== idx)
+        setEmployeeInfo({
+            ...employeeInfo,
             teams: updateTeams
         })
     }
@@ -238,9 +238,9 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         if (form.checkValidity() === true) {
             e.preventDefault()
             e.stopPropagation()
-            if (info.id) {
+            if (employeeInfo.id) {
                 let data = {
-                    ...info,
+                    ...employeeInfo,
                     modifyBy: 1
                 }
                 data.departments?.forEach((department, index, array) => {
@@ -256,7 +256,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
             }
             else {
                 let data = {
-                    ...info,
+                    ...employeeInfo,
                     createBy: 1
                 }
                 data.departments?.forEach((department, index, array) => {
@@ -297,7 +297,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                             type="text"
                             name="code"
                             placeholder="Nhập mã sinh viên..."
-                            value={info.code}
+                            value={employeeInfo.code}
                             onChange={handleInputChange}
                             required
                         />
@@ -312,7 +312,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                             type="text"
                             name="name"
                             placeholder="Nhập họ và tên sinh viên..."
-                            value={info.name}
+                            value={employeeInfo.name}
                             onChange={handleInputChange}
                             required
                         />
@@ -327,7 +327,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                             type="date"
                             name="dateOfBirth"
                             placeholder="Nhập ngày sinh..."
-                            value={info.dateOfBirth || ""}
+                            value={employeeInfo.dateOfBirth || ""}
                             onChange={handleInputChange}
                             required
                         />
@@ -341,7 +341,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                         <Form.Select
                             type="date"
                             name="gender"
-                            value={info.gender}
+                            value={employeeInfo.gender}
                             onChange={handleInputChange}
                             required
                         >
@@ -359,7 +359,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                             type="email"
                             name="email"
                             placeholder="Nhập email sinh viên..."
-                            value={info.email}
+                            value={employeeInfo.email}
                             onChange={handleInputChange}
                             required
                         />
@@ -374,7 +374,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                             type="number"
                             name="phoneNumber"
                             placeholder="Nhập số điện thoại của sinh viên..."
-                            value={info.phoneNumber}
+                            value={employeeInfo.phoneNumber}
                             onChange={handleInputChange}
                             required
                         />
@@ -391,7 +391,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                             <Tab eventKey="departments" title="Phòng ban">
                                 <div className="card-body">
                                     {
-                                        info.departments.map((department, index) => (
+                                        employeeInfo.departments.map((department, index) => (
                                             <div key={index} className="list-group-item bg-light mb-3">
                                                 <div className="d-flex flex-lg-row flex-column">
                                                     <div className="mb-3 mb-lg-0 col">
@@ -407,8 +407,8 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                                         <Form.Label>Chức vụ của phòng ban số {index + 1}:</Form.Label>
                                                         <FormSelectPosition
                                                             index={index}
-                                                            currentPosition={info.departments[index]?.position}
-                                                            positions={info.departments[index]?.positions}
+                                                            currentPosition={employeeInfo.departments[index]?.position}
+                                                            positions={employeeInfo.departments[index]?.positions}
                                                             onPositionChange={handlePositionOfDepartmentChange}
                                                         />
                                                     </div>
@@ -437,7 +437,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                             <Tab eventKey="teams" title="CLB/Đội nhóm">
                                 <div className="card-body">
                                     {
-                                        info.teams?.map((team, index) => (
+                                        employeeInfo.teams?.map((team, index) => (
                                             <div key={index} className="list-group-item bg-light mb-3">
                                                 <div className="d-flex flex-lg-row flex-column">
                                                     <div className="mb-3 mb-lg-0 col">
@@ -452,8 +452,8 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                                         <Form.Label>Chức vụ của CLB/Đội nhóm số {index + 1}:</Form.Label>
                                                         <FormSelectPosition
                                                             index={index}
-                                                            currentPosition={info.teams[index]?.position}
-                                                            positions={info.teams[index]?.positions}
+                                                            currentPosition={employeeInfo.teams[index]?.position}
+                                                            positions={employeeInfo.teams[index]?.positions}
                                                             onPositionChange={handlePositionOfTeamChange}
                                                         />
                                                     </div>
@@ -487,12 +487,12 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                             <Form.Check
                                 type="switch"
                                 label="Cho phép đăng nhập"
-                                checked={info.user.enableLogin}
+                                checked={employeeInfo.user.enableLogin}
                                 onChange={handleToggleLogin}
                             />
                         </div>
                         <div className="card-body">
-                            {(info.user.enableLogin) ? (
+                            {(employeeInfo.user.enableLogin) ? (
                                 <>
                                     <div className="mb-3">
                                         <Form.Label htmlFor="username" className="mt-3">Tên đăng nhập:</Form.Label>
@@ -500,7 +500,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                             type="text"
                                             name="username"
                                             placeholder="Nhập tên đăng nhập..."
-                                            value={info.user?.username || info.email}
+                                            value={employeeInfo.user?.username || employeeInfo.email}
                                             onChange={handleUserChange}
                                             required
                                         />

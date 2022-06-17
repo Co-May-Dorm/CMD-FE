@@ -9,6 +9,7 @@ import listbarIcon from './../../assets/icons/listbar.svg'
 import manualsIcon from './../../assets/icons/manuals.svg'
 
 const AppHeaderDropdown = () => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
     return (
         <Dropdown className="col-auto">
             <Dropdown.Toggle variant="none" className="d-flex align-items-center">
@@ -23,10 +24,10 @@ const AppHeaderDropdown = () => {
                 />
                 <div className="col d-flex flex-column text-start">
                     <span className="fw-bolder">
-                        Nguyễn Võ Song Toàn
+                        {userInfo.name}
                     </span>
                     <span>
-                        Sinh viên
+                        {userInfo.username}
                     </span>
                 </div>
                 <Image
@@ -40,14 +41,14 @@ const AppHeaderDropdown = () => {
                     Tài khoản
                 </Dropdown.Item>
                 <Dropdown.Item>
-                    <img src={manualsIcon} className="me-2" />
+                    <Image src={manualsIcon} className="me-2" />
                     Hướng dẫn sử dụng
                 </Dropdown.Item>
                 <Dropdown.Item onClick={() => {
                     localStorage.removeItem("token")
                     window.location.reload()
                 }}>
-                    <img src={logoutIcon} className="me-2" />
+                    <Image src={logoutIcon} alt="Logout" className="me-2" />
                     Đăng xuất
                 </Dropdown.Item>
             </Dropdown.Menu>

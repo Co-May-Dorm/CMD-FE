@@ -6,7 +6,7 @@ import { BiTrash } from 'react-icons/bi'
 
 import { fetchRolesRequest } from '../../../../actions/rolesAction'
 
-const Positions = ({ info, setInfo }) => {
+const Positions = ({ departmentInfo, setDepartmentInfo }) => {
     const roles = useSelector(state => state.roles.roles)
     const dispatch = useDispatch()
 
@@ -15,19 +15,19 @@ const Positions = ({ info, setInfo }) => {
         dispatch(fetchRolesRequest())
     }, [])
 
-    /* Các hàm thay đổi giá trị của state info mỗi khi người dùng nhập/chọn dữ liệu mới */
+    /* Các hàm thay đổi giá trị của state departmentInfo mỗi khi người dùng nhập/chọn dữ liệu mới */
     const handleInputChange = (e) => {
         const index = e.target.tabIndex
         const name = e.target.name
         const value = (e.target.type === "checkbox") ? e.target.checked : e.target.value
-        const start = info.positions.slice(0, index) || []
-        const end = info.positions.slice(index + 1, info.positions.length + 1) || []
-        setInfo({
-            ...info,
+        const start = departmentInfo.positions.slice(0, index) || []
+        const end = departmentInfo.positions.slice(index + 1, departmentInfo.positions.length + 1) || []
+        setDepartmentInfo({
+            ...departmentInfo,
             positions: [
                 ...start,
                 {
-                    ...info.positions[index],
+                    ...departmentInfo.positions[index],
                     [name]: value
                 },
                 ...end]
@@ -37,14 +37,14 @@ const Positions = ({ info, setInfo }) => {
         const index = e.target.tabIndex
         const value = e.target.value
         const findName = roles.find(role => role.id === Number(value))?.name
-        const start = info.positions.slice(0, index) || []
-        const end = info.positions.slice(index + 1, info.positions.length + 1) || []
-        setInfo({
-            ...info,
+        const start = departmentInfo.positions.slice(0, index) || []
+        const end = departmentInfo.positions.slice(index + 1, departmentInfo.positions.length + 1) || []
+        setDepartmentInfo({
+            ...departmentInfo,
             positions: [
                 ...start,
                 {
-                    ...info.positions[index],
+                    ...departmentInfo.positions[index],
                     role: {
                         id: Number(value),
                         name: findName
@@ -54,9 +54,9 @@ const Positions = ({ info, setInfo }) => {
         })
     }
     const handleDelete = (index) => {
-        const array = info.positions.filter((e, idx) => index !== idx)
-        setInfo({
-            ...info,
+        const array = departmentInfo.positions.filter((e, idx) => index !== idx)
+        setDepartmentInfo({
+            ...departmentInfo,
             positions: array
         })
     }
@@ -64,9 +64,9 @@ const Positions = ({ info, setInfo }) => {
 
     // Thêm một form nhập chức vụ mới mỗi khi click vào Button Thêm chức vụ
     const handleShowFormAddPostion = () => {
-        if (info.positions?.length === 0) {
-            setInfo({
-                ...info,
+        if (departmentInfo.positions?.length === 0) {
+            setDepartmentInfo({
+                ...departmentInfo,
                 positions: [{
                     name: "",
                     isManager: false,
@@ -78,10 +78,10 @@ const Positions = ({ info, setInfo }) => {
             })
         }
         else {
-            setInfo({
-                ...info,
+            setDepartmentInfo({
+                ...departmentInfo,
                 positions: [
-                    ...info.positions,
+                    ...departmentInfo.positions,
                     {
                         name: "",
                         isManager: false,
@@ -98,7 +98,7 @@ const Positions = ({ info, setInfo }) => {
     return (
         <>
             {
-                info?.positions?.map((position, index) => (
+                departmentInfo?.positions?.map((position, index) => (
                     <div key={index}>
                         <ListGroup.Item className="bg-light text-body">
                             <Form.Group className="mb-3">
@@ -137,7 +137,7 @@ const Positions = ({ info, setInfo }) => {
                                     name="isManager"
                                     className="col ms-3"
                                     tabIndex={index}
-                                    disabled={info.positions.some(e => e.isManager === true) && position.isManager === false}
+                                    disabled={departmentInfo.positions.some(e => e.isManager === true) && position.isManager === false}
                                     checked={position.isManager}
                                     onChange={handleInputChange}
                                 />

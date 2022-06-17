@@ -16,11 +16,11 @@ const Login = lazy(() => import('./views/pages/login/Login'))
 const Page404 = lazy(() => import('./views/pages/page404/Page404'))
 
 const RequireLogin = () => {
-    return localStorage.getItem("token") ? <DefaultLayout /> : <Navigate to="/login" />
+    return localStorage.getItem("accessToken") ? <DefaultLayout /> : <Navigate to="/login" />
 }
 
 const LoginSuccess = () => {
-    return !localStorage.getItem("token") ? <Login /> : <Navigate to="/" />
+    return !localStorage.getItem("accessToken") ? <Login /> : <Navigate to="/" />
 }
 
 class App extends Component {

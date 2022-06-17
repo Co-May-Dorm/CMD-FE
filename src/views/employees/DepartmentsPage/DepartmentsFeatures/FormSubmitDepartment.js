@@ -12,7 +12,7 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
     const dispatch = useDispatch()
 
     /* Quản lý các state */
-    const [info, setInfo] = useState({
+    const [departmentInfo, setDepartmentInfo] = useState({
         // State lưu thông tin của phòng ban khi người dùng nhập dữ liệu
         code: "",
         name: "",
@@ -27,20 +27,20 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
     }, [])
     useEffect(() => {
         if (department?.id) {
-            setInfo(department)
+            setDepartmentInfo(department)
         }
     }, [department])
 
-    /* Các hàm thay đổi giá trị của state info mỗi khi người dùng nhập/chọn dữ liệu mới */
+    /* Các hàm thay đổi giá trị của state departmentInfo mỗi khi người dùng nhập/chọn dữ liệu mới */
     const handleInputChange = (e) => {
-        setInfo({
-            ...info,
+        setDepartmentInfo({
+            ...departmentInfo,
             [e.target.name]: e.target.value
         })
     }
     const handleDepartmentChange = (index, department) => {
-        setInfo({
-            ...info,
+        setDepartmentInfo({
+            ...departmentInfo,
             level: department.level + 1,
             fatherDepartmentId: department.id
         })
@@ -59,28 +59,28 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
         if (form.checkValidity() === true) {
             e.preventDefault()
             e.stopPropagation()
-            if (info.fatherDepartmentId === "") {
-                setInfo({
-                    ...info,
+            if (departmentInfo.fatherDepartmentId === "") {
+                setDepartmentInfo({
+                    ...departmentInfo,
                     fatherDepartmentId: null
                 })
             }
-            if (info.id) {
-                dispatch(updateDepartmentRequest(info))
+            if (departmentInfo.id) {
+                dispatch(updateDepartmentRequest(departmentInfo))
             }
             else {
-                dispatch(addDepartmentRequest(info))
+                dispatch(addDepartmentRequest(departmentInfo))
             }
         }
     }
     //
 
     // Tìm phòng ban cha dựa theo id
-    const fatherDepartment = departments.find(department => department.id === info.fatherDepartmentId) || {
+    const fatherDepartment = departments.find(department => department.id === departmentInfo.fatherDepartmentId) || {
         id: null,
         name: "Không có phòng ban cha"
     }
-    console.log(info)
+    console.log(departmentInfo)
     return (
         <>
             <Modal
@@ -107,7 +107,7 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
                                 type="text"
                                 name="code"
                                 placeholder="Nhập mã phòng ban..."
-                                value={info.code}
+                                value={departmentInfo.code}
                                 onChange={handleInputChange}
                                 required
                             />
@@ -122,7 +122,7 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
                                 type="text"
                                 name="name"
                                 placeholder="Nhập tên phòng ban..."
-                                value={info.name}
+                                value={departmentInfo.name}
                                 onChange={handleInputChange}
                                 required
                             />
@@ -138,7 +138,7 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
                                 rows={10}
                                 name="description"
                                 placeholder="Nhập mô tả phòng ban..."
-                                value={info.description}
+                                value={departmentInfo.description}
                                 onChange={handleInputChange}
                             />
                         </div>
@@ -152,7 +152,7 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
                                 onDepartmentChange={handleDepartmentChange}
                             />
                         </div>
-                        <Positions info={info} setInfo={setInfo} />
+                        <Positions departmentInfo={departmentInfo} setDepartmentInfo={setDepartmentInfo} />
                         <Modal.Footer>
                             <Button
                                 className="d-table m-auto"
