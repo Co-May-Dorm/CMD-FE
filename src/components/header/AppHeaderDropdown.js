@@ -45,10 +45,10 @@ const AppHeaderDropdown = () => {
                     Hướng dẫn sử dụng
                 </Dropdown.Item>
                 <Dropdown.Item onClick={() => {
-                    localStorage.removeItem("token")
+                    localStorage.removeItem("accessToken")
                     window.location.reload()
                 }}>
-                    <Image src={logoutIcon} alt="Logout" className="me-2" />
+                    <Image src={logoutIcon} className="me-2" />
                     Đăng xuất
                 </Dropdown.Item>
             </Dropdown.Menu>

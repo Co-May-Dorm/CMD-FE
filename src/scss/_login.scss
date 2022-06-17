@@ -1,0 +1,23 @@
+#form-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    .notify--login {
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 1rem!important;
+    }
+    .login--input {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+        .login--input__icon {
+            flex: 0 0 30px;
+            margin-right: 1rem;
+        }
+        .login--input__textbox {
+            flex: 0 0 400px;
+        }
+    }
+}

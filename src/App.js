@@ -12,8 +12,8 @@ const loading = (
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
 
 // Pages
-const Login = lazy(() => import('./views/pages/login/Login'))
-const Page404 = lazy(() => import('./views/pages/page404/Page404'))
+const Login = lazy(() => import('./views/pages/Login'))
+const Page404 = lazy(() => import('./views/pages/Page404'))
 
 const RequireLogin = () => {
     return localStorage.getItem("accessToken") ? <DefaultLayout /> : <Navigate to="/login" />
