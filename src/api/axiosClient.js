@@ -5,7 +5,7 @@ import queryString from 'query-string'
 const accessToken = localStorage.getItem("accessToken") || ""
 
 const axiosClient = axios.create({
-    baseURL: "http://27.74.244.150:9090/",
+    baseURL: "http://222.255.238.159:9090/",
     headers: {
         'content-type': 'application/json',
         'Authorization': accessToken,
