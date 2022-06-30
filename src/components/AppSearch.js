@@ -1,4 +1,5 @@
 import React from 'react'
+import { Image } from 'react-bootstrap'
 
 import searchIcon from '../assets/icons/search.svg'
 /*
@@ -14,7 +15,7 @@ const AppSearch = ({ value, onSearch }) => {
                 className="d-inline-flex form-control py-1"
                 style={{ borderRadius: "0.5rem" }}
             >
-                <img
+                <Image
                     src={searchIcon}
                     className="mx-auto h-100"
                     style={{

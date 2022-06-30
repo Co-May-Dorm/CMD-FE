@@ -46,6 +46,7 @@ const AppHeaderDropdown = () => {
                 </Dropdown.Item>
                 <Dropdown.Item onClick={() => {
                     localStorage.removeItem("accessToken")
+                    localStorage.removeItem("userInfo")
                     window.location.reload()
                 }}>
                     <Image src={logoutIcon} className="me-2" />

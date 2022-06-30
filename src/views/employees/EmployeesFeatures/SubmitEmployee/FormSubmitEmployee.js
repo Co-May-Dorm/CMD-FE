@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
-
+import { useDispatch, useSelector } from "react-redux"
 import { Button, Form, Modal, Tab, Tabs } from "react-bootstrap"
 import { BiPlusMedical, BiTrash } from 'react-icons/bi'
-import { addEmployeeRequest, updateEmployeeRequest } from "../../../../actions/employeesAction"
+
+import { addEmployee, updateEmployee } from "~/redux/employeesSlice"
+import { departmentsSelector } from "~/redux/selectors"
 import FormSelectDepartment from "./FormSelectDepartment"
 import FormSelectPosition from "./FormSelectPosition"
 import FormSelectTeam from "./FormSelectTeam"
 
 const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
-    const departments = useSelector(state => state.departments.data)
+    const departments = useSelector(departmentsSelector).departments
+    const dispatch = useDispatch()
 
     /* Quản lý các state */
     const [employeeInfo, setEmployeeInfo] = useState({
@@ -35,14 +37,17 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         if (employee?.id) {
             let data = {
                 ...employee,
-                user: (employee.user.enableLogin !== false) ? employee.user : { username: "" }
+                user: (employee.user.enableLogin !== false) ? employee.user : { username: "" },
+                departments: employee.departments.map((department, index, array) => {
+                    return {
+                        ...employee.departments,
+                        positions: departments.find(dp => dp.id === department.id).positions
+                    }
+                })
             }
-            employee.departments.forEach((department, index, array) => {
-                array[index].positions = departments.find(dp => dp.id === department.id).positions
-            })
             setEmployeeInfo(data)
         }
-    }, [employee, departments])
+    }, [])
 
     /* Các hàm thay đổi giá trị của state employeeInfo mỗi khi người dùng nhập/chọn dữ liệu mới */
     const handleInputChange = (e) => {
@@ -252,7 +257,8 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                 data.teams?.forEach((team, index, array) => {
                     delete array[index].positions
                 })
-                updateEmployeeRequest(data)
+                setVisible(false)
+                dispatch(updateEmployee(data))
             }
             else {
                 let data = {
@@ -265,7 +271,8 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                 data.teams?.forEach((team, index, array) => {
                     delete array[index].positions
                 })
-                addEmployeeRequest(data)
+                setVisible(false)
+                dispatch(addEmployee(data))
             }
         }
     }

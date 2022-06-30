@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import { Button } from 'react-bootstrap'
+
 import Roles from './RolesMainPage'
 
 const ButtonShowRoles = () => {
+
     const [visible, setVisible] = useState(false)
+
     return (
         <>
             <Button
@@ -14,7 +17,9 @@ const ButtonShowRoles = () => {
                     Vai trò
                 </span>
             </Button>
-            <Roles visible={visible} setVisible={setVisible} />
+            {
+                visible && <Roles visible={visible} setVisible={setVisible} />
+            }
         </>
     )
 }

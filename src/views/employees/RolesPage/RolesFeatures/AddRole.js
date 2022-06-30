@@ -1,9 +1,14 @@
 import React, { useState } from 'react'
+
 import { Button } from 'react-bootstrap'
+
 import FormSubmitRole from './FormSubmitRole'
 
+
 const AddRole = () => {
+
     const [visible, setVisible] = useState(false)
+
     return (
         <>
             <Button
@@ -16,5 +21,6 @@ const AddRole = () => {
         </>
     )
 }
+
 
 export default AddRole

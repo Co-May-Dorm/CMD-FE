@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from "react-redux"
 
 import { Button, Form, Modal } from "react-bootstrap"
 
-import { addDepartmentRequest, fetchDepartmentsRequest, updateDepartmentRequest } from "../../../../actions/departmentsAction"
+import { addDepartment, fetchDepartments, updateDepartment } from "../../../../redux/departmentsSlice"
+import { departmentsSelector } from "../../../../redux/selectors"
 import FormSelectDepartment from "../../EmployeesFeatures/SubmitEmployee/FormSelectDepartment"
 import Positions from "./Positions"
 
 const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
-    const departments = useSelector(state => state.departments.data)
+    const departments = useSelector(departmentsSelector).departments
     const dispatch = useDispatch()
 
     /* Quản lý các state */
@@ -23,7 +24,7 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
     //
 
     useEffect(() => {
-        dispatch(fetchDepartmentsRequest())
+        dispatch(fetchDepartments())
     }, [])
     useEffect(() => {
         if (department?.id) {
@@ -66,10 +67,10 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
                 })
             }
             if (departmentInfo.id) {
-                dispatch(updateDepartmentRequest(departmentInfo))
+                dispatch(updateDepartment(departmentInfo))
             }
             else {
-                dispatch(addDepartmentRequest(departmentInfo))
+                dispatch(addDepartment(departmentInfo))
             }
         }
     }
@@ -80,7 +81,6 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
         id: null,
         name: "Không có phòng ban cha"
     }
-    console.log(departmentInfo)
     return (
         <>
             <Modal

@@ -1,12 +1,18 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { Button, Modal } from 'react-bootstrap'
 import { BiTrash } from 'react-icons/bi'
-import { deleteRoleRequest } from '../../../actions/rolesAction'
 
-const DeleteRole = ({ id }) => {
+import { deleteRole } from '~/redux/rolesSlice'
+
+
+const DeleteRole = ({ roleId }) => {
+    const dispatch = useDispatch()
+
     const [visible, setVisible] = useState(false)
-    const handleDelete = (id) => {
-        deleteRoleRequest(id)
+
+    const handleDelete = (roleId) => {
+        dispatch(deleteRole(roleId))
         setVisible(false)
     }
 
@@ -19,32 +25,36 @@ const DeleteRole = ({ id }) => {
             >
                 <BiTrash /> <span className="ps-1">Xóa</span>
             </Button>
-            <Modal
-                scrollable
-                show={visible}
-                onHide={() => setVisible(false)}
-            >
-                <Modal.Header>
-                    <Modal.Title>XÓA VAI TRÒ</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    Bạn có chắc muốn xóa vai trò này khỏi công ty?
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        variant="secondary"
-                        onClick={() => setVisible(false)}
+            {
+                visible && (
+                    <Modal
+                        scrollable
+                        show={visible}
+                        onHide={() => setVisible(false)}
                     >
-                        Hủy
-                    </Button>
-                    <Button
-                        variant="danger"
-                        onClick={() => handleDelete(id)}
-                    >
-                        Đồng ý
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+                        <Modal.Header>
+                            <Modal.Title>XÓA VAI TRÒ</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            Bạn có chắc muốn xóa vai trò này khỏi KTX?
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button
+                                variant="secondary"
+                                onClick={() => setVisible(false)}
+                            >
+                                Hủy
+                            </Button>
+                            <Button
+                                variant="danger"
+                                onClick={() => handleDelete(roleId)}
+                            >
+                                Đồng ý
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                )
+            }
         </>
     )
 }

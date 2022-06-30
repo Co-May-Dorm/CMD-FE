@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
+
 import { Dropdown } from 'react-bootstrap'
 import { BiEdit } from 'react-icons/bi'
+
 import FormSubmitDepartment from './FormSubmitDepartment'
 
 const EditDepartment = ({ department }) => {

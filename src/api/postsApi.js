@@ -1,26 +1,26 @@
 import axiosClient from "./axiosClient"
 
-// API nhân viên
+// API liên quan đến phần bảng tin
 const baseUrl = "/posts"
 const postsApi = {
-    getAll: (params) => {
+    getAll: (filtersParams) => {
         const requestUrl = `${baseUrl}`
-        return axiosClient.get(requestUrl, {params})
+        return axiosClient.get(requestUrl, {filtersParams})
     },
-    get: (id) => {
-        const requestUrl = `${baseUrl}/${id}`
+    get: (postId) => {
+        const requestUrl = `${baseUrl}/${postId}`
         return axiosClient.get(requestUrl)
     },
-    add: (data) => {
-        const requestUrl = `${baseUrl}`
-        return axiosClient.post(requestUrl, data)
+    add: (postInfo) => {
+        const requestUrl = `${baseUrl}/add`
+        return axiosClient.post(requestUrl, postInfo)
     },
-    update: (data) => {
-        const requestUrl = `${baseUrl}/${data.id}`
-        return axiosClient.patch(requestUrl, data)
+    update: (postInfo) => {
+        const requestUrl = `${baseUrl}/edit`
+        return axiosClient.put(requestUrl, postInfo)
     },
-    delete: (id) => {
-        const requestUrl = `${baseUrl}/${id}`
+    delete: (postId) => {
+        const requestUrl = `${baseUrl}/delete/${postId}`
         return axiosClient.delete(requestUrl)
     }
 }

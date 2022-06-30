@@ -4,17 +4,16 @@ import { useDispatch } from 'react-redux'
 import { Button, Dropdown, Modal } from 'react-bootstrap'
 import { BiTrash } from 'react-icons/bi'
 
-import { deleteTeamRequest } from '../../../../actions/teamsAction'
+import { deleteTeam } from '../../../../redux/teamsSlice'
 
 
 const DeleteTeam = ({ id }) => {
     const dispatch = useDispatch()
     const [visibleDeleteTeam, setVisibleDeleteTeam] = useState(false)
     const handleDelete = (id) => {
-        dispatch(deleteTeamRequest(id))
+        dispatch(deleteTeam(id))
         setVisibleDeleteTeam(false)
     }
-
     return (
         <>
             <Dropdown.Item onClick={() => setVisibleDeleteTeam(!visibleDeleteTeam)}>
@@ -29,7 +28,7 @@ const DeleteTeam = ({ id }) => {
                     <Modal.Title>XÓA CLB - ĐỘI NHÓM</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    Bạn có chắc muốn xóa clb - đội nhóm này khỏi công ty?
+                    Bạn có chắc muốn xóa CLB - Đội nhóm này khỏi KTX?
                 </Modal.Body>
                 <Modal.Footer>
                     <Button

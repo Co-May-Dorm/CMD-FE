@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
+
 import { Dropdown } from 'react-bootstrap'
 import { BiEdit } from 'react-icons/bi'
+
 import FormSubmitTeam from './FormSubmitTeam'
 
 const EditTeam = ({ team }) => {

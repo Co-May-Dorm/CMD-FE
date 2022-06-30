@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { CKEditor } from '@ckeditor/ckeditor5-react'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import { useDispatch } from 'react-redux'
 
 import { Button, Form, Modal } from 'react-bootstrap'
-import { addPostRequest, updatePostRequest } from '../../../actions/postsAction'
-import { useDispatch } from 'react-redux'
+
+import { addPost, updatePost } from '../../../redux/postsSlice'
 
 const FormSubmitPost = ({ visible, setVisible, data = null }) => {
     const [info, setInfo] = useState({
@@ -59,13 +58,13 @@ const FormSubmitPost = ({ visible, setVisible, data = null }) => {
             e.preventDefault()
             e.stopPropagation()
             if (info.id) {
-                dispatch(updatePostRequest({
+                dispatch(updatePost({
                     ...info,
                     updated_at: new Date()
                 }))
             }
             else {
-                dispatch(addPostRequest({
+                dispatch(addPost({
                     ...info,
                     created_at: new Date()
                 }))
@@ -127,13 +126,6 @@ const FormSubmitPost = ({ visible, setVisible, data = null }) => {
                     <hr />
                     <div className="mb-3">
                         <Form.Label htmlFor="content">Nội dung bài viết:</Form.Label>
-                        <CKEditor
-                            editor={ClassicEditor}
-                            data={info.content}
-                            onChange={(event, editor) => {
-                                handleCkEditorChange(event, editor)
-                            }}
-                        />
                     </div>
                     <Modal.Footer>
                         <Button

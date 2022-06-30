@@ -1,24 +1,24 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Accordion, Modal } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchRolesRequest } from '../../../actions/rolesAction'
-import AppPagination from '../../../components/AppPagination'
-import AppSearch from '../../../components/AppSearch'
+
+import { fetchRoles } from '~/redux/rolesSlice'
+import { rolesSelector } from '~/redux/selectors'
+import AppPagination from '~/components/AppPagination'
+import AppSearch from '~/components/AppSearch'
 import RoleItem from './RoleItem'
 import AddRole from './RolesFeatures/AddRole'
 
-const Roles = ({ visible, setVisible }) => {
-    const roles = useSelector(state => state.roles.roles)    // Lấy danh sách vai trò từ redux
-    const pagination = useSelector(state => state.roles.pagination)
+const RolesMainPage = ({ visible, setVisible }) => {
+    const roles = useSelector(rolesSelector).roles
+    const pagination = useSelector(rolesSelector).pagination
     const dispatch = useDispatch()
-
-    const [filters, setFilters] = useState({
-        
-    })
+    const [filters, setFilters] = useState({})
 
     useEffect(() => {
-        dispatch(fetchRolesRequest(filters))
+        dispatch(fetchRoles(filters))
     }, [filters])
 
     const handlePageChange = newPage => {
@@ -31,7 +31,7 @@ const Roles = ({ visible, setVisible }) => {
         setFilters({
             ...filters,
             page: 1,
-            q: searchTerm
+            name: searchTerm
         })
     }
     return (
@@ -76,4 +76,4 @@ const Roles = ({ visible, setVisible }) => {
     )
 }
 
-export default Roles
+export default RolesMainPage

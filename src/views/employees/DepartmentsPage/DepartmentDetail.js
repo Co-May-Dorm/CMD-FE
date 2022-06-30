@@ -3,8 +3,10 @@ import { useSelector } from 'react-redux'
 
 import { ListGroup, Modal, Table } from 'react-bootstrap'
 
+import { departmentsSelector } from '../../../redux/selectors'
+
 const DepartmentDetail = ({ department, visible, setVisible }) => {
-    const departments = useSelector(state => state.departments.data)    // Lấy danh sách phòng ban từ redux
+    const departments = useSelector(departmentsSelector).departments    // Lấy danh sách phòng ban từ redux
 
     let parentName = ""     // Khởi tạo tên phòng ban cha mặc định là rỗng
 

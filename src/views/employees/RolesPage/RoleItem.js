@@ -2,8 +2,8 @@ import React from 'react'
 
 import { Accordion, ListGroup, Table } from 'react-bootstrap'
 
-import DeleteRole from './DeleteRole'
 import EditRole from './RolesFeatures/EditRole'
+import DeleteRole from './DeleteRole'
 
 const RoleItem = ({ role }) => {
     return (

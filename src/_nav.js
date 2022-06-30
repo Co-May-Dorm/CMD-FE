@@ -5,7 +5,7 @@ const _nav = [
     },
     {
         name: 'Công việc',
-        to: '/todo-list',
+        to: '/tasks',
     },
     {
         name: 'Đề xuất',
@@ -13,7 +13,7 @@ const _nav = [
     },
     {
         name: 'Sinh viên',
-        to: '/students',
+        to: '/employees',
     }
 ]
 

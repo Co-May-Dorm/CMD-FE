@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap'
 import FormSubmitEmployee from './SubmitEmployee/FormSubmitEmployee'
 
 const AddEmployee = () => {
-    const [visibleFormAddEmployee, setVisibleFormAddEmployee] = useState(false)       // State hiển thị Form thêm sinh viên
+    const [visibleFormAddEmployee, setVisibleFormAddEmployee] = useState(false)       // State hiển thị Form thêm nhân viên
     return (
         <>
             <Button
@@ -13,11 +13,12 @@ const AddEmployee = () => {
                 onClick={() => setVisibleFormAddEmployee(!visibleFormAddEmployee)}
             >
                 <span className="fw-bold">
-                    Thêm sinh viên
+                    Thêm nhân viên
                 </span>
             </Button>
-            <FormSubmitEmployee visible={visibleFormAddEmployee} setVisible={setVisibleFormAddEmployee} />
-
+            {
+                visibleFormAddEmployee && <FormSubmitEmployee visible={visibleFormAddEmployee} setVisible={setVisibleFormAddEmployee} />
+            }
         </>
     )
 }

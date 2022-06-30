@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import { Button, Modal } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import * as actions from '../../../actions/postsAction'
+
+import { Button, Modal } from 'react-bootstrap'
+
+import { deletePost } from '../../../redux/postsSlice'
 
 const DeletePost = ({ id }) => {
     // Sử dụng hook useNavigate của react-router v6
@@ -18,7 +20,7 @@ const DeletePost = ({ id }) => {
     const handleDelete = (id) => {
 
         // Dispatch action gửi API xóa bài viết
-        dispatch(actions.deletePostRequest(id))
+        dispatch(deletePost(id))
 
         // Trở về trang trước đó
         navigate(-1)
