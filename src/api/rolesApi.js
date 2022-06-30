@@ -1,26 +1,26 @@
 import axiosClient from "./axiosClient"
 
-// API vai trò
+// API liên quan đến phần vai trò
 const baseUrl = "/roles"
 const rolesApi = {
-    getAll: (params) => {
+    getAll: (filtersParams) => {
         const requestUrl = `${baseUrl}`
-        return axiosClient.get(requestUrl, {params})
+        return axiosClient.get(requestUrl, {filtersParams})
     },
-    get: (id) => {
-        const requestUrl = `${baseUrl}/${id}`
+    get: (roleId) => {
+        const requestUrl = `${baseUrl}/${roleId}`
         return axiosClient.get(requestUrl)
     },
-    add: (data) => {
+    add: (roleInfo) => {
         const requestUrl = `${baseUrl}/add`
-        return axiosClient.post(requestUrl, data)
+        return axiosClient.post(requestUrl, roleInfo)
     },
-    update: (data) => {
+    update: (roleInfo) => {
         const requestUrl = `${baseUrl}/edit`
-        return axiosClient.put(requestUrl, data)
+        return axiosClient.put(requestUrl, roleInfo)
     },
-    delete: (id) => {
-        const requestUrl = `${baseUrl}/delete/${id}`
+    delete: (roleId) => {
+        const requestUrl = `${baseUrl}/delete/${roleId}`
         return axiosClient.delete(requestUrl)
     }
 }

@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { Container } from 'react-bootstrap'
+
+import { fetchPosts } from '../../redux/postsSlice'
 import Slider from './Slider'
-import { fetchPostsRequest } from '../../actions/postsAction'
 import PostItem from './PostItem'
 import AddPost from './features/AddPost'
 
@@ -10,7 +12,7 @@ const Posts = () => {
     const posts = useSelector(state => state.posts.data)
     const dispatch = useDispatch()
     useEffect(() => {
-        dispatch(fetchPostsRequest())
+        dispatch(fetchPosts())
     }, [])
     
     return (

@@ -4,15 +4,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap'
 import { BiTrash } from 'react-icons/bi'
 
-import { fetchRolesRequest } from '../../../../actions/rolesAction'
+import { fetchRoles } from '../../../../redux/rolesSlice'
+import { rolesSelector } from '../../../../redux/selectors'
 
 const Positions = ({ info, setInfo }) => {
-    const roles = useSelector(state => state.roles.roles)
+    const roles = useSelector(rolesSelector).roles
     const dispatch = useDispatch()
 
     const [visibleDeletePosition, setVisibleDeletePosition] = useState(false)
     useEffect(() => {
-        dispatch(fetchRolesRequest())
+        dispatch(fetchRoles())
     }, [])
 
     /* Các hàm thay đổi giá trị của state info mỗi khi người dùng nhập/chọn dữ liệu mới */

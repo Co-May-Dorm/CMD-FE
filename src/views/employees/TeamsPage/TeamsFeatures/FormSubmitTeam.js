@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
 
 import { Button, Form, Modal } from "react-bootstrap"
+import { useDispatch } from "react-redux"
+import { addTeam, updateTeam } from "../../../../redux/teamsSlice"
 
-import { addTeamRequest, updateTeamRequest } from "../../../../actions/teamsAction"
 import Positions from "./Positions"
 
 const FormSubmitTeam = ({ visible, setVisible, team = null }) => {
     const dispatch = useDispatch()
 
     /* Quản lý các state */
-    const [info, setInfo] = useState({
+    const [teaminfo, setTeamInfo] = useState({
         // State lưu thông tin của CLB/Đội nhóm khi người dùng nhập dữ liệu
         code: "",
         name: "",
@@ -21,14 +21,14 @@ const FormSubmitTeam = ({ visible, setVisible, team = null }) => {
 
     useEffect(() => {
         if (team?.id) {
-            setInfo(team)
+            setTeamInfo(team)
         }
     }, [team])
 
-    /* Các hàm thay đổi giá trị của state info mỗi khi người dùng nhập/chọn dữ liệu mới */
+    /* Các hàm thay đổi giá trị của state teaminfo mỗi khi người dùng nhập/chọn dữ liệu mới */
     const handleInputChange = (e) => {
-        setInfo({
-            ...info,
+        setTeamInfo({
+            ...teaminfo,
             [e.target.name]: e.target.value
         })
     }
@@ -46,17 +46,17 @@ const FormSubmitTeam = ({ visible, setVisible, team = null }) => {
         if (form.checkValidity() === true) {
             e.preventDefault()
             e.stopPropagation()
-            if (info.fatherTeamId === "") {
-                setInfo({
-                    ...info,
+            if (teaminfo.fatherTeamId === "") {
+                setTeamInfo({
+                    ...teaminfo,
                     fatherTeamId: null
                 })
             }
-            if (info.id) {
-                dispatch(updateTeamRequest(info))
+            if (teaminfo.id) {
+                dispatch(updateTeam(teaminfo))
             }
             else {
-                dispatch(addTeamRequest(info))
+                dispatch(addTeam(teaminfo))
             }
         }
     }
@@ -88,7 +88,7 @@ const FormSubmitTeam = ({ visible, setVisible, team = null }) => {
                                 type="text"
                                 name="code"
                                 placeholder="Nhập mã CLB/Đội nhóm..."
-                                value={info.code}
+                                value={teaminfo.code}
                                 onChange={handleInputChange}
                                 required
                             />
@@ -103,7 +103,7 @@ const FormSubmitTeam = ({ visible, setVisible, team = null }) => {
                                 type="text"
                                 name="name"
                                 placeholder="Nhập tên CLB/Đội nhóm..."
-                                value={info.name}
+                                value={teaminfo.name}
                                 onChange={handleInputChange}
                                 required
                             />
@@ -119,12 +119,12 @@ const FormSubmitTeam = ({ visible, setVisible, team = null }) => {
                                 rows={10}
                                 name="description"
                                 placeholder="Nhập mô tả CLB/Đội nhóm..."
-                                value={info.description}
+                                value={teaminfo.description}
                                 onChange={handleInputChange}
                             />
                         </div>
                         <hr />
-                        <Positions info={info} setInfo={setInfo} />
+                        <Positions teaminfo={teaminfo} setTeamInfo={setTeamInfo} />
                         <Modal.Footer>
                             <Button
                                 className="d-table m-auto"

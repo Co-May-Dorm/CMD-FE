@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { ListGroup, Modal } from 'react-bootstrap'
 
-import * as actions from '../../../actions/teamsAction'
+import { fetchTeams } from '../../../redux/teamsSlice'
 import AppSearch from '../../../components/AppSearch'
 import TeamRow from './TeamRow'
 import AddTeam from './TeamsFeatures/AddTeam'
+import { teamsSelector } from '../../../redux/selectors'
 
 const TeamsMainPage = ({ visible, setVisible }) => {
-    const teams = useSelector(state => state.teams.data)
+    const teams = useSelector(teamsSelector).teams
 
     const dispatch = useDispatch()
 
@@ -18,7 +19,7 @@ const TeamsMainPage = ({ visible, setVisible }) => {
     })
 
     useEffect(() => {
-        dispatch(actions.fetchTeamsRequest(filters))
+        dispatch(fetchTeams(filters))
     }, [filters])
 
     const handleSearchTerm = (searchTerm) => {

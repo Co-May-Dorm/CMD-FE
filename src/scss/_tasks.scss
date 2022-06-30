@@ -1,0 +1,98 @@
+@media (min-width: 992px) {
+    .task-title {
+        display: block;
+    }
+    .task {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+        padding: 0.5rem;
+        word-wrap: break-word;
+        word-break: break-word;
+        .task-title {
+            flex: 0 0 auto;
+            width: 20%;
+        }
+        .task-creator {
+            flex: 0 0 auto;
+            width: 5%;
+        }
+        .task-receiver {
+            flex: 0 0 auto;
+            width: 5%;
+        }
+        .task-timeline {
+            flex: 0 0 auto;
+            width: 15%;
+        }
+        .task-status {
+            flex: 0 0 auto;
+            width: 10%;
+        }
+        .task-department {
+            flex: 0 0 auto;
+            width: 15%;
+        }
+        .task-position {
+            flex: 0 0 auto;
+            width: 15%;
+        }
+        .task-more {
+            flex: 0 0 auto;
+            width: 2%;
+        }
+    }
+}
+@media (max-width: 991px) {
+    .task-title {
+        display: none!important;
+    }
+    .task {
+        position: relative;
+        display: block;
+        margin-bottom: 1rem;
+        word-wrap: break-word;
+        word-break: break-word;
+        .task-name {
+            margin: 0.5rem 0;
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        .task-name {
+            margin: 0.5rem 0;
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        .task-dob {
+            margin: 0.5rem 0;
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        .task-email {
+            margin: 0.5rem 0;
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        .task-phoneNumber {
+            margin: 0.5rem 0;
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        .task-department {
+            margin: 0.5rem 0;
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        .task-position {
+            margin: 0.5rem 0;
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        .task-more {
+            position: absolute;
+            right: 0%;
+            top: 0%;
+        }
+    }
+}

@@ -1,39 +1,42 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
-
 import { AiOutlineSortAscending, AiOutlineSortDescending } from 'react-icons/ai'
-import { BiArrowFromTop } from 'react-icons/bi'
+import { BiArrowFromTop, BiSortAlt2 } from 'react-icons/bi'
 import { Card, Container, Dropdown } from 'react-bootstrap'
 
-import * as actions from '../../actions/employeesAction'
-import AppPagination from '../../components/AppPagination'
+import { fetchEmployees } from '~/redux/employeesSlice'
+import { employeesSelector } from '~/redux/selectors'
+import AppPagination from '~/components/AppPagination'
 import EmployeeRow from './EmployeeRow'
 import AddEmployee from './EmployeesFeatures/AddEmployee'
 import ButtonShowDepartments from './DepartmentsPage/ButtonShowDepartments'
 import ButtonShowTeams from './TeamsPage/ButtonShowTeams'
-import AppSearch from '../../components/AppSearch'
+import AppSearch from '~/components/AppSearch'
 import ButtonShowRoles from './RolesPage/ButtonShowRoles'
 import ExportDataToCSV from './EmployeesFeatures/ExportDataToCSV'
 
 const queryString = require('query-string')
 
 const EmployeesMainPage = () => {
-    const employees = useSelector(state => state.employees.employees)           // Lấy danh sách sinh viên từ redux
-    const pagination = useSelector(state => state.employees.pagination)         // Lấy dữ liệu phân trang của danh sách sinh viên trên
+    const employees = useSelector(employeesSelector).employees           // Lấy danh sách sinh viên từ redux
+    const pagination = useSelector(employeesSelector).pagination         // Lấy dữ liệu phân trang của danh sách sinh viên trên
 
     const dispatch = useDispatch()          // Dùng để dispatch các action
     const location = useLocation()          // Lấy thông tin từ URL của trang hiện tại
     const navigation = useNavigate()        // Thực hiện công việc điều hướng trang
 
-    const [filters, setFilters] = useState({})      // State lưu trữ các params truyền vào API để lấy dữ liệu từ Back End
+    const [filters, setFilters] = useState({
+        page: 1
+    })      // State lưu trữ các params truyền vào API để lấy dữ liệu từ Back End
 
     useEffect(() => {
-        document.title = "Sinh viên - Cảnh Báo Sớm"     // Thiết lập tiêu đề cho trang
+        document.title = "Sinh viên"     // Thiết lập tiêu đề cho trang
 
         // Kiểm tra nếu load lại trang thì giữ nguyên các filter hiện tại
         if (location.search.length > 0) {
-            let params = queryString.parse(location.search)     // Lấy danh sách params từ URL
+            const params = queryString.parse(location.search)     // Lấy danh sách params từ URL
             let newParams = {}      // Lưu danh sách những param khác null
 
             // Thực hiện việc loại bỏ những param có giá trị là null
@@ -45,17 +48,14 @@ const EmployeesMainPage = () => {
             }
 
             // 
-            setFilters({
-                ...filters,
-                ...newParams
-            })
+            setFilters(newParams)
         }
     }, [])
 
     useEffect(() => {
         const requestUrl = location.pathname + "?" + queryString.stringify(filters)         // Lấy RequestURL đã gửi API tới Back End
+        dispatch(fetchEmployees(filters))        // Dispatch action fetchEmployees với tham số truyền vào là filters
         navigation(requestUrl)          // Thực hiện điều hướng rới RequestURL đã lấy ở trên
-        dispatch(actions.fetchEmployeesRequest(filters))        // Dispatch action fetchEmployeesRequest với tham số truyền vào là filters
     }, [filters])
 
     //  Hàm thay đổi state khi ấn vào trang mới ở phần phân trang
@@ -74,13 +74,6 @@ const EmployeesMainPage = () => {
             name: searchTerm
         })
     }
-
-    // const handleFilter = (e) => {
-    //     setFilters({
-    //         ...filters,
-    //         [e.target.name]: e.target.value
-    //     })
-    // }
 
     // Hàm thay đổi state khi thực hiện sắp xếp
     const handleSort = (sortBy) => {
@@ -167,68 +160,92 @@ const EmployeesMainPage = () => {
                             className="fw-bolder cursor-pointer"
                             onClick={() => handleSort("emp.name")}
                         >
-                            HỌ VÀ TÊN {filters.sort === "emp.name" && filters.order === "asc" ? <AiOutlineSortAscending size={20} /> : null} {filters.sort === "emp.name" && filters.order === "desc" ? <AiOutlineSortDescending size={20} /> : null}
+                            HỌ VÀ TÊN
+                            {
+                                (filters.sort === "emp.name" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
+                                    : (filters.sort === "emp.name" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
+                                        : <BiSortAlt2 size={20} />
+                            }
                         </span>
-                        {/* <Form.Control type="text" name="name" placeholder="Lọc theo họ và tên..." value={filters.name} onChange={handleFilter} /> */}
                     </div>
                     <div className="employee-dob">
                         <span
                             className="fw-bolder cursor-pointer"
                             onClick={() => handleSort("emp.dateOfBirth")}
                         >
-                            NGÀY SINH {filters.sort === "emp.dateOfBirth" && filters.order === "asc" ? <AiOutlineSortAscending size={20} /> : null} {filters.sort === "emp.dateOfBirth" && filters.order === "desc" ? <AiOutlineSortDescending size={20} /> : null}
+                            NGÀY SINH
+                            {
+                                (filters.sort === "emp.dateOfBirth" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
+                                    : (filters.sort === "emp.dateOfBirth" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
+                                        : <BiSortAlt2 size={20} />
+                            }
                         </span>
-                        {/* <Form.Control type="text" name="dob" placeholder="Lọc theo ngày sinh..." value={filters.dob} onChange={handleFilter} /> */}
                     </div>
                     <div className="employee-email">
                         <span
                             className="fw-bolder cursor-pointer"
                             onClick={() => handleSort("emp.email")}
                         >
-                            EMAIL {filters.sort === "emp.email" && filters.order === "asc" ? <AiOutlineSortAscending size={20} /> : null} {filters.sort === "emp.email" && filters.order === "desc" ? <AiOutlineSortDescending size={20} /> : null}
+                            EMAIL
+                            {
+                                (filters.sort === "emp.email" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
+                                    : (filters.sort === "emp.email" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
+                                        : <BiSortAlt2 size={20} />
+                            }
                         </span>
-                        {/* <Form.Control type="text" name="email" placeholder="Lọc theo email..." value={filters.email} onChange={handleFilter} /> */}
                     </div>
                     <div className="employee-phoneNumber">
                         <span
                             className="fw-bolder cursor-pointer"
                             onClick={() => handleSort("emp.phoneNumber")}
                         >
-                            SĐT {filters.sort === "emp.phoneNumber" && filters.order === "asc" ? <AiOutlineSortAscending size={20} /> : null} {filters.sort === "emp.phoneNumber" && filters.order === "desc" ? <AiOutlineSortDescending size={20} /> : null}
+                            SĐT
+                            {
+                                (filters.sort === "emp.phoneNumber" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
+                                    : (filters.sort === "emp.phoneNumber" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
+                                        : <BiSortAlt2 size={20} />
+                            }
                         </span>
-                        {/* <Form.Control type="text" name="phone" placeholder="Lọc theo số điện spanoại..." value={filters.phone} onChange={handleFilter} /> */}
                     </div>
                     <div className="employee-department">
                         <span
                             className="fw-bolder cursor-pointer"
                             onClick={() => handleSort("dep.name")}
                         >
-                            PHÒNG BAN {filters.sort === "dep.name" && filters.order === "asc" ? <AiOutlineSortAscending size={20} /> : null} {filters.sort === "dep.name" && filters.order === "desc" ? <AiOutlineSortDescending size={20} /> : null}
+                            PHÒNG BAN
+                            {
+                                (filters.sort === "dep.name" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
+                                    : (filters.sort === "dep.name" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
+                                        : <BiSortAlt2 size={20} />
+                            }
                         </span>
-                        {/* <Form.Control type="text" name="dep.name" placeholder="Lọc theo tên phòng ban..." value={filters.department} onChange={handleFilter} /> */}
                     </div>
                     <div className="employee-position">
                         <span
                             className="fw-bolder cursor-pointer"
                             onClick={() => handleSort("pos.name")}
                         >
-                            CHỨC VỤ {filters.sort === "pos.name" && filters.order === "asc" ? <AiOutlineSortAscending size={20} /> : null} {filters.sort === "pos.name" && filters.order === "desc" ? <AiOutlineSortDescending size={20} /> : null}
+                            CHỨC VỤ
+                            {
+                                (filters.sort === "pos.name" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
+                                    : (filters.sort === "pos.name" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
+                                        : <BiSortAlt2 size={20} />
+                            }
                         </span>
-                        {/* <Form.Control type="text" name="pos.name" placeholder="Lọc theo tên chức vụ..." value={filters.position} onChange={handleFilter} /> */}
                     </div>
                     <div className="employee-more" />
                 </div>
                 <div className="list-group-horizontal-lg">
                     {
-                        employees.map(employee => (
+                        employees?.map(employee => (
                             <EmployeeRow
                                 key={employee.id}
-                                employee={employee}
+                                employeeInfo={employee}
                             />
                         ))
                     }
                     {
-                        employees.length === 0 ? (
+                        employees?.length === 0 ? (
                             <Card.Body align="center">
                                 Không có dữ liệu
                             </Card.Body>
@@ -236,7 +253,10 @@ const EmployeesMainPage = () => {
                     }
                 </div>
                 <AppPagination
-                    pagination={pagination}
+                    pagination={{
+                        ...pagination,
+                        page: filters.page
+                    }}
                     onPageChange={handlePageChange}
                 />
             </Container>

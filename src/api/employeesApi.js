@@ -1,26 +1,26 @@
 import axiosClient from "./axiosClient"
 
-// API nhân viên
+// API liên quan đến phần nhân viên
 const baseUrl = "/employees"
 const employeesApi = {
     getAll: (params) => {
         const requestUrl = `${baseUrl}`
         return axiosClient.get(requestUrl, {params})
     },
-    get: (id) => {
-        const requestUrl = `${baseUrl}/${id}`
+    get: (employeeId) => {
+        const requestUrl = `${baseUrl}/${employeeId}`
         return axiosClient.get(requestUrl)
     },
-    add: (data) => {
+    add: (employeeInfo) => {
         const requestUrl = `${baseUrl}/add`
-        return axiosClient.post(requestUrl, data)
+        return axiosClient.post(requestUrl, employeeInfo)
     },
-    update: (data) => {
+    update: (employeeInfo) => {
         const requestUrl = `${baseUrl}/edit`
-        return axiosClient.put(requestUrl, data)
+        return axiosClient.put(requestUrl, employeeInfo)
     },
-    delete: (id) => {
-        const requestUrl = `${baseUrl}/delete/${id}`
+    delete: (employeeId) => {
+        const requestUrl = `${baseUrl}/delete/${employeeId}`
         return axiosClient.delete(requestUrl)
     }
 }

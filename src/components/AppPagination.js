@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-
-import { Pagination } from 'react-bootstrap'
+import { Image, Pagination } from 'react-bootstrap'
 
 import previousPageIcon from '../assets/icons/previous_page.svg'
 import nextPageIcon from '../assets/icons/next_page.svg'
@@ -13,9 +12,11 @@ import nextPageIcon from '../assets/icons/next_page.svg'
     + totalItem: tổng số Item của danh sách
     2. onPageChange: một hàm callback nhận vào một đối số là giá trị trang mới khi click chuột vào button
 */
+
 const AppPagination = ({ pagination, onPageChange }) => {
     // Lấy các đối tượng từ props pagination
     let { page, limit, totalItem } = pagination
+    page = Number.parseInt(page)
 
     // Tính toán tổng số trang
     const totalPage = Math.ceil(totalItem / limit)
@@ -34,12 +35,7 @@ const AppPagination = ({ pagination, onPageChange }) => {
         return () => {
             window.removeEventListener('resize', updateWidth)
         }
-    }, [])
-
-    // Hàm gọi props onPageChange được truyền vào từ component dùng nó với đối số truyền vào là trang mới cần chuyển hướng
-    const handlePageChange = (newPage) => {
-        onPageChange(newPage)
-    }
+    }, [width])
 
     // Hàm này sẽ trả về một mảng lưu những số (hoặc dấu ...) cần hiển thị ra UI tùy thuộc vào chiều rộng của màn hình (đã responsive)
     const fetchListPage = () => {
@@ -227,9 +223,9 @@ const AppPagination = ({ pagination, onPageChange }) => {
             >
                 <Pagination.Item
                     disabled={page <= 1}
-                    onClick={() => handlePageChange(page - 1)}
+                    onClick={() => onPageChange(page - 1)}
                 >
-                    <img src={previousPageIcon} />
+                    <Image src={previousPageIcon} />
                 </Pagination.Item>
                 {
                     fetchListPage().map((pageItem, index) => {
@@ -257,7 +253,7 @@ const AppPagination = ({ pagination, onPageChange }) => {
                             return (
                                 <Pagination.Item
                                     key={index}
-                                    onClick={() => handlePageChange(pageItem)}
+                                    onClick={() => onPageChange(pageItem)}
                                 >
                                     {pageItem}
                                 </Pagination.Item>
@@ -267,13 +263,13 @@ const AppPagination = ({ pagination, onPageChange }) => {
                 }
                 <Pagination.Item
                     disabled={page >= totalPage}
-                    onClick={() => handlePageChange(page + 1)}
+                    onClick={() => onPageChange(page + 1)}
                 >
-                    <img src={nextPageIcon} />
+                    <Image src={nextPageIcon} />
                 </Pagination.Item>
             </Pagination>
         </div>
     )
 }
 
-export default AppPagination
+export default React.memo(AppPagination)

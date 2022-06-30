@@ -1,6 +1,8 @@
 import React from 'react'
-import { Card, Col, Image, ListGroup, Row } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+
+import { Card, Col, Image, ListGroup, Row } from 'react-bootstrap'
+
 
 const PostItem = ({ post }) => {
     const htmlEntities = (str) => {

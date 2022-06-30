@@ -3,10 +3,11 @@ import { useSelector } from 'react-redux'
 
 import { Form, ListGroup } from 'react-bootstrap'
 
+import { teamsSelector } from '../../../../redux/selectors'
 import useOnClickOutside from '../../../../customHooks/useOnClickOutside'
 
 const FormSelectTeam = ({ index, currentTeam, onTeamChange }) => {
-    const teams = useSelector(state => state.teams.data)
+    const teams = useSelector(teamsSelector).teams
     const [visible, setVisible] = useState(false)       // State quản lý hiển thị danh sách phòng ban
 
     const ref = useRef()        // Ref form select team

@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { Button, Dropdown, Form, Modal } from 'react-bootstrap'
 import { BsShieldLock } from 'react-icons/bs'
 
-import { updateEmployeeRequest } from '../../../actions/employeesAction'
+import { updateEmployee } from '../../../redux/employeesSlice'
+
 
 const ResetPassword = ({ employee }) => {
+    const dispatch = useDispatch()
     const [visibleResetPassword, setVisibleResetPassword] = useState(false)              // State hiển thị thông báo xác nhận xóa nhân viên
     const [info, setInfo] = useState({
         password: "",
@@ -31,13 +34,13 @@ const ResetPassword = ({ employee }) => {
         if (form.checkValidity() === true) {
             e.preventDefault()
             e.stopPropagation()
-            updateEmployeeRequest({
+            dispatch(updateEmployee({
                 ...employee,
                 user: {
                     ...info.user,
                     password: info.password
                 }
-            })
+            }))
             setVisibleResetPassword(false)
         }
     }

@@ -4,14 +4,14 @@ import { useDispatch } from 'react-redux'
 import { Button, Dropdown, Modal } from 'react-bootstrap'
 import { BiTrash } from 'react-icons/bi'
 
-import { deleteDepartmentRequest } from '../../../../actions/departmentsAction'
+import { deleteDepartment } from '../../../../redux/departmentsSlice'
 
 
 const DeleteDepartment = ({ id }) => {
     const dispatch = useDispatch()
     const [visibleDeleteDepartment, setVisibleDeleteDepartment] = useState(false)
     const handleDelete = (id) => {
-        dispatch(deleteDepartmentRequest(id))
+        dispatch(deleteDepartment(id))
         setVisibleDeleteDepartment(false)
     }
 
@@ -29,7 +29,7 @@ const DeleteDepartment = ({ id }) => {
                     <Modal.Title>XÓA PHÒNG BAN</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    Bạn có chắc muốn xóa phòng ban này khỏi công ty?
+                    Bạn có chắc muốn xóa phòng ban này khỏi KTX?
                 </Modal.Body>
                 <Modal.Footer>
                     <Button

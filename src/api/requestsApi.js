@@ -1,27 +1,29 @@
 import axiosClient from "./axiosClient"
 
-// API đề xuất
+// API liên quan đến phần đề xuất
 const baseUrl = "/requests"
-const requestApi = {
-    getAll: (params) => {
+const requestsApi = {
+    getAll: (filtersParams) => {
         const requestUrl = `${baseUrl}`
-        return axiosClient.get(requestUrl, {params})
+        return axiosClient.get(requestUrl, {filtersParams})
     },
-    get: (id) => {
-        const requestUrl = `${baseUrl}/${id}`
+    get: (requestId) => {
+        const requestUrl = `${baseUrl}/${requestId}`
         return axiosClient.get(requestUrl)
     },
-    add: (data) => {
-        const requestUrl = `${baseUrl}`
-        return axiosClient.post(requestUrl, data)
+    add: (requestInfo) => {
+        const requestUrl = `${baseUrl}/add`
+        return axiosClient.post(requestUrl, requestInfo)
     },
-    update: (data) => {
-        const requestUrl = `${baseUrl}/${data.id}`
-        return axiosClient.patch(requestUrl, data)
+    update: (requestInfo) => {
+        const requestUrl = `${baseUrl}/edit`
+        return axiosClient.put(requestUrl, requestInfo)
     },
-    delete: (id) => {
-        const requestUrl = `${baseUrl}/${id}`
+    delete: (requestId) => {
+        const requestUrl = `${baseUrl}/delete/${requestId}`
         return axiosClient.delete(requestUrl)
     }
 }
-export default requestApi
+//
+
+export default requestsApi

@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { ListGroup, Modal } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import * as actions from '../../../actions/departmentsAction'
+
+import { ListGroup, Modal } from 'react-bootstrap'
+
+import { fetchDepartments } from '../../../redux/departmentsSlice'
+import { departmentsSelector } from '../../../redux/selectors'
 import AppSearch from '../../../components/AppSearch'
 import DepartmentRow from './DepartmentRow'
 import AddDepartment from './DepartmentsFeatures/AddDepartment'
 
 const DepartmentsMainPage = ({ visible, setVisible }) => {
-    const departments = useSelector(state => state.departments.data)
+    const departments = useSelector(departmentsSelector).departments
 
     const dispatch = useDispatch()
 
@@ -16,7 +19,7 @@ const DepartmentsMainPage = ({ visible, setVisible }) => {
     })
 
     useEffect(() => {
-        dispatch(actions.fetchDepartmentsRequest(filters))
+        dispatch(fetchDepartments(filters))
     }, [filters])
 
     const handleSearchTerm = (searchTerm) => {

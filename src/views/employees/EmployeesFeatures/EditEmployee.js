@@ -1,7 +1,8 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
+
 import { Dropdown } from 'react-bootstrap'
 import { BiEdit } from 'react-icons/bi'
+
 import FormSubmitEmployee from './SubmitEmployee/FormSubmitEmployee'
 
 const EditEmployee = ({ employee }) => {
@@ -13,7 +14,10 @@ const EditEmployee = ({ employee }) => {
                     <BiEdit /> Chỉnh sửa
                 </div>
             </Dropdown.Item>
-            <FormSubmitEmployee visible={visible} setVisible={setVisible} employee={employee} />
+            {
+                visible && <FormSubmitEmployee visible={visible} setVisible={setVisible} employee={employee} />
+            }
+            
         </>
     )
 }

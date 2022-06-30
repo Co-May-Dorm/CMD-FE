@@ -9,7 +9,6 @@ import usernameIcon from '../../assets/icons/username.svg'
 import passwordIcon from '../../assets/icons/password.svg'
 
 const Login = () => {
-
     useEffect(() => {
         document.title = "Đăng Nhập"
     })
@@ -101,7 +100,9 @@ const Login = () => {
                         </div>
                     </div>
                     <div className="row mb-3">
-                        <Button type="submit">Đăng nhập</Button>
+                        <Button type="submit">
+                            Đăng nhập
+                        </Button>
                     </div>
                 </Form>
             </Col>

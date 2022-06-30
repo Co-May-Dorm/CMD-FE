@@ -1,32 +1,29 @@
 import axiosClient from "./axiosClient"
 
-// API phòng ban
+// API liên quan đến phần phòng ban
 const baseUrl = "/departments"
 const departmentsApi = {
-    getAll: (params) => {
+    getAll: (filtersParams) => {
         const requestUrl = `${baseUrl}`
-        return axiosClient.get(requestUrl, {params})
+        return axiosClient.get(requestUrl, {filtersParams})
     },
-    get: (id) => {
-        const requestUrl = `${baseUrl}/${id}`
+    get: (departmentId) => {
+        const requestUrl = `${baseUrl}/${departmentId}`
         return axiosClient.get(requestUrl)
     },
-    add: (data) => {
+    add: (departmentInfo) => {
         const requestUrl = `${baseUrl}/add`
-        return axiosClient.post(requestUrl, data)
+        return axiosClient.post(requestUrl, departmentInfo)
     },
-    update: (data) => {
+    update: (departmentInfo) => {
         const requestUrl = `${baseUrl}/edit`
-        return axiosClient.put(requestUrl, data)
+        return axiosClient.put(requestUrl, departmentInfo)
     },
-    delete: (id) => {
-        const requestUrl = `${baseUrl}/delete/${id}`
-        return axiosClient.delete(requestUrl)
-    },
-    deletePosition: (id) => {
-        const requestUrl = `/positions/delete/${id}`
+    delete: (departmentId) => {
+        const requestUrl = `${baseUrl}/delete/${departmentId}`
         return axiosClient.delete(requestUrl)
     }
 }
+//
 
 export default departmentsApi
