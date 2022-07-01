@@ -25,7 +25,7 @@ const FormSelectTeam = ({ index, currentTeam, onTeamChange }) => {
                 type="text"
                 name="phoneNumber"
                 placeholder="Chọn CLB/Đội nhóm"
-                value={currentTeam?.name}
+                value={currentTeam?.name || ""}
                 readOnly
                 required
                 style={{

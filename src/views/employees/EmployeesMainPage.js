@@ -16,10 +16,12 @@ import ButtonShowTeams from './TeamsPage/ButtonShowTeams'
 import AppSearch from '~/components/AppSearch'
 import ButtonShowRoles from './RolesPage/ButtonShowRoles'
 import ExportDataToCSV from './EmployeesFeatures/ExportDataToCSV'
+import Loading from '~/components/Loading'
 
 const queryString = require('query-string')
 
 const EmployeesMainPage = () => {
+    const isLoading = useSelector(employeesSelector).status
     const employees = useSelector(employeesSelector).employees           // Lấy danh sách sinh viên từ redux
     const pagination = useSelector(employeesSelector).pagination         // Lấy dữ liệu phân trang của danh sách sinh viên trên
 
@@ -235,23 +237,29 @@ const EmployeesMainPage = () => {
                     </div>
                     <div className="employee-more" />
                 </div>
-                <div className="list-group-horizontal-lg">
-                    {
-                        employees?.map(employee => (
-                            <EmployeeRow
-                                key={employee.id}
-                                employeeInfo={employee}
-                            />
-                        ))
-                    }
-                    {
-                        employees?.length === 0 ? (
-                            <Card.Body align="center">
-                                Không có dữ liệu
-                            </Card.Body>
-                        ) : null
-                    }
-                </div>
+                {
+                    isLoading === "loading" ? (
+                        <Loading />
+                    ) : (
+                        <div className="list-group-horizontal-lg">
+                            {
+                                employees?.map(employee => (
+                                    <EmployeeRow
+                                        key={employee.id}
+                                        employeeInfo={employee}
+                                    />
+                                ))
+                            }
+                            {
+                                employees?.length === 0 ? (
+                                    <Card.Body align="center">
+                                        Không có dữ liệu
+                                    </Card.Body>
+                                ) : null
+                            }
+                        </div>
+                    )
+                }
                 <AppPagination
                     pagination={{
                         ...pagination,

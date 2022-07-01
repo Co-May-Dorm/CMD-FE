@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-
 import { Accordion, Modal } from 'react-bootstrap'
 
 import { fetchRoles } from '~/redux/rolesSlice'
@@ -10,8 +9,10 @@ import AppPagination from '~/components/AppPagination'
 import AppSearch from '~/components/AppSearch'
 import RoleItem from './RoleItem'
 import AddRole from './RolesFeatures/AddRole'
+import Loading from '~/components/Loading'
 
 const RolesMainPage = ({ visible, setVisible }) => {
+    const isLoading = useSelector(rolesSelector).status
     const roles = useSelector(rolesSelector).roles
     const pagination = useSelector(rolesSelector).pagination
     const dispatch = useDispatch()
@@ -55,15 +56,24 @@ const RolesMainPage = ({ visible, setVisible }) => {
                             <AddRole />
                         </div>
                     </div>
-                    <Accordion flush alwaysOpen>
-                        {
-                            roles?.map(role => (
-                                <Accordion.Item eventKey={role.id} key={role.id}>
-                                    <RoleItem role={role} />
-                                </Accordion.Item>
-                            ))
-                        }
-                    </Accordion>
+                    {
+                        isLoading === "loading" ? (
+                            <Loading />
+                        ) : (
+                            <Accordion flush alwaysOpen>
+                                {
+                                    roles?.map(role => (
+                                        <Accordion.Item
+                                            eventKey={role.id}
+                                            key={role.id}
+                                        >
+                                            <RoleItem role={role} />
+                                        </Accordion.Item>
+                                    ))
+                                }
+                            </Accordion>
+                        )
+                    }
                 </Modal.Body>
                 <Modal.Footer className="justify-content-center">
                     <AppPagination

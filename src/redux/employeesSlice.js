@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import swal from "sweetalert"
-import employeesApi from "../api/employeesApi"
+import employeesApi from "~/api/employeesApi"
 
 const employeesSlice = createSlice({
     name: "employees",
@@ -11,7 +11,7 @@ const employeesSlice = createSlice({
             page: 1,
             limit: 10,
             totalItem: 0,
-        },
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -100,9 +100,9 @@ const employeesSlice = createSlice({
                     // Hiển thị thông báo Xóa nhân viên thất bại kèm lỗi
                     swal({
                         title: "Xóa nhân viên",
-                        text: `${action.payload.message}`,
+                        text: action.payload.message,
                         icon: "error",
-                        button: "OK",
+                        button: "OK "
                     })
                 }
             })
@@ -112,7 +112,7 @@ const employeesSlice = createSlice({
                     title: "Xóa nhân viên",
                     text: action.payload.message,
                     icon: "error",
-                    button: "OK ",
+                    button: "OK "
                 })
             })
     },
@@ -132,6 +132,6 @@ export const updateEmployee = createAsyncThunk("employees/updateEmployee", async
     return response.data
 })
 export const deleteEmployee = createAsyncThunk("employees/deleteEmployee", async (employeeId) => {
-    await employeesApi.delete(employeeId)
-    return employeeId
+    const response = await employeesApi.delete(employeeId)
+    return response.data
 })

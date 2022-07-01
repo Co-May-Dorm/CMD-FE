@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -8,8 +9,10 @@ import { departmentsSelector } from '../../../redux/selectors'
 import AppSearch from '../../../components/AppSearch'
 import DepartmentRow from './DepartmentRow'
 import AddDepartment from './DepartmentsFeatures/AddDepartment'
+import Loading from '~/components/Loading'
 
 const DepartmentsMainPage = ({ visible, setVisible }) => {
+    const isLoading = useSelector(departmentsSelector).status
     const departments = useSelector(departmentsSelector).departments
 
     const dispatch = useDispatch()
@@ -67,11 +70,11 @@ const DepartmentsMainPage = ({ visible, setVisible }) => {
             show={visible}
             onHide={() => setVisible(false)}
         >
-                <Modal.Header closeButton>
-                    <Modal.Title>
-                        Phòng ban
-                    </Modal.Title>
-                </Modal.Header>
+            <Modal.Header closeButton>
+                <Modal.Title>
+                    Phòng ban
+                </Modal.Title>
+            </Modal.Header>
             <Modal.Body>
                 <div className="row align-content-between justify-content-between bg-light p-3">
                     <div className="col">
@@ -83,13 +86,19 @@ const DepartmentsMainPage = ({ visible, setVisible }) => {
                     <div className="col-auto">
                         <AddDepartment />
                     </div>
-                </div>                                              
-                <ListGroup
-                    className="mt-3"
-                    variant="flush"
-                >
-                    {departmentsElement}
-                </ListGroup>
+                </div>
+                {
+                    isLoading === "loading" ? (
+                        <Loading />
+                    ) : (
+                        <ListGroup
+                            className="mt-3"
+                            variant="flush"
+                        >
+                            {departmentsElement}
+                        </ListGroup>
+                    )
+                }
             </Modal.Body>
         </Modal>
     )

@@ -16,7 +16,9 @@ const ButtonShowDepartments = () => {
                 Phòng ban
                 </span>
             </Button>
-            <Departments visible={visible} setVisible={setVisible} />
+            {
+                visible && <Departments visible={visible} setVisible={setVisible} />
+            }
         </>
     )
 }
