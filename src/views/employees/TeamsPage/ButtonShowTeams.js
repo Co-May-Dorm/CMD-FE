@@ -13,10 +13,12 @@ const ButtonShowTeams = () => {
                 onClick={() => setVisible(!visible)}
             >
                 <span className="fw-bold">
-                CLB/Đội nhóm
+                    CLB/Đội nhóm
                 </span>
             </Button>
-            <Teams visible={visible} setVisible={setVisible} />
+            {
+                visible && <Teams visible={visible} setVisible={setVisible} />
+            }
         </>
     )
 }

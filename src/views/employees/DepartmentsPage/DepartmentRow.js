@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
+import { Dropdown, Image, ListGroup } from 'react-bootstrap'
+import { BiInfoSquare } from 'react-icons/bi'
 
-import departmentLevelIcon from '../../../assets/icons/department_level.svg'
-import moreIcon from '../../../assets/icons/more.svg'
-import { Dropdown, ListGroup } from 'react-bootstrap'
-
+import departmentLevelIcon from '~/assets/icons/department_level.svg'
+import moreIcon from '~/assets/icons/more.svg'
 import DepartmentDetail from './DepartmentDetail'
 import EditDepartment from './DepartmentsFeatures/EditDepartment'
 import DeleteDepartment from './DepartmentsFeatures/DeleteDepartment'
@@ -16,11 +16,9 @@ const DepartmentRow = ({ department }) => {
                 action
                 className="position-relative"
                 style={{ paddingLeft: department.level * 40 }}
-                onDoubleClick={() => setVisible(true)}
             >
-                <img src={departmentLevelIcon} alt="Panel" />
-                <span className="ps-2" />
-                {department.name}
+                <Image src={departmentLevelIcon} />
+                <span className="ps-2" /> {department.name}
                 <div
                     className="position-absolute"
                     style={{
@@ -31,16 +29,22 @@ const DepartmentRow = ({ department }) => {
                 >
                     <Dropdown className="col-auto">
                         <Dropdown.Toggle variant="none" className="text-white">
-                            <img src={moreIcon} alt="More icon" />
+                            <Image src={moreIcon} />
                         </Dropdown.Toggle>
                         <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
+                        <DepartmentDetail />
+                            <Dropdown.Item onClick={() => setVisible(!visible)}>
+                                <BiInfoSquare /> Chỉnh sửa
+                            </Dropdown.Item>
                             <EditDepartment department={department} />
-                            <DeleteDepartment id={department.id} />
+                            <DeleteDepartment departmentId={department.id} />
                         </Dropdown.Menu>
                     </Dropdown>
                 </div>
             </ListGroup.Item>
-            <DepartmentDetail department={department} visible={visible} setVisible={setVisible} />
+            {
+                visible && <DepartmentDetail department={department} visible={visible} setVisible={setVisible} />
+            }
         </>
     )
 }

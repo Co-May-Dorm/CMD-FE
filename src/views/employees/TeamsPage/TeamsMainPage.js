@@ -8,8 +8,10 @@ import AppSearch from '../../../components/AppSearch'
 import TeamRow from './TeamRow'
 import AddTeam from './TeamsFeatures/AddTeam'
 import { teamsSelector } from '../../../redux/selectors'
+import Loading from '~/components/Loading'
 
 const TeamsMainPage = ({ visible, setVisible }) => {
+    const isLoading = useSelector(teamsSelector).status
     const teams = useSelector(teamsSelector).teams
 
     const dispatch = useDispatch()
@@ -54,19 +56,25 @@ const TeamsMainPage = ({ visible, setVisible }) => {
                         <AddTeam />
                     </div>
                 </div>
-                <ListGroup
-                    className="mt-3"
-                    variant="flush"
-                >
-                    {
-                        teams.map((team, index) => (
-                            <TeamRow
-                                key={index}
-                                team={team}
-                            />
-                        ))
-                    }
-                </ListGroup>
+                {
+                    isLoading === "loading" ? (
+                        <Loading />
+                    ) : (
+                        <ListGroup
+                            className="mt-3"
+                            variant="flush"
+                        >
+                            {
+                                teams.map((team, index) => (
+                                    <TeamRow
+                                        key={index}
+                                        team={team}
+                                    />
+                                ))
+                            }
+                        </ListGroup>
+                    )
+                }
             </Modal.Body>
         </Modal>
     )

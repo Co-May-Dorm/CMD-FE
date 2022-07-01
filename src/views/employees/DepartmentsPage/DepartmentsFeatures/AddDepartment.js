@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-
 import { Button } from 'react-bootstrap'
 
 import FormSubmitDepartment from './FormSubmitDepartment'
@@ -14,9 +13,11 @@ const AddDepartment = () => {
             >
                 Tạo mới
             </Button>
-            <FormSubmitDepartment visible={visible} setVisible={setVisible} />
+            {
+                visible && <FormSubmitDepartment visible={visible} setVisible={setVisible} />
+            }
         </>
     )
 }
 
-export default AddDepartment
+export default React.memo(AddDepartment)

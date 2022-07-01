@@ -14,7 +14,9 @@ const EditDepartment = ({ department }) => {
             >
                 <BiEdit /> Chỉnh sửa
             </Dropdown.Item>
-            <FormSubmitDepartment visible={visibleEditDepartment} setVisible={setVisibleEditDepartment} department={department} />
+            {
+                visibleEditDepartment && <FormSubmitDepartment visible={visibleEditDepartment} setVisible={setVisibleEditDepartment} department={department} />
+            }
         </>
     )
 }

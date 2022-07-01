@@ -1,9 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-
 import { ListGroup, Modal, Table } from 'react-bootstrap'
 
-import { departmentsSelector } from '../../../redux/selectors'
+import { departmentsSelector } from '~/redux/selectors'
 
 const DepartmentDetail = ({ department, visible, setVisible }) => {
     const departments = useSelector(departmentsSelector).departments    // Lấy danh sách phòng ban từ redux
@@ -70,7 +69,7 @@ const DepartmentDetail = ({ department, visible, setVisible }) => {
                                     department.positions.map((position, index) => (
                                         <tr key={index}>
                                             <td>{position.name}</td>
-                                            <td>{position?.role.name}</td>
+                                            <td>{position.role.name}</td>
                                         </tr>
                                     ))
                                 }

@@ -7,11 +7,11 @@ import { BiTrash } from 'react-icons/bi'
 import { deleteDepartment } from '../../../../redux/departmentsSlice'
 
 
-const DeleteDepartment = ({ id }) => {
+const DeleteDepartment = ({ departmentId }) => {
     const dispatch = useDispatch()
     const [visibleDeleteDepartment, setVisibleDeleteDepartment] = useState(false)
-    const handleDelete = (id) => {
-        dispatch(deleteDepartment(id))
+    const handleDelete = () => {
+        dispatch(deleteDepartment(departmentId))
         setVisibleDeleteDepartment(false)
     }
 
@@ -20,34 +20,38 @@ const DeleteDepartment = ({ id }) => {
             <Dropdown.Item onClick={() => setVisibleDeleteDepartment(!visibleDeleteDepartment)}>
                 <BiTrash /> Xóa
             </Dropdown.Item>
-            <Modal
-                scrollable
-                show={visibleDeleteDepartment}
-                onHide={() => setVisibleDeleteDepartment(false)}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>XÓA PHÒNG BAN</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    Bạn có chắc muốn xóa phòng ban này khỏi KTX?
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        variant="secondary"
-                        className="text-white"
-                        onClick={() => setVisibleDeleteDepartment(false)}
+            {
+                visibleDeleteDepartment && (
+                    <Modal
+                        scrollable
+                        show={visibleDeleteDepartment}
+                        onHide={() => setVisibleDeleteDepartment(false)}
                     >
-                        Hủy
-                    </Button>
-                    <Button
-                        variant="danger"
-                        className="text-white"
-                        onClick={() => handleDelete(id)}
-                    >
-                        Đồng ý
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+                        <Modal.Header closeButton>
+                            <Modal.Title>XÓA PHÒNG BAN</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            Bạn có chắc muốn xóa phòng ban này khỏi KTX?
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button
+                                variant="secondary"
+                                className="text-white"
+                                onClick={() => setVisibleDeleteDepartment(false)}
+                            >
+                                Hủy
+                            </Button>
+                            <Button
+                                variant="danger"
+                                className="text-white"
+                                onClick={handleDelete}
+                            >
+                                Đồng ý
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                )
+            }
         </>
     )
 }

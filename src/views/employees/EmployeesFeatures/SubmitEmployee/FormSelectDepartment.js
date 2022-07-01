@@ -34,12 +34,12 @@ const FormSelectDepartment = ({ index, currentDepartment, departments, onDepartm
         )
     }
     const recursiveDepartmentChild = (department_parent) => {
-        departments.forEach((department_child) => {
+        departments.forEach((department_child, index) => {
             if (department_parent.id === department_child.fatherDepartmentId) {
                 selectDepartmentElement.push(
                     <ListGroup.Item
                         action
-                        key={department_child.id}
+                        key={index}
                         style={{
                             paddingLeft: department_child.level * 20,
                             borderRadius: "none"
@@ -56,12 +56,12 @@ const FormSelectDepartment = ({ index, currentDepartment, departments, onDepartm
         })
     }
     const traverseDepartment = () => {
-        departments.forEach((department) => {
+        departments.forEach((department, index) => {
             if (department.fatherDepartmentId === -1) {
                 selectDepartmentElement.push(
                     <ListGroup.Item
                         action
-                        key={department.id}
+                        key={index}
                         style={{
                             paddingLeft: department.level * 20,
                             borderRadius: "none"
@@ -88,9 +88,12 @@ const FormSelectDepartment = ({ index, currentDepartment, departments, onDepartm
         >
             <input
                 type="text"
-                name="phoneNumber"
+                name="department"
                 placeholder="Chọn phòng ban"
-                value={currentDepartment?.name}
+                value={currentDepartment?.name || ""}
+                onChange={() => {
+
+                }}
                 readOnly
                 required
                 style={{
@@ -108,7 +111,7 @@ const FormSelectDepartment = ({ index, currentDepartment, departments, onDepartm
             </Form.Control.Feedback>
 
             <div className="select">
-                {(visible) ? selectDepartmentElement : null}
+                {(visible) && selectDepartmentElement}
             </div>
         </div>
     )
