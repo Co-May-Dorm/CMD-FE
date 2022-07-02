@@ -1,53 +1,153 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import departmentsApi from '../api/departmentsApi'
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+
+import swal from "sweetalert"
+import departmentsApi from "~/api/departmentsApi"
 
 const departmentsSlice = createSlice({
-    name: 'departments',
+    name: "departments",
     initialState: {
-        status: 'idle',
-        departments: []
+        status: "idle",
+        departments: [],
     },
     extraReducers: (builder) => {
         builder
             .addCase(fetchDepartments.pending, (state, action) => {
-                state.status = 'loading'
+                state.status = "loading"
             })
             .addCase(fetchDepartments.fulfilled, (state, action) => {
-                state.departments = action.payload
-                state.status = 'idle'
+                state.departments = action.payload.data
+                state.status = "success"
+            })
+            .addCase(fetchDepartments.rejected, (state, action) => {
+                state.status = "error"
             })
             .addCase(addDepartment.fulfilled, (state, action) => {
-                state.departments.push(action.payload)
+                // Nếu thêm phòng ban thành công
+                if (action.payload.status === "OK") {
+                    // Thực hiện thêm phòng ban đó vào đầu mảng dữ liệu trên redux và xóa phòng ban ở cuối mảng để số phòng ban trên 1 trang luôn đúng
+                    state.departments.unshift(action.payload.data)
+                    state.departments.pop()
+
+                    // Hiển thị thông báo thêm phòng ban thành công
+                    swal({
+                        title: "Thêm phòng ban",
+                        text: `Thêm phòng ban ${action.payload.data.name} thành công!`,
+                        icon: "success",
+                        button: "OK",
+                    })
+                }
+
+                // Nếu có dữ liệu không hợp lệ
+                else {
+                    // Hiển thị thông báo dữ liệu thông hợp lệ
+                    swal({
+                        title: "Thêm phòng ban",
+                        text: `Thêm phòng ban thất bại. ${action.payload.message}`,
+                        icon: "error",
+                        button: "OK",
+                    })
+                }
+            })
+            .addCase(addDepartment.rejected, (state, action) => {
+                // Hiển thị thông báo nếu gửi request thất bại
+                swal({
+                    title: "Thêm phòng ban",
+                    text: action.error.message,
+                    icon: "error",
+                    button: "OK",
+                })
             })
             .addCase(updateDepartment.fulfilled, (state, action) => {
-                // Tìm kiếm id phòng ban và thực hiện cập nhật thông tin mới cho phòng ban đó
-                state.departments.forEach((department, index, array) => {
-                    if (department.id === action.payload.id) {
-                        array[index] = action.payload
-                    }
+                // Nếu gửi request thêm phòng ban thành công lên Server
+                if (action.payload.status === "OK") {
+                    // Tìm kiếm id phòng ban và thực hiện cập nhật thông tin mới cho phòng ban đó
+                    state.departments.forEach((department, index, array) => {
+                        if (department.id === action.payload.id) {
+                            array[index] = action.payload
+                        }
+                    })
+
+                    // Hiển thị thông báo chỉnh sửa phòng ban thành công
+                    swal({
+                        title: "Chỉnh sửa phòng ban",
+                        text: `Chỉnh sửa phòng ban ${action.payload.name} thành công!`,
+                        icon: "success",
+                        button: "OK",
+                    })
+                }
+
+                // Nếu có dữ liệu không hợp lệ
+                else {
+                    // Hiển thị thông báo dữ liệu thông hợp lệ
+                    swal({
+                        title: "Chỉnh sửa phòng ban",
+                        text: action.payload.message,
+                        icon: "error",
+                        button: "OK",
+                    })
+                }
+            })
+            .addCase(updateDepartment.rejected, (state, action) => {
+                // Hiển thị thông báo nếu gửi request thất bại
+                swal({
+                    title: "Chỉnh sửa phòng ban",
+                    text: action.error.message,
+                    icon: "error",
+                    button: "OK",
                 })
             })
             .addCase(deleteDepartment.fulfilled, (state, action) => {
-                // Thực hiện xóa phòng ban
-                state.departments.filter(department => department.id !== action.payload)
+                // Nếu gửi request xoắ phòng ban thành công lên Server
+                if (action.payload.status === "OK") {
+                    // Thực hiện lọc ra những phòng ban có id khác với id phòng ban cần xóa
+                    state.departments = state.departments.filter((department) => department.id !== action.payload.id)
+
+                    // Hiển thị thông báo xóa phòng ban thành công
+                    swal({
+                        title: "Xóa phòng ban",
+                        text: `Xóa phòng ban ${action.payload.name} thành công!`,
+                        icon: "success",
+                        button: "OK",
+                    })
+                }
+
+                // Nếu không thể xóa phòng ban
+                else {
+                    // Hiển thị cảnh báo không thể xóa phòng ban
+                    swal({
+                        title: "Xóa phòng ban",
+                        text: action.payload.message,
+                        icon: "warning",
+                        button: "OK ",
+                    })
+                }
             })
-    }
+            .addCase(deleteDepartment.rejected, (state, action) => {
+                // Hiển thị thông báo nếu gửi request thất bại
+                swal({
+                    title: "Xóa phòng ban",
+                    text: action.payload.message,
+                    icon: "error",
+                    button: "OK ",
+                })
+            })
+    },
 })
 export default departmentsSlice
 
-export const fetchDepartments = createAsyncThunk('departments/fetchDepartments', async (filtersParams) => {
-    const response = await departmentsApi.getAll(filtersParams)
+export const fetchDepartments = createAsyncThunk("departments/fetchDepartments", async (params) => {
+    const response = await departmentsApi.getAll(params)
     return response.data.data
 })
-export const addDepartment = createAsyncThunk('departments/addDepartment', async (departmentInfo) => {
+export const addDepartment = createAsyncThunk("departments/addDepartment", async (departmentInfo) => {
     const response = await departmentsApi.add(departmentInfo)
-    return response.data.data
+    return response.data
 })
-export const updateDepartment = createAsyncThunk('departments/updateDepartment', async (departmentInfo) => {
+export const updateDepartment = createAsyncThunk("departments/updateDepartment", async (departmentInfo) => {
     const response = await departmentsApi.update(departmentInfo)
-    return response.data.data
+    return response.data
 })
-export const deleteDepartment = createAsyncThunk('departments/deleteDepartment', async (departmentId) => {
+export const deleteDepartment = createAsyncThunk("departments/deleteDepartment", async (departmentId) => {
     const response = await departmentsApi.delete(departmentId)
-    return response.data.data
+    return response.data
 })
