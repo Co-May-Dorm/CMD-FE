@@ -23,14 +23,12 @@ const AppContent = () => {
                         unmountOnExit
                     >
                         <Routes>
-                            {routes.map((route, idx) => {
+                            {routes.map((route, index) => {
                                 return (
                                     route.element && (
                                         <Route
-                                            key={idx}
-                                            path={route.path}
-                                            name={route.name}
-                                            element={<route.element />}
+                                            key={index}
+                                            {...route}
                                         />
                                     )
                                 )

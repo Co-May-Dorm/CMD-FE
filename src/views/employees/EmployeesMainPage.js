@@ -21,7 +21,7 @@ import Loading from '~/components/Loading'
 const queryString = require('query-string')
 
 const EmployeesMainPage = () => {
-    const isLoading = useSelector(employeesSelector).status
+    const status = useSelector(employeesSelector).status
     const employees = useSelector(employeesSelector).employees           // Lấy danh sách sinh viên từ redux
     const pagination = useSelector(employeesSelector).pagination         // Lấy dữ liệu phân trang của danh sách sinh viên trên
 
@@ -34,7 +34,7 @@ const EmployeesMainPage = () => {
     })      // State lưu trữ các params truyền vào API để lấy dữ liệu từ Back End
 
     useEffect(() => {
-        document.title = "Sinh viên"     // Thiết lập tiêu đề cho trang
+        document.title = "Nhân viên"     // Thiết lập tiêu đề cho trang
 
         // Kiểm tra nếu load lại trang thì giữ nguyên các filter hiện tại
         if (location.search.length > 0) {
@@ -238,8 +238,10 @@ const EmployeesMainPage = () => {
                     <div className="employee-more" />
                 </div>
                 {
-                    isLoading === "loading" ? (
+                    status === "loading" ? (
                         <Loading />
+                    ) : status === "error" ? (
+                        <div className="text-center py-3">Có lỗi trong quá trình lấy dữ liệu từ Server</div>
                     ) : (
                         <div className="list-group-horizontal-lg">
                             {

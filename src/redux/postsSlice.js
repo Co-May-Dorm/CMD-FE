@@ -1,58 +1,159 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import postsApi from '../api/postsApi'
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+
+import swal from "sweetalert"
+import postsApi from "~/api/postsApi"
 
 const postsSlice = createSlice({
-    name: 'posts',
+    name: "posts",
     initialState: {
-        status: 'idle',
+        status: "idle",
         posts: [],
         pagination: {
             page: 1,
             limit: 10,
-            totalItem: 0
-        }
+            totalItem: 0,
+        },
     },
     extraReducers: (builder) => {
         builder
             .addCase(fetchPosts.pending, (state, action) => {
-                state.status = 'loading'
+                state.status = "loading"
             })
             .addCase(fetchPosts.fulfilled, (state, action) => {
-                state.posts = action.payload
-                state.status = 'idle'
+                state.posts = action.payload.posts
+                state.pagination = action.payload.pagination
+                state.status = "success"
+            })
+            .addCase(fetchPosts.rejected, (state, action) => {
+                state.status = "error"
             })
             .addCase(addPost.fulfilled, (state, action) => {
-                state.posts.push(action.payload)
+                // Nếu thêm bài viết thành công
+                if (action.payload.status === "OK") {
+                    // Thực hiện thêm bài viết đó vào đầu mảng dữ liệu trên redux và xóa bài viết ở cuối mảng để số bài viết trên 1 trang luôn đúng
+                    state.posts.unshift(action.payload.data)
+                    state.posts.pop()
+
+                    // Hiển thị thông báo thêm bài viết thành công
+                    swal({
+                        title: "Thêm bài viết",
+                        text: `Thêm bài viết ${action.payload.data.name} thành công!`,
+                        icon: "success",
+                        button: "OK",
+                    })
+                }
+
+                // Nếu có dữ liệu không hợp lệ
+                else {
+                    // Hiển thị thông báo dữ liệu thông hợp lệ
+                    swal({
+                        title: "Thêm bài viết",
+                        text: `Thêm bài viết thất bại. ${action.payload.message}`,
+                        icon: "error",
+                        button: "OK",
+                    })
+                }
+            })
+            .addCase(addPost.rejected, (state, action) => {
+                // Hiển thị thông báo nếu gửi request thất bại
+                swal({
+                    title: "Thêm bài viết",
+                    text: action.error.message,
+                    icon: "error",
+                    button: "OK",
+                })
             })
             .addCase(updatePost.fulfilled, (state, action) => {
-                // Tìm kiếm id bài viết và thực hiện cập nhật thông tin mới cho bài viết đó
-                state.posts.forEach((post, index, array) => {
-                    if (post.id === action.payload.id) {
-                        array[index] = action.payload
-                    }
+                // Nếu gửi request thêm bài viết thành công lên Server
+                if (action.payload.status === "OK") {
+                    // Tìm kiếm id bài viết và thực hiện cập nhật thông tin mới cho bài viết đó
+                    state.posts.forEach((post, index, array) => {
+                        if (post.id === action.payload.id) {
+                            array[index] = action.payload
+                        }
+                    })
+
+                    // Hiển thị thông báo chỉnh sửa bài viết thành công
+                    swal({
+                        title: "Chỉnh sửa bài viết",
+                        text: `Chỉnh sửa bài viết ${action.payload.name} thành công!`,
+                        icon: "success",
+                        button: "OK",
+                    })
+                }
+
+                // Nếu có dữ liệu không hợp lệ
+                else {
+                    // Hiển thị thông báo dữ liệu thông hợp lệ
+                    swal({
+                        title: "Chỉnh sửa bài viết",
+                        text: action.payload.message,
+                        icon: "error",
+                        button: "OK",
+                    })
+                }
+            })
+            .addCase(updatePost.rejected, (state, action) => {
+                // Hiển thị thông báo nếu gửi request thất bại
+                swal({
+                    title: "Chỉnh sửa bài viết",
+                    text: action.error.message,
+                    icon: "error",
+                    button: "OK",
                 })
             })
             .addCase(deletePost.fulfilled, (state, action) => {
-                // Thực hiện xóa bài viết
-                state.posts.filter(post => post.id !== action.payload)
+                // Nếu gửi request xoắ bài viết thành công lên Server
+                if (action.payload.status === "OK") {
+                    // Thực hiện lọc ra những bài viết có id khác với id bài viết cần xóa
+                    state.posts = state.posts.filter((post) => post.id !== action.payload.id)
+
+                    // Hiển thị thông báo xóa bài viết thành công
+                    swal({
+                        title: "Xóa bài viết",
+                        text: `Xóa bài viết ${action.payload.name} thành công!`,
+                        icon: "success",
+                        button: "OK",
+                    })
+                }
+
+                // Nếu không thể xóa bài viết
+                else {
+                    // Hiển thị cảnh báo không thể xóa bài viết
+                    swal({
+                        title: "Xóa bài viết",
+                        text: action.payload.message,
+                        icon: "warning",
+                        button: "OK ",
+                    })
+                }
             })
-    }
+            .addCase(deletePost.rejected, (state, action) => {
+                // Hiển thị thông báo nếu gửi request thất bại
+                swal({
+                    title: "Xóa bài viết",
+                    text: action.payload.message,
+                    icon: "error",
+                    button: "OK ",
+                })
+            })
+    },
 })
 export default postsSlice
 
-export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (filtersParams) => {
-    const response = await postsApi.getAll(filtersParams)
+export const fetchPosts = createAsyncThunk("posts/fetchPosts", async (params) => {
+    const response = await postsApi.getAll(params)
     return response.data.data
 })
-export const addPost = createAsyncThunk('posts/addPost', async (postInfo) => {
+export const addPost = createAsyncThunk("posts/addPost", async (postInfo) => {
     const response = await postsApi.add(postInfo)
-    return response.data.data
+    return response.data
 })
-export const updatePost = createAsyncThunk('posts/updatePost', async (postInfo) => {
+export const updatePost = createAsyncThunk("posts/updatePost", async (postInfo) => {
     const response = await postsApi.update(postInfo)
-    return response.data.data
+    return response.data
 })
-export const deletePost = createAsyncThunk('posts/deletePost', async (postId) => {
+export const deletePost = createAsyncThunk("posts/deletePost", async (postId) => {
     const response = await postsApi.delete(postId)
-    return response.data.data
+    return response.data
 })

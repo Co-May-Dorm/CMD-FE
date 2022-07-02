@@ -24,11 +24,11 @@ const DepartmentDetail = ({ department, visible, setVisible }) => {
             show={visible}
             onHide={() => setVisible(false)}
         >
-                <Modal.Header closeButton>
-                    <Modal.Title>
-                        Chi tiết phòng ban
-                    </Modal.Title>
-                </Modal.Header>
+            <Modal.Header closeButton>
+                <Modal.Title>
+                    Chi tiết phòng ban
+                </Modal.Title>
+            </Modal.Header>
             <Modal.Body>
                 <ListGroup variant="flush">
                     <ListGroup.Item>
@@ -79,7 +79,6 @@ const DepartmentDetail = ({ department, visible, setVisible }) => {
                 </ListGroup>
             </Modal.Body>
         </Modal>
-
     )
 }
 

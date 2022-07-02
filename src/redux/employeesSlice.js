@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+
 import swal from "sweetalert"
 import employeesApi from "~/api/employeesApi"
 
@@ -11,7 +12,7 @@ const employeesSlice = createSlice({
             page: 1,
             limit: 10,
             totalItem: 0,
-        }
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -21,10 +22,13 @@ const employeesSlice = createSlice({
             .addCase(fetchEmployees.fulfilled, (state, action) => {
                 state.employees = action.payload.employees
                 state.pagination = action.payload.pagination
-                state.status = "idle"
+                state.status = "success"
+            })
+            .addCase(fetchEmployees.rejected, (state, action) => {
+                state.status = "error"
             })
             .addCase(addEmployee.fulfilled, (state, action) => {
-                // Nếu gửi request thêm nhân viên thành công lên Server
+                // Nếu thêm nhân viên thành công
                 if (action.payload.status === "OK") {
                     // Thực hiện thêm nhân viên đó vào đầu mảng dữ liệu trên redux và xóa nhân viên ở cuối mảng để số nhân viên trên 1 trang luôn đúng
                     state.employees.unshift(action.payload.data)
@@ -33,22 +37,31 @@ const employeesSlice = createSlice({
                     // Hiển thị thông báo thêm nhân viên thành công
                     swal({
                         title: "Thêm nhân viên",
-                        text: `Thêm nhân viên thành công!`,
+                        text: `Thêm nhân viên ${action.payload.data.name} thành công!`,
                         icon: "success",
                         button: "OK",
                     })
                 }
 
-                // Nếu có lỗi khi gửi request hay dữ liệu không hợp lệ
+                // Nếu có dữ liệu không hợp lệ
                 else {
-                    // Hiển thị thông báo thêm nhân viên thất bại kèm lỗi
+                    // Hiển thị thông báo dữ liệu thông hợp lệ
                     swal({
                         title: "Thêm nhân viên",
-                        text: `${action.payload.message}`,
+                        text: `Thêm nhân viên thất bại. ${action.payload.message}`,
                         icon: "error",
                         button: "OK",
                     })
                 }
+            })
+            .addCase(addEmployee.rejected, (state, action) => {
+                // Hiển thị thông báo nếu gửi request thất bại
+                swal({
+                    title: "Thêm nhân viên",
+                    text: action.error.message,
+                    icon: "error",
+                    button: "OK",
+                })
             })
             .addCase(updateEmployee.fulfilled, (state, action) => {
                 // Nếu gửi request thêm nhân viên thành công lên Server
@@ -63,22 +76,31 @@ const employeesSlice = createSlice({
                     // Hiển thị thông báo chỉnh sửa nhân viên thành công
                     swal({
                         title: "Chỉnh sửa nhân viên",
-                        text: `Chỉnh sửa nhân viên thành công!`,
+                        text: `Chỉnh sửa nhân viên ${action.payload.name} thành công!`,
                         icon: "success",
                         button: "OK",
                     })
                 }
 
-                // Nếu có lỗi khi gửi request hay dữ liệu không hợp lệ
+                // Nếu có dữ liệu không hợp lệ
                 else {
-                    // Hiển thị thông báo chỉnh sửa nhân viên thất bại kèm lỗi
+                    // Hiển thị thông báo dữ liệu thông hợp lệ
                     swal({
                         title: "Chỉnh sửa nhân viên",
-                        text: `${action.payload.message}`,
+                        text: action.payload.message,
                         icon: "error",
                         button: "OK",
                     })
                 }
+            })
+            .addCase(updateEmployee.rejected, (state, action) => {
+                // Hiển thị thông báo nếu gửi request thất bại
+                swal({
+                    title: "Chỉnh sửa nhân viên",
+                    text: action.error.message,
+                    icon: "error",
+                    button: "OK",
+                })
             })
             .addCase(deleteEmployee.fulfilled, (state, action) => {
                 // Nếu gửi request xoắ nhân viên thành công lên Server
@@ -86,10 +108,10 @@ const employeesSlice = createSlice({
                     // Thực hiện lọc ra những nhân viên có id khác với id nhân viên cần xóa
                     state.employees = state.employees.filter((employee) => employee.id !== action.payload.id)
 
-                    // Hiển thị thông báo chỉnh sửa nhân viên thành công
+                    // Hiển thị thông báo xóa nhân viên thành công
                     swal({
                         title: "Xóa nhân viên",
-                        text: `Xóa nhân viên thành công!`,
+                        text: `Xóa nhân viên ${action.payload.name} thành công!`,
                         icon: "success",
                         button: "OK",
                     })
@@ -97,22 +119,22 @@ const employeesSlice = createSlice({
 
                 // Nếu không thể xóa nhân viên
                 else {
-                    // Hiển thị thông báo Xóa nhân viên thất bại kèm lỗi
+                    // Hiển thị cảnh báo không thể xóa nhân viên
                     swal({
                         title: "Xóa nhân viên",
                         text: action.payload.message,
-                        icon: "error",
-                        button: "OK "
+                        icon: "warning",
+                        button: "OK ",
                     })
                 }
             })
             .addCase(deleteEmployee.rejected, (state, action) => {
-                // Hiển thị thông báo xóa nhân viên thất bạn
+                // Hiển thị thông báo nếu gửi request thất bại
                 swal({
                     title: "Xóa nhân viên",
                     text: action.payload.message,
                     icon: "error",
-                    button: "OK "
+                    button: "OK ",
                 })
             })
     },
