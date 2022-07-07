@@ -1,10 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-
 import { Button, Form, Modal } from "react-bootstrap"
 
-import { addDepartment, fetchDepartments, updateDepartment } from "../../../../redux/departmentsSlice"
-import { departmentsSelector } from "../../../../redux/selectors"
+import { addDepartment, fetchDepartments, updateDepartment } from "~/redux/departmentsSlice"
+import { departmentsSelector } from "~/redux/selectors"
 import FormSelectDepartment from "../../EmployeesFeatures/SubmitEmployee/FormSelectDepartment"
 import Positions from "./Positions"
 
@@ -147,9 +147,8 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
                             <Form.Label>Phòng ban cha:</Form.Label>
                             <FormSelectDepartment
                                 index={null}
-                                currentDepartment={fatherDepartment}
-                                departments={departments}
-                                onDepartmentChange={handleDepartmentChange}
+                                current={fatherDepartment}
+                                onChange={handleDepartmentChange}
                             />
                         </div>
                         <Positions departmentInfo={departmentInfo} setDepartmentInfo={setDepartmentInfo} />

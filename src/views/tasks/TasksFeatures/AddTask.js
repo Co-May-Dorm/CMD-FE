@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-
 import { Button } from 'react-bootstrap'
 
 import FormSubmitTask from './SubmitTask/FormSubmitTask'
@@ -13,11 +12,12 @@ const AddTask = () => {
                 onClick={() => setVisibleFormAddTask(!visibleFormAddTask)}
             >
                 <span className="fw-bold">
-                    Tạo việc
+                    Thêm công việc
                 </span>
             </Button>
-            <FormSubmitTask visible={visibleFormAddTask} setVisible={setVisibleFormAddTask} />
-
+            {
+                visibleFormAddTask && <FormSubmitTask visible={visibleFormAddTask} setVisible={setVisibleFormAddTask} />
+            }
         </>
     )
 }

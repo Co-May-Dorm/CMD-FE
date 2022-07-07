@@ -69,7 +69,7 @@ const DepartmentDetail = ({ department, visible, setVisible }) => {
                                     department.positions.map((position, index) => (
                                         <tr key={index}>
                                             <td>{position.name}</td>
-                                            <td>{position.role.name}</td>
+                                            <td>{position.role?.name}</td>
                                         </tr>
                                     ))
                                 }

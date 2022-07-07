@@ -1,11 +1,21 @@
-import React, { useRef, useState } from 'react'
-
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useRef, useState } from 'react'
 import { Form, ListGroup } from 'react-bootstrap'
-import departmentLevelIcon from '../../../../assets/icons/department_level.svg'
+import { useDispatch, useSelector } from 'react-redux'
 
-import useOnClickOutside from '../../../../customHooks/useOnClickOutside'
+import departmentLevelIcon from '~/assets/icons/department_level.svg'
+import useOnClickOutside from '~/customHooks/useOnClickOutside'
+import { fetchDepartments } from '~/redux/departmentsSlice'
+import { departmentsSelector } from '~/redux/selectors'
 
-const FormSelectDepartment = ({ index, currentDepartment, departments, onDepartmentChange }) => {
+const FormSelectDepartment = ({ index, current, onChange }) => {
+    const departments = useSelector(departmentsSelector).departments
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(fetchDepartments())
+    }, [])
+
     const [visible, setVisible] = useState(false)       // State quản lý hiển thị danh sách phòng ban
 
     const ref = useRef()        // Ref form select department
@@ -22,30 +32,30 @@ const FormSelectDepartment = ({ index, currentDepartment, departments, onDepartm
                     borderRadius: "none",
                     textAlign: "center"
                 }}
-                onClick={() => onDepartmentChange(index, {
+                onClick={() => onChange(index, {
                     id: -1,
                     level: 0,
                     name: "Không có phòng ban cha"
                 })}
-                active={currentDepartment.id === null}
+                active={current.id === null}
             >
                 Không có phòng ban cha
             </ListGroup.Item>
         )
     }
     const recursiveDepartmentChild = (department_parent) => {
-        departments.forEach((department_child, index) => {
+        departments.forEach((department_child) => {
             if (department_parent.id === department_child.fatherDepartmentId) {
                 selectDepartmentElement.push(
                     <ListGroup.Item
                         action
-                        key={index}
+                        key={department_child.id}
                         style={{
                             paddingLeft: department_child.level * 20,
                             borderRadius: "none"
                         }}
-                        onClick={() => onDepartmentChange(index, department_child)}
-                        active={currentDepartment?.id === department_child.id}
+                        onClick={() => onChange(index, department_child)}
+                        active={current?.id === department_child.id}
                     >
                         <img src={departmentLevelIcon} alt="Panel" />
                         <span className="ps-2" />
@@ -56,18 +66,18 @@ const FormSelectDepartment = ({ index, currentDepartment, departments, onDepartm
         })
     }
     const traverseDepartment = () => {
-        departments.forEach((department, index) => {
+        departments.forEach((department) => {
             if (department.fatherDepartmentId === -1) {
                 selectDepartmentElement.push(
                     <ListGroup.Item
                         action
-                        key={index}
+                        key={department.id}
                         style={{
                             paddingLeft: department.level * 20,
                             borderRadius: "none"
                         }}
-                        onClick={() => onDepartmentChange(index, department)}
-                        active={currentDepartment?.name === department.name}
+                        onClick={() => onChange(index, department)}
+                        active={current?.name === department.name}
                     >
                         <img src={departmentLevelIcon} alt="Panel" />
                         <span className="ps-2" />
@@ -90,7 +100,7 @@ const FormSelectDepartment = ({ index, currentDepartment, departments, onDepartm
                 type="text"
                 name="department"
                 placeholder="Chọn phòng ban"
-                value={currentDepartment?.name || ""}
+                value={current?.name || ""}
                 onChange={() => {
 
                 }}

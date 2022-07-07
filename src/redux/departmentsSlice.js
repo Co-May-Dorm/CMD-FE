@@ -15,7 +15,7 @@ const departmentsSlice = createSlice({
                 state.status = "loading"
             })
             .addCase(fetchDepartments.fulfilled, (state, action) => {
-                state.departments = action.payload.data
+                state.departments = action.payload
                 state.status = "success"
             })
             .addCase(fetchDepartments.rejected, (state, action) => {
@@ -25,8 +25,7 @@ const departmentsSlice = createSlice({
                 // Nếu thêm phòng ban thành công
                 if (action.payload.status === "OK") {
                     // Thực hiện thêm phòng ban đó vào đầu mảng dữ liệu trên redux và xóa phòng ban ở cuối mảng để số phòng ban trên 1 trang luôn đúng
-                    state.departments.unshift(action.payload.data)
-                    state.departments.pop()
+                    state.departments.push(action.payload.data)
 
                     // Hiển thị thông báo thêm phòng ban thành công
                     swal({

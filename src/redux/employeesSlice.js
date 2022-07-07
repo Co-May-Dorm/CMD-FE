@@ -30,9 +30,11 @@ const employeesSlice = createSlice({
             .addCase(addEmployee.fulfilled, (state, action) => {
                 // Nếu thêm nhân viên thành công
                 if (action.payload.status === "OK") {
-                    // Thực hiện thêm nhân viên đó vào đầu mảng dữ liệu trên redux và xóa nhân viên ở cuối mảng để số nhân viên trên 1 trang luôn đúng
-                    state.employees.unshift(action.payload.data)
-                    state.employees.pop()
+                    if (state.pagination.page === 1) {  // Kiểm tra nếu ở trang 1 thì mới hiển thị nhân viên vừa thêm lên giao diện
+                        // Thực hiện thêm nhân viên đó vào đầu mảng dữ liệu trên redux và xóa nhân viên ở cuối mảng để số nhân viên trên 1 trang luôn đúng
+                        state.employees.unshift(action.payload.data)
+                        state.employees.pop()
+                    }
 
                     // Hiển thị thông báo thêm nhân viên thành công
                     swal({
