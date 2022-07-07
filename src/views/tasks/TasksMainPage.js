@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AiOutlineSortAscending, AiOutlineSortDescending } from 'react-icons/ai'
-import { BiArrowFromTop } from 'react-icons/bi'
+import { BiArrowFromTop, BiSortAlt2 } from 'react-icons/bi'
 import { Card, Container, Dropdown } from 'react-bootstrap'
 
 import { fetchTasks } from '~/redux/tasksSlice'
@@ -11,10 +11,12 @@ import AppPagination from '~/components/AppPagination'
 import TaskRow from './TaskRow'
 import AddTask from './TasksFeatures/AddTask'
 import AppSearch from '~/components/AppSearch'
+import Loading from '~/components/Loading'
 
 const queryString = require('query-string')
 
 const TasksMainPage = () => {
+    const status = useSelector(tasksSelector).status
     const tasks = useSelector(tasksSelector).tasks           // Lấy danh sách công việc từ redux
     const pagination = useSelector(tasksSelector).pagination         // Lấy dữ liệu phân trang của danh sách công việc trên
 
@@ -25,14 +27,14 @@ const TasksMainPage = () => {
     const [filters, setFilters] = useState({})      // State lưu trữ các params truyền vào API để lấy dữ liệu từ Back End
 
     useEffect(() => {
-        document.title = "Công việc - Cảnh Báo Sớm"     // Thiết lập tiêu đề cho trang
+        document.title = "Công việc"     // Thiết lập tiêu đề cho trang
 
         // Kiểm tra nếu load lại trang thì giữ nguyên các filter hiện tại
         if (location.search.length > 0) {
             let params = queryString.parse(location.search)     // Lấy danh sách params từ URL
             let newParams = {}      // Lưu danh sách những param khác null
 
-            // Thực hiện việc loại bỏ những param có giá trị là null
+            // Thực hiện việc loại bỏ những param có giá trị là null hoặc chuỗi rỗng
             for (let param in params) {
                 if (params[param] === null || params[param] === "") {       // Nếu giá trị của param là null hoặc chuỗi rỗng thì bỏ qua
                     continue
@@ -118,7 +120,7 @@ const TasksMainPage = () => {
                         <AddTask />
                     </div>
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
-                        
+
                     </div>
                     <Dropdown autoClose="outside" className="col-auto d-sm-none">
                         <Dropdown.Toggle>
@@ -134,76 +136,114 @@ const TasksMainPage = () => {
                 <hr />
             </Container>
             <Container fluid>
-                <div className="task task-title">
+                <div className="task task-header">
                     <div className="ms-lg-5" />
-                    <div className="task-name">
+                    <div className="task-title">
                         <span
                             className="fw-bolder cursor-pointer"
                             onClick={() => handleSort("emp.name")}
                         >
-                            HỌ VÀ TÊN {filters.sort === "emp.name" && filters.order === "asc" ? <AiOutlineSortAscending size={20} /> : null} {filters.sort === "emp.name" && filters.order === "desc" ? <AiOutlineSortDescending size={20} /> : null}
+                            TÊN CÔNG VIỆC
+                            {
+                                (filters.sort === "emp.name" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
+                                    : (filters.sort === "emp.name" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
+                                        : <BiSortAlt2 size={20} />
+                            }
                         </span>
                     </div>
-                    <div className="task-dob">
+                    <div className="task-creator">
                         <span
                             className="fw-bolder cursor-pointer"
                             onClick={() => handleSort("emp.dateOfBirth")}
                         >
-                            NGÀY SINH {filters.sort === "emp.dateOfBirth" && filters.order === "asc" ? <AiOutlineSortAscending size={20} /> : null} {filters.sort === "emp.dateOfBirth" && filters.order === "desc" ? <AiOutlineSortDescending size={20} /> : null}
+                            NGƯỜI GIAO
+                            {
+                                (filters.sort === "emp.dateOfBirth" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
+                                    : (filters.sort === "emp.dateOfBirth" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
+                                        : <BiSortAlt2 size={20} />
+                            }
                         </span>
                     </div>
-                    <div className="task-email">
-                        <span
-                            className="fw-bolder cursor-pointer"
-                            onClick={() => handleSort("emp.email")}
-                        >
-                            EMAIL {filters.sort === "emp.email" && filters.order === "asc" ? <AiOutlineSortAscending size={20} /> : null} {filters.sort === "emp.email" && filters.order === "desc" ? <AiOutlineSortDescending size={20} /> : null}
-                        </span>
-                    </div>
-                    <div className="task-phoneNumber">
+                    <div className="task-arrow" />
+                    <div className="task-receiver">
                         <span
                             className="fw-bolder cursor-pointer"
                             onClick={() => handleSort("emp.phoneNumber")}
                         >
-                            SĐT {filters.sort === "emp.phoneNumber" && filters.order === "asc" ? <AiOutlineSortAscending size={20} /> : null} {filters.sort === "emp.phoneNumber" && filters.order === "desc" ? <AiOutlineSortDescending size={20} /> : null}
+                            NGƯỜI NHẬN
+                            {
+                                (filters.sort === "emp.phoneNumber" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
+                                    : (filters.sort === "emp.phoneNumber" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
+                                        : <BiSortAlt2 size={20} />
+                            }
                         </span>
                     </div>
-                    <div className="task-department">
+                    <div className="task-timeline">
                         <span
                             className="fw-bolder cursor-pointer"
                             onClick={() => handleSort("dep.name")}
                         >
-                            PHÒNG BAN {filters.sort === "dep.name" && filters.order === "asc" ? <AiOutlineSortAscending size={20} /> : null} {filters.sort === "dep.name" && filters.order === "desc" ? <AiOutlineSortDescending size={20} /> : null}
+                            THỜI GIAN
+                            {
+                                (filters.sort === "dep.name" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
+                                    : (filters.sort === "dep.name" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
+                                        : <BiSortAlt2 size={20} />
+                            }
                         </span>
                     </div>
-                    <div className="task-position">
+                    <div className="task-status">
                         <span
                             className="fw-bolder cursor-pointer"
                             onClick={() => handleSort("pos.name")}
                         >
-                            CHỨC VỤ {filters.sort === "pos.name" && filters.order === "asc" ? <AiOutlineSortAscending size={20} /> : null} {filters.sort === "pos.name" && filters.order === "desc" ? <AiOutlineSortDescending size={20} /> : null}
+                            TÌNH TRẠNG
+                            {
+                                (filters.sort === "pos.name" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
+                                    : (filters.sort === "pos.name" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
+                                        : <BiSortAlt2 size={20} />
+                            }
                         </span>
-                        {/* <Form.Control type="text" name="pos.name" placeholder="Lọc theo tên chức vụ..." value={filters.position} onChange={handleFilter} /> */}
+                    </div>
+                    <div className="task-review">
+                        <span
+                            className="fw-bolder cursor-pointer"
+                            onClick={() => handleSort("pos.name")}
+                        >
+                            ĐÁNH GIÁ
+                            {
+                                (filters.sort === "pos.name" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
+                                    : (filters.sort === "pos.name" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
+                                        : <BiSortAlt2 size={20} />
+                            }
+                        </span>
                     </div>
                     <div className="task-more" />
                 </div>
-                <div className="list-group-horizontal-lg">
-                    {
-                        tasks?.map(task => (
-                            <TaskRow
-                                key={task.id}
-                                task={task}
-                            />
-                        ))
-                    }
-                    {
-                        tasks?.length === 0 ? (
-                            <Card.Body align="center">
-                                Không có dữ liệu
-                            </Card.Body>
-                        ) : null
-                    }
-                </div>
+                {
+                    status === "loading" ? (
+                        <Loading />
+                    ) : status === "error" ? (
+                        <div className="text-center py-3">Có lỗi trong quá trình lấy dữ liệu từ Server</div>
+                    ) : (
+                        <div className="list-group-horizontal-lg">
+                            {
+                                tasks?.map((task, index) => (
+                                    <TaskRow
+                                        key={index}
+                                        task={task}
+                                    />
+                                ))
+                            }
+                            {
+                                tasks?.length === 0 ? (
+                                    <Card.Body align="center">
+                                        Không có dữ liệu
+                                    </Card.Body>
+                                ) : null
+                            }
+                        </div>
+                    )
+                }
                 <AppPagination
                     pagination={pagination}
                     onPageChange={handlePageChange}

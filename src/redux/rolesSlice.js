@@ -30,9 +30,11 @@ const rolesSlice = createSlice({
             .addCase(addRole.fulfilled, (state, action) => {
                 // Nếu thêm vai trò thành công
                 if (action.payload.status === "OK") {
-                    // Thực hiện thêm vai trò đó vào đầu mảng dữ liệu trên redux và xóa vai trò ở cuối mảng để số vai trò trên 1 trang luôn đúng
-                    state.roles.unshift(action.payload.data)
-                    state.roles.pop()
+                    if (state.pagination.page === 1) {  // Kiểm tra nếu ở trang 1 thì mới hiển thị vai trò vừa thêm lên giao diện
+                        // Thực hiện thêm vai trò đó vào đầu mảng dữ liệu trên redux và xóa vai trò ở cuối mảng để số vai trò trên 1 trang luôn đúng
+                        state.roles.unshift(action.payload.data)
+                        state.roles.pop()
+                    }
 
                     // Hiển thị thông báo thêm vai trò thành công
                     swal({

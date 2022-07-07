@@ -1,13 +1,21 @@
-import React, { useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
-
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Form, ListGroup } from 'react-bootstrap'
 
-import { teamsSelector } from '../../../../redux/selectors'
-import useOnClickOutside from '../../../../customHooks/useOnClickOutside'
+import { teamsSelector } from '~/redux/selectors'
+import useOnClickOutside from '~/customHooks/useOnClickOutside'
+import { fetchTeams } from '~/redux/teamsSlice'
 
 const FormSelectTeam = ({ index, currentTeam, onTeamChange }) => {
     const teams = useSelector(teamsSelector).teams
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(fetchTeams())
+    }, [])
+    console.log("Re")
+
     const [visible, setVisible] = useState(false)       // State quản lý hiển thị danh sách phòng ban
 
     const ref = useRef()        // Ref form select team
@@ -43,10 +51,10 @@ const FormSelectTeam = ({ index, currentTeam, onTeamChange }) => {
             </Form.Control.Feedback>
 
             <div className="select">
-                {(visible) ? teams.map((team, index) => (
+                {(visible) ? teams.map((team) => (
                     <ListGroup.Item
                         action
-                        key={index}
+                        key={team.id}
                         onClick={() => onTeamChange(index, team)}
                         active={currentTeam?.id === team.id}
                     >

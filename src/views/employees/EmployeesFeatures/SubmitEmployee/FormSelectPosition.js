@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react'
 import { ListGroup } from 'react-bootstrap'
 import useOnClickOutside from '../../../../customHooks/useOnClickOutside'
 
-const FormSelectPosition = ({ index, currentPosition, positions = null, onPositionChange }) => {
+const FormSelectPosition = ({ index, current, positions = null, onChange }) => {
     const [visible, setVisible] = useState(false)       // State quản lý hiển thị danh sách phòng ban
 
     const ref = useRef()        // Ref form select position
@@ -22,8 +22,8 @@ const FormSelectPosition = ({ index, currentPosition, positions = null, onPositi
             <ListGroup.Item
                 action
                 key={position.id}
-                onClick={() => onPositionChange(index, position)}
-                active={currentPosition?.name === position.name}
+                onClick={() => onChange(index, position)}
+                active={current?.name === position.name}
             >
                 {position.name}
             </ListGroup.Item>
@@ -36,7 +36,7 @@ const FormSelectPosition = ({ index, currentPosition, positions = null, onPositi
             onClick={() => setVisible(!visible)}
             className="form-select"
         >
-            {currentPosition?.name || "Chọn chức vụ"}
+            {current?.name || "Chọn chức vụ"}
             <div className="select">
                 {(visible) ? selectPositionElement : null}
             </div>

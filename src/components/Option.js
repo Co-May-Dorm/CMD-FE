@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 
 import { ListGroup } from 'react-bootstrap'
-import useOnClickOutside from '../../../../customHooks/useOnClickOutside'
+import useOnClickOutside from '~/customHooks/useOnClickOutside'
 
 /*
     Option dùng để hiển thị form chọn tùy chọn, có tác dụng tương tự như thẻ select của html
@@ -13,9 +13,8 @@ import useOnClickOutside from '../../../../customHooks/useOnClickOutside'
     +
 */
 
-const Option = ({ value, defaultValue, data = null, onChange }) => {
+const Option = ({ index, value, defaultValue, data, onChange }) => {
     const [visible, setVisible] = useState(false)       // State quản lý hiển thị danh sách phòng ban
-
     const ref = useRef()        // Ref form select Value
 
     useOnClickOutside(ref, () => setVisible(false))     // Hàm xử lý đóng form select Value khi click ra ngoài
@@ -26,19 +25,19 @@ const Option = ({ value, defaultValue, data = null, onChange }) => {
             onClick={() => setVisible(!visible)}
             className="form-select"
         >
-            {value || defaultValue}
+            {defaultValue?.label || value?.label || data[0].label}
             <div className="select">
                 {
-                    (visible) ? data?.map((item) => (
+                    visible && data.map((item, key) => (
                         <ListGroup.Item
                             action
-                            key={item.id}
-                            onClick={() => onChange(item)}
-                            active={value === item.name}
+                            key={key}
+                            onClick={() => onChange(index, item)}
+                            active={value.label === item.label}
                         >
-                            {value}
+                            {item.label}
                         </ListGroup.Item>
-                    )) : null
+                    ))
                 }
             </div>
         </div>

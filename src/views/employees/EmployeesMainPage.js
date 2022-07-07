@@ -154,7 +154,7 @@ const EmployeesMainPage = () => {
                 <hr />
             </Container>
             <Container fluid>
-                <div className="employee employee-title">
+                <div className="employee employee-header">
                     <div className="ms-lg-5" />
                     <div className="employee-active" />
                     <div className="employee-name">

@@ -32,9 +32,8 @@ const DepartmentRow = ({ department }) => {
                             <Image src={moreIcon} />
                         </Dropdown.Toggle>
                         <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
-                        <DepartmentDetail />
                             <Dropdown.Item onClick={() => setVisible(!visible)}>
-                                <BiInfoSquare /> Chỉnh sửa
+                                <BiInfoSquare /> Chi tiết
                             </Dropdown.Item>
                             <EditDepartment department={department} />
                             <DeleteDepartment departmentId={department.id} />

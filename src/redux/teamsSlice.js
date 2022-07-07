@@ -15,7 +15,7 @@ const teamsSlice = createSlice({
                 state.status = "loading"
             })
             .addCase(fetchTeams.fulfilled, (state, action) => {
-                state.teams = action.payload.data
+                state.teams = action.payload
                 state.status = "success"
             })
             .addCase(fetchTeams.rejected, (state, action) => {
@@ -24,9 +24,8 @@ const teamsSlice = createSlice({
             .addCase(addTeam.fulfilled, (state, action) => {
                 // Nếu thêm CLB - Đội nhóm thành công
                 if (action.payload.status === "OK") {
-                    // Thực hiện thêm CLB - Đội nhóm đó vào đầu mảng dữ liệu trên redux và xóa CLB - Đội nhóm ở cuối mảng để số CLB - Đội nhóm trên 1 trang luôn đúng
-                    state.teams.unshift(action.payload.data)
-                    state.teams.pop()
+                    // Thực hiện thêm CLB - Đội nhóm đó vào cuối mảng
+                    state.teams.push(action.payload.data)
 
                     // Hiển thị thông báo thêm CLB - Đội nhóm thành công
                     swal({

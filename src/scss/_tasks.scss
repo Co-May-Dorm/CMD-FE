@@ -1,5 +1,5 @@
 @media (min-width: 992px) {
-    .task-title {
+    .task-header {
         display: block;
     }
     .task {
@@ -12,15 +12,19 @@
         word-break: break-word;
         .task-title {
             flex: 0 0 auto;
-            width: 20%;
+            width: 30%;
         }
         .task-creator {
+            flex: 0 0 auto;
+            width: 12%;
+        }
+        .task-arrow {
             flex: 0 0 auto;
             width: 5%;
         }
         .task-receiver {
             flex: 0 0 auto;
-            width: 5%;
+            width: 12%;
         }
         .task-timeline {
             flex: 0 0 auto;
@@ -28,24 +32,63 @@
         }
         .task-status {
             flex: 0 0 auto;
+            width: 15%;
+        }
+        .task-review {
+            flex: 0 0 auto;
             width: 10%;
         }
-        .task-department {
+    }
+    .task.item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+        padding: 0.5rem;
+        word-wrap: break-word;
+        word-break: break-word;
+        .task-title {
+            flex: 0 0 auto;
+            width: 30%;
+            font-weight: 500;
+        }
+        .task-creator {
+            flex: 0 0 auto;
+            width: 12%;
+        }
+        .task-arrow {
+            flex: 0 0 auto;
+            width: 5%;
+            background-image: url("../assets/icons/arrow_right.svg");
+        }
+        .task-receiver {
+            flex: 0 0 auto;
+            width: 12%;
+        }
+        .task-timeline {
+            flex: 0 0 auto;
+            width: 15%;
+            font-style: italic;
+            font-weight: 500;
+            font-size: 11px;
+            line-height: 13px;
+            display: flex;
+            align-items: center;
+            text-align: right;
+            letter-spacing: 0.09em;
+        }
+        .task-status {
             flex: 0 0 auto;
             width: 15%;
         }
-        .task-position {
+        .task-review {
             flex: 0 0 auto;
-            width: 15%;
-        }
-        .task-more {
-            flex: 0 0 auto;
-            width: 2%;
+            width: 10%;
         }
     }
 }
 @media (max-width: 991px) {
-    .task-title {
+    .task-header {
         display: none!important;
     }
     .task {
@@ -54,37 +97,32 @@
         margin-bottom: 1rem;
         word-wrap: break-word;
         word-break: break-word;
-        .task-name {
+        .task-title {
             margin: 0.5rem 0;
             display: flex;
             margin-bottom: 1rem;
         }
-        .task-name {
+        .task-creator {
             margin: 0.5rem 0;
             display: flex;
             margin-bottom: 1rem;
         }
-        .task-dob {
+        .task-receiver {
             margin: 0.5rem 0;
             display: flex;
             margin-bottom: 1rem;
         }
-        .task-email {
+        .task-timeline {
             margin: 0.5rem 0;
             display: flex;
             margin-bottom: 1rem;
         }
-        .task-phoneNumber {
+        .task-status {
             margin: 0.5rem 0;
             display: flex;
             margin-bottom: 1rem;
         }
-        .task-department {
-            margin: 0.5rem 0;
-            display: flex;
-            margin-bottom: 1rem;
-        }
-        .task-position {
+        .task-review {
             margin: 0.5rem 0;
             display: flex;
             margin-bottom: 1rem;

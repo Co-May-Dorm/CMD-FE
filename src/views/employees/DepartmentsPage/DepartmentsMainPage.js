@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-
 import { ListGroup, Modal } from 'react-bootstrap'
 
 import { fetchDepartments } from '../../../redux/departmentsSlice'
@@ -12,7 +11,7 @@ import AddDepartment from './DepartmentsFeatures/AddDepartment'
 import Loading from '~/components/Loading'
 
 const DepartmentsMainPage = ({ visible, setVisible }) => {
-    const isLoading = useSelector(departmentsSelector).status
+    const status = useSelector(departmentsSelector).status
     const departments = useSelector(departmentsSelector).departments
 
     const dispatch = useDispatch()
@@ -88,7 +87,7 @@ const DepartmentsMainPage = ({ visible, setVisible }) => {
                     </div>
                 </div>
                 {
-                    isLoading === "loading" ? (
+                    status === "loading" ? (
                         <Loading />
                     ) : (
                         <ListGroup

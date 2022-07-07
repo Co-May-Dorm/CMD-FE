@@ -8,6 +8,7 @@ import { departmentsSelector } from "~/redux/selectors"
 import FormSelectDepartment from "./FormSelectDepartment"
 import FormSelectPosition from "./FormSelectPosition"
 import FormSelectTeam from "./FormSelectTeam"
+import { fetchDepartments } from "~/redux/departmentsSlice"
 
 const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     const departments = useSelector(departmentsSelector).departments
@@ -128,44 +129,43 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         }
     }
 
-    const handleDepartmentChange = (index, department) => {
-        const start = employeeInfo.departments.slice(0, index) || []
-        const end = employeeInfo.departments.slice(index + 1, employeeInfo.departments.length + 1) || []
+    const handleDepartmentChange = (index, newDepartment) => {
+        let newDepartments = employeeInfo.departments.map((department, key) => {
+            if (key === index) {
+                return {
+                    ...newDepartment,
+                    position: {}
+                }
+            }
+            return department
+        })
         setEmployeeInfo({
             ...employeeInfo,
-            departments: [
-                ...start,
-                {
-                    ...department,
-                    position: {}
-                },
-                ...end
-            ]
+            departments: newDepartments
         })
     }
 
     const handlePositionOfDepartmentChange = (index, position) => {
-        const start = employeeInfo.departments.slice(0, index) || []
-        const end = employeeInfo.departments.slice(index + 1, employeeInfo.departments.length + 1) || []
-        const department = employeeInfo.departments[index]
-        setEmployeeInfo({
-            ...employeeInfo,
-            departments: [
-                ...start,
-                {
+        let newDepartments = employeeInfo.departments.map((department, key) => {
+            if (key === index) {
+                return {
                     ...department,
                     position
-                },
-                ...end
-            ]
+                }
+            }
+            return department
+        })
+        setEmployeeInfo({
+            ...employeeInfo,
+            departments: newDepartments
         })
     }
 
     const handleDeleteFormSelectDepartment = (index) => {
-        const updateDepartments = employeeInfo.departments.filter((e, idx) => index !== idx)
+        const newDepartments = employeeInfo.departments.filter((e, idx) => index !== idx)
         setEmployeeInfo({
             ...employeeInfo,
-            departments: updateDepartments
+            departments: newDepartments
         })
     }
     //
@@ -189,44 +189,43 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         }
     }
 
-    const handleTeamChange = (index, team) => {
-        const start = employeeInfo.teams.slice(0, index) || []
-        const end = employeeInfo.teams.slice(index + 1, employeeInfo.teams.length + 1) || []
+    const handleTeamChange = (index, newTeam) => {
+        let newTeams = employeeInfo.teams.map((team, key) => {
+            if (key === index) {
+                return {
+                    ...newTeam,
+                    position: {}
+                }
+            }
+            return team
+        })
         setEmployeeInfo({
             ...employeeInfo,
-            teams: [
-                ...start,
-                {
-                    ...team,
-                    position: {}
-                },
-                ...end
-            ]
+            teams: newTeams
         })
     }
 
     const handlePositionOfTeamChange = (index, position) => {
-        const start = employeeInfo.teams.slice(0, index) || []
-        const end = employeeInfo.teams.slice(index + 1, employeeInfo.teams.length + 1) || []
-        const team = employeeInfo.teams[index]
-        setEmployeeInfo({
-            ...employeeInfo,
-            teams: [
-                ...start,
-                {
+        let newTeams = employeeInfo.teams.map((team, key) => {
+            if (key === index) {
+                return {
                     ...team,
                     position
-                },
-                ...end
-            ]
+                }
+            }
+            return team
+        })
+        setEmployeeInfo({
+            ...employeeInfo,
+            teams: newTeams
         })
     }
 
     const handleDeleteFormSelectTeam = (index) => {
-        const updateTeams = employeeInfo.teams.filter((e, idx) => index !== idx)
+        const newTeams = employeeInfo.teams.filter((e, idx) => index !== idx)
         setEmployeeInfo({
             ...employeeInfo,
-            teams: updateTeams
+            teams: newTeams
         })
     }
     //
@@ -405,18 +404,17 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                                         <Form.Label>Phòng ban số {index + 1}:</Form.Label>
                                                         <FormSelectDepartment
                                                             index={index}
-                                                            currentDepartment={department}
-                                                            departments={departments}
-                                                            onDepartmentChange={handleDepartmentChange}
+                                                            current={department}
+                                                            onChange={handleDepartmentChange}
                                                         />
                                                     </div>
                                                     <div className="mb-3 ms-lg-3 col">
                                                         <Form.Label>Chức vụ của phòng ban số {index + 1}:</Form.Label>
                                                         <FormSelectPosition
                                                             index={index}
-                                                            currentPosition={employeeInfo.departments[index]?.position}
+                                                            current={employeeInfo.departments[index]?.position}
                                                             positions={employeeInfo.departments[index]?.positions}
-                                                            onPositionChange={handlePositionOfDepartmentChange}
+                                                            onChange={handlePositionOfDepartmentChange}
                                                         />
                                                     </div>
                                                 </div>
@@ -459,9 +457,9 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                                         <Form.Label>Chức vụ của CLB/Đội nhóm số {index + 1}:</Form.Label>
                                                         <FormSelectPosition
                                                             index={index}
-                                                            currentPosition={employeeInfo.teams[index]?.position}
+                                                            current={employeeInfo.teams[index]?.position}
                                                             positions={employeeInfo.teams[index]?.positions}
-                                                            onPositionChange={handlePositionOfTeamChange}
+                                                            onChange={handlePositionOfTeamChange}
                                                         />
                                                     </div>
                                                 </div>

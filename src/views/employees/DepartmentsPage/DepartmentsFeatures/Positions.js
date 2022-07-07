@@ -1,15 +1,22 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap'
 import { BiTrash } from 'react-icons/bi'
 
 import { fetchRoles } from '~/redux/rolesSlice'
 import { rolesSelector } from '~/redux/selectors'
+import Option from '~/components/Option'
 
 const Positions = ({ departmentInfo, setDepartmentInfo }) => {
     const roles = useSelector(rolesSelector).roles
     const dispatch = useDispatch()
+    let newRoles = roles?.map((role, index) => {
+        return {
+            ...role,
+            label: role.name
+        }
+    })
 
     const [visibleDeletePosition, setVisibleDeletePosition] = useState(false)
     useEffect(() => {
@@ -34,31 +41,28 @@ const Positions = ({ departmentInfo, setDepartmentInfo }) => {
                 ...end]
         })
     }
-    const handleRoleChange = (e) => {
-        const index = e.target.tabIndex
-        const value = e.target.value
-        const findName = roles.find(role => role.id === Number(value))?.name
-        const start = departmentInfo.positions.slice(0, index) || []
-        const end = departmentInfo.positions.slice(index + 1, departmentInfo.positions.length + 1) || []
+    const handleRoleChange = (index, newRole) => {
+        console.log("index: ", index)
+        console.log("newRole: ", newRole)
+        let newPositions = departmentInfo.positions.map((position, key) => {
+            if (key === index) {
+                return {
+                    ...position,
+                    role: newRole
+                }
+            }
+            return position
+        })
         setDepartmentInfo({
             ...departmentInfo,
-            positions: [
-                ...start,
-                {
-                    ...departmentInfo.positions[index],
-                    role: {
-                        id: Number(value),
-                        name: findName
-                    }
-                },
-                ...end]
+            positions: newPositions
         })
     }
     const handleDelete = (index) => {
-        const array = departmentInfo.positions.filter((e, idx) => index !== idx)
+        const newPositions = departmentInfo.positions.filter((e, idx) => index !== idx)
         setDepartmentInfo({
             ...departmentInfo,
-            positions: array
+            positions: newPositions
         })
     }
     //
@@ -95,11 +99,11 @@ const Positions = ({ departmentInfo, setDepartmentInfo }) => {
             })
         }
     }
-    
+
     return (
         <>
             {
-                departmentInfo?.positions?.map((position, index) => (
+                departmentInfo.positions?.map((position, index) => (
                     <div key={index}>
                         <ListGroup.Item className="bg-light text-body">
                             <Form.Group className="mb-3">
@@ -119,18 +123,15 @@ const Positions = ({ departmentInfo, setDepartmentInfo }) => {
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Vai trò:</Form.Label>
-                                <Form.Select
-                                    tabIndex={index}
-                                    value={position.role?.id}
-                                    label={position.role?.name}
+                                <Option
+                                    index={index}
+                                    value={{
+                                        ...departmentInfo.positions[index].role,
+                                        label: departmentInfo.positions[index].role.name
+                                    }}
+                                    data={newRoles}
                                     onChange={handleRoleChange}
-                                >
-                                    {
-                                        roles.map(role => (
-                                            <option key={role.id} value={role.id}>{role.name}</option>
-                                        ))
-                                    }
-                                </Form.Select>
+                                />
                             </Form.Group>
                             <div className="row justify-content-center">
                                 <Form.Check
