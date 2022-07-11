@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Dropdown } from 'react-bootstrap'
+import { Dropdown, Image, OverlayTrigger, Tooltip } from 'react-bootstrap'
 
 import moreIcon from "../../assets/icons/more.svg"
 import EditTask from './TasksFeatures/EditTask'
@@ -12,11 +12,6 @@ const TaskRow = ({ task }) => {
     const showDate = (d) => {
         const date = new Date(d)      // Khởi tạo biến date kiểu dữ liệu Date với dữ liệu truyền vào là ngày sinh của công việc được lấy từ database có dạng yyyymmdddd
         return "" + (date.getDate() < 10 ? "0" : "") + date.getDate() + "/" + (date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1) + "/" + date.getFullYear()
-    }
-
-    let activeStatusElement = <span className="d-inline-block rounded-circle bg-success" style={{ height: "10px", width: "10px" }} />
-    if (task.active === false) {
-        activeStatusElement = <span className="d-inline-block rounded-circle bg-secondary" style={{ height: "10px", width: "10px" }} />
     }
 
     return (
@@ -41,7 +36,21 @@ const TaskRow = ({ task }) => {
                     Người giao:
                 </div>
                 <div className="col text-break">
-                    {task.creatorName}
+                    <OverlayTrigger
+                        placement="top-start"
+                        overlay={
+                            <Tooltip>
+                                {task.creator.name}
+                            </Tooltip>
+                        }
+                    >
+                        <Image
+                            src={task.creator.avatar}
+                            className="rounded-circle float-end"
+                            width="40"
+                            height="40"
+                        />
+                    </OverlayTrigger>
                 </div>
             </div>
             <div className="task-arrow" />
@@ -50,7 +59,21 @@ const TaskRow = ({ task }) => {
                     Người nhận:
                 </div>
                 <div className="col text-break">
-                    {task.receiverName}
+                    <OverlayTrigger
+                        placement="top-start"
+                        overlay={
+                            <Tooltip>
+                                {task.receiver.name}
+                            </Tooltip>
+                        }
+                    >
+                        <Image
+                            src={task.receiver.avatar}
+                            className="rounded-circle float-start"
+                            width="40"
+                            height="40"
+                        />
+                    </OverlayTrigger>
                 </div>
             </div>
             <div className="task-timeline">
@@ -66,10 +89,18 @@ const TaskRow = ({ task }) => {
                     Tình trạng:
                 </div>
                 <div className="col text-break">
-                    {task.statusName}
+                    {
+                        task.status.id === 1 ? (
+                            <>
+                                <strong>{task.status.name}</strong><br />
+                                {showDate(task.finishDate)}
+                            </>
+
+                        ) : <strong>{task.status.name}</strong>
+                    }
                 </div>
             </div>
-            <div className="task-review">
+            <div className="task-rate">
                 <div className="d-lg-none fw-bold col text-break">
                     Đánh giá:
                 </div>

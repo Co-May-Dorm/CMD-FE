@@ -1,13 +1,13 @@
 import React from 'react'
-import { Container, Navbar } from 'react-bootstrap'
-import AppNavbarNav from './AppNavbarNav'
-import AppHeaderDropdown from './header/AppHeaderDropdown'
-import logo from "../assets/brand/logo-full.png"
 import { NavLink } from 'react-router-dom'
+import { Container, Image, Navbar } from 'react-bootstrap'
+
+import AppNavbarNav from './AppNavbarNav'
 import AppNotification from './AppNotification'
+import AppHeaderDropdown from './header/AppHeaderDropdown'
+import logo from "~/assets/brand/logo-full.png"
 
 const AppHeader = () => {
-
     return (
         <Navbar
             id="navbarHeader"
@@ -18,12 +18,11 @@ const AppHeader = () => {
             <Container fluid>
                 <Navbar.Brand>
                     <NavLink to="/">
-                        <img
+                        <Image
                             src={logo}
                             width="120"
                             height="50"
                             className="d-inline-block align-top"
-                            alt="Cảnh Báo Sớm Logo"
                         />
                     </NavLink>
                 </Navbar.Brand>
@@ -38,4 +37,4 @@ const AppHeader = () => {
     )
 }
 
-export default AppHeader
+export default React.memo(AppHeader)

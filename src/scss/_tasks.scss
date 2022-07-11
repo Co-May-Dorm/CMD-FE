@@ -12,11 +12,11 @@
         word-break: break-word;
         .task-title {
             flex: 0 0 auto;
-            width: 30%;
+            width: 20%;
         }
         .task-creator {
             flex: 0 0 auto;
-            width: 12%;
+            width: 120px;
         }
         .task-arrow {
             flex: 0 0 auto;
@@ -24,17 +24,18 @@
         }
         .task-receiver {
             flex: 0 0 auto;
-            width: 12%;
+            width: 120px;
         }
         .task-timeline {
             flex: 0 0 auto;
             width: 15%;
+            text-align: center;
         }
         .task-status {
             flex: 0 0 auto;
-            width: 15%;
+            width: 10%;
         }
-        .task-review {
+        .task-rate {
             flex: 0 0 auto;
             width: 10%;
         }
@@ -49,12 +50,12 @@
         word-break: break-word;
         .task-title {
             flex: 0 0 auto;
-            width: 30%;
+            width: 20%;
             font-weight: 500;
         }
         .task-creator {
             flex: 0 0 auto;
-            width: 12%;
+            width: 120px;
         }
         .task-arrow {
             flex: 0 0 auto;
@@ -63,7 +64,7 @@
         }
         .task-receiver {
             flex: 0 0 auto;
-            width: 12%;
+            width: 120px;
         }
         .task-timeline {
             flex: 0 0 auto;
@@ -76,12 +77,14 @@
             align-items: center;
             text-align: right;
             letter-spacing: 0.09em;
+            text-align: center;
         }
         .task-status {
             flex: 0 0 auto;
-            width: 15%;
+            width: 10%;
+            text-align: right;
         }
-        .task-review {
+        .task-rate {
             flex: 0 0 auto;
             width: 10%;
         }
@@ -122,7 +125,7 @@
             display: flex;
             margin-bottom: 1rem;
         }
-        .task-review {
+        .task-rate {
             margin: 0.5rem 0;
             display: flex;
             margin-bottom: 1rem;

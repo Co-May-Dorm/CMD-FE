@@ -9,7 +9,6 @@ import searchIcon from '../assets/icons/search.svg'
 */
 const AppSearch = ({ value, onSearch }) => {
     return (
-
         <div className="d-flex justify-content-center">
             <div
                 className="d-inline-flex form-control py-1"
@@ -40,4 +39,4 @@ const AppSearch = ({ value, onSearch }) => {
     )
 }
 
-export default AppSearch
+export default React.memo(AppSearch)

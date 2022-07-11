@@ -17,7 +17,9 @@ const postsSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchPosts.pending, (state, action) => {
-                state.status = "loading"
+                if (state.status !== "success") {
+                    state.status = "loading"
+                } 
             })
             .addCase(fetchPosts.fulfilled, (state, action) => {
                 state.posts = action.payload.posts
@@ -30,14 +32,16 @@ const postsSlice = createSlice({
             .addCase(addPost.fulfilled, (state, action) => {
                 // Nếu thêm bài viết thành công
                 if (action.payload.status === "OK") {
-                    // Thực hiện thêm bài viết đó vào đầu mảng dữ liệu trên redux và xóa bài viết ở cuối mảng để số bài viết trên 1 trang luôn đúng
-                    state.posts.unshift(action.payload.data)
-                    state.posts.pop()
+                    if (state.pagination.page === 1) {  // Kiểm tra nếu ở trang 1 thì mới hiển thị bài viết vừa thêm lên giao diện
+                        // Thực hiện thêm bài viết đó vào đầu mảng dữ liệu trên redux và xóa bài viết ở cuối mảng để số bài viết trên 1 trang luôn đúng
+                        state.posts.unshift(action.payload.data)
+                        state.posts.pop()
+                    }
 
                     // Hiển thị thông báo thêm bài viết thành công
                     swal({
                         title: "Thêm bài viết",
-                        text: `Thêm bài viết ${action.payload.data.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })
@@ -48,8 +52,8 @@ const postsSlice = createSlice({
                     // Hiển thị thông báo dữ liệu thông hợp lệ
                     swal({
                         title: "Thêm bài viết",
-                        text: `Thêm bài viết thất bại. ${action.payload.message}`,
-                        icon: "error",
+                        text: action.payload.message,
+                        icon: "warning",
                         button: "OK",
                     })
                 }
@@ -76,7 +80,7 @@ const postsSlice = createSlice({
                     // Hiển thị thông báo chỉnh sửa bài viết thành công
                     swal({
                         title: "Chỉnh sửa bài viết",
-                        text: `Chỉnh sửa bài viết ${action.payload.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })
@@ -88,7 +92,7 @@ const postsSlice = createSlice({
                     swal({
                         title: "Chỉnh sửa bài viết",
                         text: action.payload.message,
-                        icon: "error",
+                        icon: "warning",
                         button: "OK",
                     })
                 }
@@ -111,7 +115,7 @@ const postsSlice = createSlice({
                     // Hiển thị thông báo xóa bài viết thành công
                     swal({
                         title: "Xóa bài viết",
-                        text: `Xóa bài viết ${action.payload.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })

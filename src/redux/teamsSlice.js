@@ -7,12 +7,14 @@ const teamsSlice = createSlice({
     name: "teams",
     initialState: {
         status: "idle",
-        teams: [],
+        teams: []
     },
     extraReducers: (builder) => {
         builder
             .addCase(fetchTeams.pending, (state, action) => {
-                state.status = "loading"
+                if (state.status !== "success") {
+                    state.status = "loading"
+                } 
             })
             .addCase(fetchTeams.fulfilled, (state, action) => {
                 state.teams = action.payload
@@ -22,15 +24,14 @@ const teamsSlice = createSlice({
                 state.status = "error"
             })
             .addCase(addTeam.fulfilled, (state, action) => {
-                // Nếu thêm CLB - Đội nhóm thành công
+                // Nếu thêm đội nhóm thành công
                 if (action.payload.status === "OK") {
-                    // Thực hiện thêm CLB - Đội nhóm đó vào cuối mảng
-                    state.teams.push(action.payload.data)
+                        state.teams.push(action.payload.data)
 
-                    // Hiển thị thông báo thêm CLB - Đội nhóm thành công
+                    // Hiển thị thông báo thêm đội nhóm thành công
                     swal({
-                        title: "Thêm CLB - Đội nhóm",
-                        text: `Thêm CLB - Đội nhóm ${action.payload.data.name} thành công!`,
+                        title: "Thêm đội nhóm",
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })
@@ -40,9 +41,9 @@ const teamsSlice = createSlice({
                 else {
                     // Hiển thị thông báo dữ liệu thông hợp lệ
                     swal({
-                        title: "Thêm CLB - Đội nhóm",
-                        text: `Thêm CLB - Đội nhóm thất bại. ${action.payload.message}`,
-                        icon: "error",
+                        title: "Thêm đội nhóm",
+                        text: action.payload.message,
+                        icon: "warning",
                         button: "OK",
                     })
                 }
@@ -50,26 +51,26 @@ const teamsSlice = createSlice({
             .addCase(addTeam.rejected, (state, action) => {
                 // Hiển thị thông báo nếu gửi request thất bại
                 swal({
-                    title: "Thêm CLB - Đội nhóm",
+                    title: "Thêm đội nhóm",
                     text: action.error.message,
                     icon: "error",
                     button: "OK",
                 })
             })
             .addCase(updateTeam.fulfilled, (state, action) => {
-                // Nếu gửi request thêm CLB - Đội nhóm thành công lên Server
+                // Nếu gửi request thêm đội nhóm thành công lên Server
                 if (action.payload.status === "OK") {
-                    // Tìm kiếm id CLB - Đội nhóm và thực hiện cập nhật thông tin mới cho CLB - Đội nhóm đó
+                    // Tìm kiếm id đội nhóm và thực hiện cập nhật thông tin mới cho đội nhóm đó
                     state.teams.forEach((team, index, array) => {
                         if (team.id === action.payload.id) {
                             array[index] = action.payload
                         }
                     })
 
-                    // Hiển thị thông báo chỉnh sửa CLB - Đội nhóm thành công
+                    // Hiển thị thông báo chỉnh sửa đội nhóm thành công
                     swal({
-                        title: "Chỉnh sửa CLB - Đội nhóm",
-                        text: `Chỉnh sửa CLB - Đội nhóm ${action.payload.name} thành công!`,
+                        title: "Chỉnh sửa đội nhóm",
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })
@@ -79,9 +80,9 @@ const teamsSlice = createSlice({
                 else {
                     // Hiển thị thông báo dữ liệu thông hợp lệ
                     swal({
-                        title: "Chỉnh sửa CLB - Đội nhóm",
+                        title: "Chỉnh sửa đội nhóm",
                         text: action.payload.message,
-                        icon: "error",
+                        icon: "warning",
                         button: "OK",
                     })
                 }
@@ -89,32 +90,32 @@ const teamsSlice = createSlice({
             .addCase(updateTeam.rejected, (state, action) => {
                 // Hiển thị thông báo nếu gửi request thất bại
                 swal({
-                    title: "Chỉnh sửa CLB - Đội nhóm",
+                    title: "Chỉnh sửa đội nhóm",
                     text: action.error.message,
                     icon: "error",
                     button: "OK",
                 })
             })
             .addCase(deleteTeam.fulfilled, (state, action) => {
-                // Nếu gửi request xoắ CLB - Đội nhóm thành công lên Server
+                // Nếu gửi request xoắ đội nhóm thành công lên Server
                 if (action.payload.status === "OK") {
-                    // Thực hiện lọc ra những CLB - Đội nhóm có id khác với id CLB - Đội nhóm cần xóa
+                    // Thực hiện lọc ra những đội nhóm có id khác với id đội nhóm cần xóa
                     state.teams = state.teams.filter((team) => team.id !== action.payload.id)
 
-                    // Hiển thị thông báo xóa CLB - Đội nhóm thành công
+                    // Hiển thị thông báo xóa đội nhóm thành công
                     swal({
-                        title: "Xóa CLB - Đội nhóm",
-                        text: `Xóa CLB - Đội nhóm ${action.payload.name} thành công!`,
+                        title: "Xóa đội nhóm",
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })
                 }
 
-                // Nếu không thể xóa CLB - Đội nhóm
+                // Nếu không thể xóa đội nhóm
                 else {
-                    // Hiển thị cảnh báo không thể xóa CLB - Đội nhóm
+                    // Hiển thị cảnh báo không thể xóa đội nhóm
                     swal({
-                        title: "Xóa CLB - Đội nhóm",
+                        title: "Xóa đội nhóm",
                         text: action.payload.message,
                         icon: "warning",
                         button: "OK ",
@@ -124,7 +125,7 @@ const teamsSlice = createSlice({
             .addCase(deleteTeam.rejected, (state, action) => {
                 // Hiển thị thông báo nếu gửi request thất bại
                 swal({
-                    title: "Xóa CLB - Đội nhóm",
+                    title: "Xóa đội nhóm",
                     text: action.payload.message,
                     icon: "error",
                     button: "OK ",

@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react'
 import { ListGroup } from 'react-bootstrap'
 import useOnClickOutside from '../../../../customHooks/useOnClickOutside'
 
-const FormSelectPosition = ({ index, current, positions = null, onChange }) => {
+const FormSelectPosition = ({ index, current, positions, onChange }) => {
     const [visible, setVisible] = useState(false)       // State quản lý hiển thị danh sách phòng ban
 
     const ref = useRef()        // Ref form select position

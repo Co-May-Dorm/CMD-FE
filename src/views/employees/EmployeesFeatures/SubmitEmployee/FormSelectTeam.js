@@ -14,7 +14,6 @@ const FormSelectTeam = ({ index, currentTeam, onTeamChange }) => {
     useEffect(() => {
         dispatch(fetchTeams())
     }, [])
-    console.log("Re")
 
     const [visible, setVisible] = useState(false)       // State quản lý hiển thị danh sách phòng ban
 

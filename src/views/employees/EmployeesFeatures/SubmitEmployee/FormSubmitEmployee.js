@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Button, Form, Modal, Tab, Tabs } from "react-bootstrap"
@@ -8,7 +9,6 @@ import { departmentsSelector } from "~/redux/selectors"
 import FormSelectDepartment from "./FormSelectDepartment"
 import FormSelectPosition from "./FormSelectPosition"
 import FormSelectTeam from "./FormSelectTeam"
-import { fetchDepartments } from "~/redux/departmentsSlice"
 
 const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     const departments = useSelector(departmentsSelector).departments
@@ -16,7 +16,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
 
     /* Quản lý các state */
     const [employeeInfo, setEmployeeInfo] = useState({
-        // State lưu thông tin của sinh viên khi người dùng nhập dữ liệu
+        // State lưu thông tin của nhân viên khi người dùng nhập dữ liệu
         code: "",
         name: "",
         avatar: "",
@@ -25,12 +25,13 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         email: "",
         phoneNumber: "",
         teams: [],
-        departments: [{}],
+        departments: [],
         user: {
             username: "",
             enableLogin: false
         }
     })
+    console.log(employeeInfo)
     const [tab, setTab] = useState('departments')       // State chuyển từ điều chỉnh phòng ban <=> điều chỉnh đội nhóm
     //
 
@@ -41,7 +42,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                 user: (employee.user.enableLogin !== false) ? employee.user : { username: "" },
                 departments: employee.departments.map((department, index, array) => {
                     return {
-                        ...employee.departments,
+                        ...employee.departments[index],
                         positions: departments.find(dp => dp.id === department.id).positions
                     }
                 })
@@ -287,7 +288,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title className="text-white">
-                    {employee?.id ? "Chỉnh sửa sinh viên" : "Thêm sinh viên"}
+                    {employee?.id ? "Chỉnh sửa nhân viên" : "Thêm nhân viên"}
                 </Modal.Title>
             </Modal.Header>
             <Form
@@ -298,17 +299,17 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
             >
                 <div className="modal-body-content">
                     <div className="mb-3">
-                        <Form.Label>Mã sinh viên:</Form.Label>
+                        <Form.Label>Mã nhân viên:</Form.Label>
                         <Form.Control
                             type="text"
                             name="code"
-                            placeholder="Nhập mã sinh viên..."
+                            placeholder="Nhập mã nhân viên..."
                             value={employeeInfo.code}
                             onChange={handleInputChange}
                             required
                         />
                         <Form.Control.Feedback type="invalid">
-                            Vui lòng nhập mã sinh viên.
+                            Vui lòng nhập mã nhân viên.
                         </Form.Control.Feedback>
                     </div>
                     <hr />
@@ -317,13 +318,13 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                         <Form.Control
                             type="text"
                             name="name"
-                            placeholder="Nhập họ và tên sinh viên..."
+                            placeholder="Nhập họ và tên nhân viên..."
                             value={employeeInfo.name}
                             onChange={handleInputChange}
                             required
                         />
                         <Form.Control.Feedback type="invalid">
-                            Vui lòng nhập họ và tên sinh viên.
+                            Vui lòng nhập họ và tên nhân viên.
                         </Form.Control.Feedback>
                     </div>
                     <hr />
@@ -345,7 +346,6 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                     <div className="mb-3">
                         <Form.Label>Giới tính:</Form.Label>
                         <Form.Select
-                            type="date"
                             name="gender"
                             value={employeeInfo.gender}
                             onChange={handleInputChange}
@@ -364,7 +364,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                         <Form.Control
                             type="email"
                             name="email"
-                            placeholder="Nhập email sinh viên..."
+                            placeholder="Nhập email nhân viên..."
                             value={employeeInfo.email}
                             onChange={handleInputChange}
                             required
@@ -379,7 +379,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                         <Form.Control
                             type="number"
                             name="phoneNumber"
-                            placeholder="Nhập số điện thoại của sinh viên..."
+                            placeholder="Nhập số điện thoại của nhân viên..."
                             value={employeeInfo.phoneNumber}
                             onChange={handleInputChange}
                             required

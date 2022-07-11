@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-target-blank */
 import React from 'react'
 import { Navbar } from 'react-bootstrap'
 import { BsChatDotsFill, BsEnvelopeFill, BsTelephoneForwardFill } from 'react-icons/bs'
@@ -66,4 +67,4 @@ const AppFooter = () => {
     )
 }
 
-export default AppFooter
+export default React.memo(AppFooter)
