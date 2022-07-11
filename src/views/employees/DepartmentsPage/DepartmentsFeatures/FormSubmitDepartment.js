@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Button, Form, Modal } from "react-bootstrap"
 
-import { addDepartment, fetchDepartments, updateDepartment } from "~/redux/departmentsSlice"
+import { addDepartment, updateDepartment } from "~/redux/departmentsSlice"
 import { departmentsSelector } from "~/redux/selectors"
 import FormSelectDepartment from "../../EmployeesFeatures/SubmitEmployee/FormSelectDepartment"
 import Positions from "./Positions"
@@ -23,9 +23,6 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
     })
     //
 
-    useEffect(() => {
-        dispatch(fetchDepartments())
-    }, [])
     useEffect(() => {
         if (department?.id) {
             setDepartmentInfo(department)

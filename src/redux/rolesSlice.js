@@ -17,7 +17,9 @@ const rolesSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchRoles.pending, (state, action) => {
-                state.status = "loading"
+                if (state.status !== "success") {
+                    state.status = "loading"
+                } 
             })
             .addCase(fetchRoles.fulfilled, (state, action) => {
                 state.roles = action.payload.roles
@@ -39,7 +41,7 @@ const rolesSlice = createSlice({
                     // Hiển thị thông báo thêm vai trò thành công
                     swal({
                         title: "Thêm vai trò",
-                        text: `Thêm vai trò ${action.payload.data.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })
@@ -50,8 +52,8 @@ const rolesSlice = createSlice({
                     // Hiển thị thông báo dữ liệu thông hợp lệ
                     swal({
                         title: "Thêm vai trò",
-                        text: `Thêm vai trò thất bại. ${action.payload.message}`,
-                        icon: "error",
+                        text: action.payload.message,
+                        icon: "warning",
                         button: "OK",
                     })
                 }
@@ -78,7 +80,7 @@ const rolesSlice = createSlice({
                     // Hiển thị thông báo chỉnh sửa vai trò thành công
                     swal({
                         title: "Chỉnh sửa vai trò",
-                        text: `Chỉnh sửa vai trò ${action.payload.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })
@@ -90,7 +92,7 @@ const rolesSlice = createSlice({
                     swal({
                         title: "Chỉnh sửa vai trò",
                         text: action.payload.message,
-                        icon: "error",
+                        icon: "warning",
                         button: "OK",
                     })
                 }
@@ -113,7 +115,7 @@ const rolesSlice = createSlice({
                     // Hiển thị thông báo xóa vai trò thành công
                     swal({
                         title: "Xóa vai trò",
-                        text: `Xóa vai trò ${action.payload.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })

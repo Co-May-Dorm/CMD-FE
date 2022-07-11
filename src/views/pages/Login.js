@@ -1,50 +1,53 @@
 
-import React, { useEffect, useState } from 'react'
-
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button, Col, Container, Form, Image } from 'react-bootstrap'
+import swal from 'sweetalert'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+import clsx from 'clsx'
 
-import axiosClient from '../../api/axiosClient'
-import background from '../../assets/images/login-background.png'
-import usernameIcon from '../../assets/icons/username.svg'
-import passwordIcon from '../../assets/icons/password.svg'
+import background from '~/assets/images/login-background.png'
+import usernameIcon from '~/assets/icons/username.svg'
+import passwordIcon from '~/assets/icons/password.svg'
+import authApi from '~/api/authApi'
 
 const Login = () => {
+    const navigate = useNavigate()
+
     useEffect(() => {
         document.title = "Đăng Nhập"
-    })
+    }, [])
 
-    const [loginInfo, setLoginInfo] = useState({
+    /* Xử lý form với formik */
+    const initialValues = {
         username: "",
         password: ""
+    }
+    const validationSchema = Yup.object({
+        username: Yup.string()
+            .required("Vui lòng nhập tên người dùng.").matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "Vui lòng nhập tên người dùng hợp lệ. Tên người dùng là địa chỉ Email của bạn."),
+        password: Yup.string().required("Vui lòng nhập mật khẩu.")
     })
-
-    const handleInput = (e) => {
-        setLoginInfo({
-            ...loginInfo,
-            [e.target.name]: e.target.value
-        })
-    }
-
-    /* Xử lý khi click button Đăng nhập */
-    const [validated, setValidated] = useState(false)
-    const handleSubmit = (e) => {
-        const form = e.currentTarget
-        if (form.checkValidity() === false) {
-            e.preventDefault()
-            e.stopPropagation()
+    const handleSubmit = async (values, actions) => {
+        actions.setSubmitting(true)
+        const response = await authApi.login(values)
+        if (response.data.status === "OK") {
+            localStorage.setItem("accessToken", "Bearer " + response.data.data.accessToken)
+            localStorage.setItem("userInfo", JSON.stringify(response.data.data.userInfo))
+            navigate("/")
         }
-        setValidated(true)
-        if (form.checkValidity() === true) {
-            e.preventDefault()
-            e.stopPropagation()
-            axiosClient.post("/api/auth/signin", loginInfo)
-                .then(response => {
-                    localStorage.setItem("accessToken", "Bearer " + response.data.data.accessToken)
-                    localStorage.setItem("userInfo", JSON.stringify(response.data.data.userInfo))
-                    window.location.reload()
-                })
+        else {
+            swal({
+                title: "Đăng nhập",
+                text: response.data.message,
+                icon: "error",
+                button: "OK"
+            })
         }
     }
+    //
+
     return (
         <Container
             fluid
@@ -56,55 +59,69 @@ const Login = () => {
             <Col className="min-vh-100 position-relative">
             </Col>
             <Col>
-                <Form
-                    id="form-login"
-                    noValidate
-                    validated={validated}
+                <Formik
+                    initialValues={initialValues}
+                    validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                 >
-                    <h3 className="notify--login">Vui lòng đăng nhập vào tài khoản của bạn</h3>
-                    <div className="login--input">
-                        <div className="login--input__icon">
-                            <Image src={usernameIcon} />
-                        </div>
-                        <div className="login--input__textbox">
-                            <Form.Control
-                                type="text"
-                                name="username"
-                                placeholder="Tên đăng nhập"
-                                value={loginInfo.username}
-                                onChange={handleInput}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Vui lòng nhập tên đăng nhập.
-                            </Form.Control.Feedback>
-                        </div>
-                    </div>
-                    <div className="login--input">
-                        <div className="login--input__icon">
-                            <Image src={passwordIcon} />
-                        </div>
-                        <div className="login--input__textbox">
-                            <Form.Control
-                                type="password"
-                                name="password"
-                                placeholder="Mật khẩu"
-                                value={loginInfo.info}
-                                onChange={handleInput}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Vui lòng nhập mật khẩu.
-                            </Form.Control.Feedback>
-                        </div>
-                    </div>
-                    <div className="row mb-3">
-                        <Button type="submit">
-                            Đăng nhập
-                        </Button>
-                    </div>
-                </Form>
+                    {
+                        ({ values, touched, errors, handleChange, handleBlur, handleSubmit, isValid, dirty }) => (
+                            <Form id="form-login" onSubmit={handleSubmit}>
+                                <h3 className="notify--login">Vui lòng đăng nhập vào tài khoản của bạn</h3>
+                                <div className="login--input">
+                                    <div className="login--input__icon">
+                                        <Image src={usernameIcon} />
+                                    </div>
+                                    <div className="login--input__textbox">
+                                        <Form.Control
+                                            type="text"
+                                            name="username"
+                                            placeholder="Tên đăng nhập"
+                                            className={clsx({
+                                                "is-invalid": touched.username && errors.username
+                                            })}
+                                            value={values.username}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                        {
+                                            touched.username && errors.username && <div className="invalid-feedback">{errors.username}</div>
+                                        }
+                                    </div>
+                                </div>
+                                <div className="login--input">
+                                    <div className="login--input__icon">
+                                        <Image src={passwordIcon} />
+                                    </div>
+                                    <div className="login--input__textbox">
+                                        <Form.Control
+                                            type="password"
+                                            name="password"
+                                            placeholder="Mật khẩu"
+                                            className={clsx({
+                                                "is-invalid": touched.password && errors.password
+                                            })}
+                                            value={values.password}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                        {
+                                            touched.password && errors.password && <div className="invalid-feedback">{errors.password}</div>
+                                        }
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <Button
+                                        type="submit"
+                                        disabled={!(dirty && isValid)}
+                                    >
+                                        Đăng nhập
+                                    </Button>
+                                </div>
+                            </Form>
+                        )
+                    }
+                </Formik>
             </Col>
         </Container>
     )

@@ -1,14 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit'
-import departmentsSlice from './departmentsSlice'
+
+import authSlice from './authSlice'
 import postsSlice from './postsSlice'
-import requestsSlice from './requestsSlice'
-import rolesSlice from './rolesSlice'
 import employeesSlice from './employeesSlice'
+import departmentsSlice from './departmentsSlice'
 import teamsSlice from './teamsSlice'
+import rolesSlice from './rolesSlice'
+import requestsSlice from './requestsSlice'
 import tasksSlice from './tasksSlice'
 
 const store = configureStore({
     reducer: {
+        auth: authSlice.reducer,
         posts: postsSlice.reducer,
         employees: employeesSlice.reducer,
         departments: departmentsSlice.reducer,

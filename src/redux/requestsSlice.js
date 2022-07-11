@@ -17,7 +17,9 @@ const requestsSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchRequests.pending, (state, action) => {
-                state.status = "loading"
+                if (state.status !== "success") {
+                    state.status = "loading"
+                } 
             })
             .addCase(fetchRequests.fulfilled, (state, action) => {
                 state.requests = action.payload.requests
@@ -30,14 +32,16 @@ const requestsSlice = createSlice({
             .addCase(addRequest.fulfilled, (state, action) => {
                 // Nếu thêm đề xuất thành công
                 if (action.payload.status === "OK") {
-                    // Thực hiện thêm đề xuất đó vào đầu mảng dữ liệu trên redux và xóa đề xuất ở cuối mảng để số đề xuất trên 1 trang luôn đúng
-                    state.requests.unshift(action.payload.data)
-                    state.requests.pop()
+                    if (state.pagination.page === 1) {  // Kiểm tra nếu ở trang 1 thì mới hiển thị đề xuất vừa thêm lên giao diện
+                        // Thực hiện thêm đề xuất đó vào đầu mảng dữ liệu trên redux và xóa đề xuất ở cuối mảng để số đề xuất trên 1 trang luôn đúng
+                        state.requests.unshift(action.payload.data)
+                        state.requests.pop()
+                    }
 
                     // Hiển thị thông báo thêm đề xuất thành công
                     swal({
                         title: "Thêm đề xuất",
-                        text: `Thêm đề xuất ${action.payload.data.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })
@@ -48,8 +52,8 @@ const requestsSlice = createSlice({
                     // Hiển thị thông báo dữ liệu thông hợp lệ
                     swal({
                         title: "Thêm đề xuất",
-                        text: `Thêm đề xuất thất bại. ${action.payload.message}`,
-                        icon: "error",
+                        text: action.payload.message,
+                        icon: "warning",
                         button: "OK",
                     })
                 }
@@ -76,7 +80,7 @@ const requestsSlice = createSlice({
                     // Hiển thị thông báo chỉnh sửa đề xuất thành công
                     swal({
                         title: "Chỉnh sửa đề xuất",
-                        text: `Chỉnh sửa đề xuất ${action.payload.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })
@@ -88,7 +92,7 @@ const requestsSlice = createSlice({
                     swal({
                         title: "Chỉnh sửa đề xuất",
                         text: action.payload.message,
-                        icon: "error",
+                        icon: "warning",
                         button: "OK",
                     })
                 }
@@ -111,7 +115,7 @@ const requestsSlice = createSlice({
                     // Hiển thị thông báo xóa đề xuất thành công
                     swal({
                         title: "Xóa đề xuất",
-                        text: `Xóa đề xuất ${action.payload.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })

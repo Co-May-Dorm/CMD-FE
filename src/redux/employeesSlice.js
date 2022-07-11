@@ -17,7 +17,9 @@ const employeesSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchEmployees.pending, (state, action) => {
-                state.status = "loading"
+                if (state.status !== "success") {
+                    state.status = "loading"
+                } 
             })
             .addCase(fetchEmployees.fulfilled, (state, action) => {
                 state.employees = action.payload.employees
@@ -39,7 +41,7 @@ const employeesSlice = createSlice({
                     // Hiển thị thông báo thêm nhân viên thành công
                     swal({
                         title: "Thêm nhân viên",
-                        text: `Thêm nhân viên ${action.payload.data.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })
@@ -50,8 +52,8 @@ const employeesSlice = createSlice({
                     // Hiển thị thông báo dữ liệu thông hợp lệ
                     swal({
                         title: "Thêm nhân viên",
-                        text: `Thêm nhân viên thất bại. ${action.payload.message}`,
-                        icon: "error",
+                        text: action.payload.message,
+                        icon: "warning",
                         button: "OK",
                     })
                 }
@@ -78,7 +80,7 @@ const employeesSlice = createSlice({
                     // Hiển thị thông báo chỉnh sửa nhân viên thành công
                     swal({
                         title: "Chỉnh sửa nhân viên",
-                        text: `Chỉnh sửa nhân viên ${action.payload.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })
@@ -90,7 +92,7 @@ const employeesSlice = createSlice({
                     swal({
                         title: "Chỉnh sửa nhân viên",
                         text: action.payload.message,
-                        icon: "error",
+                        icon: "warning",
                         button: "OK",
                     })
                 }
@@ -113,7 +115,7 @@ const employeesSlice = createSlice({
                     // Hiển thị thông báo xóa nhân viên thành công
                     swal({
                         title: "Xóa nhân viên",
-                        text: `Xóa nhân viên ${action.payload.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })

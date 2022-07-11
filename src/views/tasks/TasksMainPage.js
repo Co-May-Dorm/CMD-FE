@@ -204,7 +204,7 @@ const TasksMainPage = () => {
                             }
                         </span>
                     </div>
-                    <div className="task-review">
+                    <div className="task-rate">
                         <span
                             className="fw-bolder cursor-pointer"
                             onClick={() => handleSort("pos.name")}

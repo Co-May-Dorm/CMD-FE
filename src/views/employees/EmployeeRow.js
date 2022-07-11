@@ -20,7 +20,7 @@ const EmployeeRow = ({ employeeInfo }) => {
         activeStatusElement = <span className="d-inline-block rounded-circle bg-secondary" style={{ height: "10px", width: "10px" }} />
     }
 
-    const mainDepartment = employeeInfo.departments.reduce((min, department) => min.level < department.level ? min : department)
+    const mainDepartment = employeeInfo.departments.length > 0 && employeeInfo.departments?.reduce((min, department) => min.level < department.level ? min : department)
 
     return (
         <div
@@ -71,7 +71,7 @@ const EmployeeRow = ({ employeeInfo }) => {
                     Phòng:
                 </div>
                 <div className="col text-break">
-                    {mainDepartment.name}
+                    {mainDepartment.name || "Trống"}
                 </div>
             </div>
             <div className="employee-position">
@@ -79,7 +79,7 @@ const EmployeeRow = ({ employeeInfo }) => {
                     Chức vụ:
                 </div>
                 <div className="col text-break">
-                    {mainDepartment.position.name}
+                    {mainDepartment.position?.name || "Trống"}
                 </div>
             </div>
             <Dropdown className="employee-more">

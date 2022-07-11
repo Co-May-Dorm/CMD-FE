@@ -1,15 +1,24 @@
 import React from 'react'
-
+import { useNavigate } from 'react-router-dom'
 import { Dropdown, Image } from 'react-bootstrap'
 import { BsPersonCircle } from 'react-icons/bs'
 
-import defaultAvatar from './../../assets/icons/avatar-default.png'
-import logoutIcon from './../../assets/icons/logout.svg'
-import listbarIcon from './../../assets/icons/listbar.svg'
-import manualsIcon from './../../assets/icons/manuals.svg'
+import defaultAvatar from '~/assets/icons/avatar-default.png'
+import logoutIcon from '~/assets/icons/logout.svg'
+import listbarIcon from '~/assets/icons/listbar.svg'
+import manualsIcon from '~/assets/icons/manuals.svg'
 
 const AppHeaderDropdown = () => {
+    const navigate = useNavigate()
+
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+
+    const handleLogout = () => {
+        localStorage.removeItem("accessToken")
+        localStorage.removeItem("userInfo")
+        navigate("/login")
+    }
+
     return (
         <Dropdown className="col-auto">
             <Dropdown.Toggle variant="none" className="d-flex align-items-center">
@@ -44,11 +53,7 @@ const AppHeaderDropdown = () => {
                     <Image src={manualsIcon} className="me-2" />
                     Hướng dẫn sử dụng
                 </Dropdown.Item>
-                <Dropdown.Item onClick={() => {
-                    localStorage.removeItem("accessToken")
-                    localStorage.removeItem("userInfo")
-                    window.location.reload()
-                }}>
+                <Dropdown.Item onClick={handleLogout}>
                     <Image src={logoutIcon} className="me-2" />
                     Đăng xuất
                 </Dropdown.Item>

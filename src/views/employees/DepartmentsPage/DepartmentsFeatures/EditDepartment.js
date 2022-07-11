@@ -10,7 +10,7 @@ const EditDepartment = ({ department }) => {
     return (
         <>
             <Dropdown.Item
-                onClick={() => setVisibleEditDepartment(!visibleEditDepartment)}
+                onClick={() => setVisibleEditDepartment(true)}
             >
                 <BiEdit /> Chỉnh sửa
             </Dropdown.Item>

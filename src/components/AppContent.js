@@ -1,42 +1,26 @@
-import React, { Suspense } from 'react'
-import { Route, Routes, useLocation } from 'react-router-dom'
-import { Spinner } from 'react-bootstrap'
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import React from 'react'
+import { Route, Routes } from 'react-router-dom'
 
 import './style.css'
 import routes from '../routes'
 
 const AppContent = () => {
-    const location = useLocation()
-
     return (
         <div className="container-fluid mt-3">
-            <Suspense fallback={<Spinner
-                animation="border"
-                variant="primary"
-            />}>
-                <TransitionGroup>
-                    <CSSTransition
-                        key={location.pathname}
-                        classNames="fade"
-                        timeout={100}
-                        unmountOnExit
-                    >
-                        <Routes>
-                            {routes.map((route, index) => {
-                                return (
-                                    route.element && (
-                                        <Route
-                                            key={index}
-                                            {...route}
-                                        />
-                                    )
-                                )
-                            })}
-                        </Routes>
-                    </CSSTransition>
-                </TransitionGroup>
-            </Suspense>
+            <Routes>
+                {
+                    routes.map((route, index) => {
+                        return (
+                            route.element && (
+                                <Route
+                                    key={index}
+                                    {...route}
+                                />
+                            )
+                        )
+                    })
+                }
+            </Routes>
         </div>
     )
 }

@@ -7,12 +7,14 @@ const departmentsSlice = createSlice({
     name: "departments",
     initialState: {
         status: "idle",
-        departments: [],
+        departments: []
     },
     extraReducers: (builder) => {
         builder
             .addCase(fetchDepartments.pending, (state, action) => {
-                state.status = "loading"
+                if (state.status !== "success") {
+                    state.status = "loading"
+                } 
             })
             .addCase(fetchDepartments.fulfilled, (state, action) => {
                 state.departments = action.payload
@@ -24,13 +26,12 @@ const departmentsSlice = createSlice({
             .addCase(addDepartment.fulfilled, (state, action) => {
                 // Nếu thêm phòng ban thành công
                 if (action.payload.status === "OK") {
-                    // Thực hiện thêm phòng ban đó vào đầu mảng dữ liệu trên redux và xóa phòng ban ở cuối mảng để số phòng ban trên 1 trang luôn đúng
-                    state.departments.push(action.payload.data)
+                        state.departments.push(action.payload.data)
 
                     // Hiển thị thông báo thêm phòng ban thành công
                     swal({
                         title: "Thêm phòng ban",
-                        text: `Thêm phòng ban ${action.payload.data.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })
@@ -41,8 +42,8 @@ const departmentsSlice = createSlice({
                     // Hiển thị thông báo dữ liệu thông hợp lệ
                     swal({
                         title: "Thêm phòng ban",
-                        text: `Thêm phòng ban thất bại. ${action.payload.message}`,
-                        icon: "error",
+                        text: action.payload.message,
+                        icon: "warning",
                         button: "OK",
                     })
                 }
@@ -69,7 +70,7 @@ const departmentsSlice = createSlice({
                     // Hiển thị thông báo chỉnh sửa phòng ban thành công
                     swal({
                         title: "Chỉnh sửa phòng ban",
-                        text: `Chỉnh sửa phòng ban ${action.payload.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })
@@ -81,7 +82,7 @@ const departmentsSlice = createSlice({
                     swal({
                         title: "Chỉnh sửa phòng ban",
                         text: action.payload.message,
-                        icon: "error",
+                        icon: "warning",
                         button: "OK",
                     })
                 }
@@ -104,7 +105,7 @@ const departmentsSlice = createSlice({
                     // Hiển thị thông báo xóa phòng ban thành công
                     swal({
                         title: "Xóa phòng ban",
-                        text: `Xóa phòng ban ${action.payload.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })
