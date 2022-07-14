@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { ListGroup, Modal, Table } from 'react-bootstrap'
+import { Dropdown, ListGroup, Modal, Table } from 'react-bootstrap'
+import { BiInfoSquare } from 'react-icons/bi'
 
 import { departmentsSelector } from '~/redux/selectors'
 
-const DepartmentDetail = ({ department, visible, setVisible }) => {
+const DepartmentDetail = ({ department }) => {
+    const [visible, setVisible] = useState(false)
     const departments = useSelector(departmentsSelector).departments    // Lấy danh sách phòng ban từ redux
 
     let parentName = ""     // Khởi tạo tên phòng ban cha mặc định là rỗng
@@ -17,68 +19,77 @@ const DepartmentDetail = ({ department, visible, setVisible }) => {
     })
 
     return (
-        <Modal
-            className="modal-fullheight"
-            size="md"
-            scrollable
-            show={visible}
-            onHide={() => setVisible(false)}
-        >
-            <Modal.Header closeButton>
-                <Modal.Title>
-                    Chi tiết phòng ban
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <ListGroup variant="flush">
-                    <ListGroup.Item>
-                        Mã phòng ban: {department.code}
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                        Tên phòng ban: {department.name}
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                        Thuộc sự quản lý của phòng ban: {parentName || department.name}
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                        Mô tả về phòng ban: {(department.description === "") ? "Chưa có mô tả" : department.description}
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                        <Table
-                            striped
-                            hover
-                            responsive
-                            borderless
-                        >
-                            <thead>
-                                <tr>
-                                    <td>
-                                        <span className="fw-bolder">
-                                            CHỨC VỤ
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span className="fw-bolder">
-                                            VAI TRÒ
-                                        </span>
-                                    </td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    department.positions.map((position, index) => (
-                                        <tr key={index}>
-                                            <td>{position.name}</td>
-                                            <td>{position.role?.name}</td>
-                                        </tr>
-                                    ))
-                                }
-                            </tbody>
-                        </Table>
-                    </ListGroup.Item>
-                </ListGroup>
-            </Modal.Body>
-        </Modal>
+        <>
+            <Dropdown.Item onClick={() => setVisible(!visible)}>
+                <BiInfoSquare /> Chi tiết
+            </Dropdown.Item>
+            {
+                visible && (
+                    <Modal
+                        className="modal-fullheight"
+                        size="md"
+                        scrollable
+                        show={visible}
+                        onHide={() => setVisible(false)}
+                    >
+                        <Modal.Header closeButton>
+                            <Modal.Title>
+                                Chi tiết phòng ban
+                            </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <ListGroup variant="flush">
+                                <ListGroup.Item>
+                                    Mã phòng ban: {department.code}
+                                </ListGroup.Item>
+                                <ListGroup.Item>
+                                    Tên phòng ban: {department.name}
+                                </ListGroup.Item>
+                                <ListGroup.Item>
+                                    Thuộc sự quản lý của phòng ban: {parentName || department.name}
+                                </ListGroup.Item>
+                                <ListGroup.Item>
+                                    Mô tả về phòng ban: {(department.description === "") ? "Chưa có mô tả" : department.description}
+                                </ListGroup.Item>
+                                <ListGroup.Item>
+                                    <Table
+                                        striped
+                                        hover
+                                        responsive
+                                        borderless
+                                    >
+                                        <thead>
+                                            <tr>
+                                                <td>
+                                                    <span className="fw-bolder">
+                                                        CHỨC VỤ
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span className="fw-bolder">
+                                                        VAI TRÒ
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                department.positions.map((position, index) => (
+                                                    <tr key={index}>
+                                                        <td>{position.name}</td>
+                                                        <td>{position.role?.name}</td>
+                                                    </tr>
+                                                ))
+                                            }
+                                        </tbody>
+                                    </Table>
+                                </ListGroup.Item>
+                            </ListGroup>
+                        </Modal.Body>
+                    </Modal>
+                )
+            }
+        </>
     )
 }
 

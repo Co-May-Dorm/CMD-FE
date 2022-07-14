@@ -14,7 +14,9 @@ const EditTask = ({ task }) => {
                     <BiEdit /> Chỉnh sửa
                 </div>
             </Dropdown.Item>
-            <FormSubmitTask visible={visible} setVisible={setVisible} task={task} />
+            {
+                visible && <FormSubmitTask visible={visible} setVisible={setVisible} task={task} />
+            }
         </>
     )
 }

@@ -1121,7 +1121,7 @@ $card-group-margin: $grid-gutter-width * 0.5 !default;
 $accordion-padding-y: 1rem !default;
 $accordion-padding-x: 1.25rem !default;
 $accordion-color: $body-color !default;
-$accordion-bg: $body-bg !default;
+$accordion-bg: $white !default;
 $accordion-border-width: $border-width !default;
 $accordion-border-color: rgba($black, 0.125) !default;
 $accordion-border-radius: $border-radius !default;
@@ -1135,8 +1135,8 @@ $accordion-button-padding-x: $accordion-padding-x !default;
 $accordion-button-color: $accordion-color !default;
 $accordion-button-bg: $accordion-bg !default;
 $accordion-transition: $btn-transition, border-radius 0.15s ease !default;
-$accordion-button-active-bg: tint-color($component-active-bg, 90%) !default;
-$accordion-button-active-color: shade-color($primary, 10%) !default;
+$accordion-button-active-bg: $linear !default;
+$accordion-button-active-color: $white !default;
 
 $accordion-button-focus-border-color: $input-focus-border-color !default;
 $accordion-button-focus-box-shadow: $btn-focus-box-shadow !default;
@@ -1191,8 +1191,8 @@ $popover-border-radius: $border-radius-lg !default;
 $popover-inner-border-radius: subtract($popover-border-radius, $popover-border-width) !default;
 $popover-box-shadow: $box-shadow !default;
 
-$popover-header-bg: shade-color($popover-bg, 6%) !default;
-$popover-header-color: $headings-color !default;
+$popover-header-bg: $linear !default;
+$popover-header-color: $white !default;
 $popover-header-padding-y: 0.5rem !default;
 $popover-header-padding-x: $spacer !default;
 

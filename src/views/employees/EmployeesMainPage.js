@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AiOutlineSortAscending, AiOutlineSortDescending } from 'react-icons/ai'
-import { BiArrowFromTop, BiSortAlt2 } from 'react-icons/bi'
-import { Card, Container, Dropdown } from 'react-bootstrap'
+import { BiArrowFromTop, BiFilterAlt, BiSortAlt2 } from 'react-icons/bi'
+import { Card, Container, Dropdown, Form } from 'react-bootstrap'
+import clsx from "clsx"
 
 import { fetchEmployees } from '~/redux/employeesSlice'
 import { employeesSelector } from '~/redux/selectors'
@@ -29,6 +30,7 @@ const EmployeesMainPage = () => {
     const location = useLocation()          // Lấy thông tin từ URL của trang hiện tại
     const navigation = useNavigate()        // Thực hiện công việc điều hướng trang
 
+    const [visibleFilter, setVisileFilter] = useState(false)
     const [filters, setFilters] = useState({
         page: 1
     })      // State lưu trữ các params truyền vào API để lấy dữ liệu từ Back End
@@ -42,14 +44,14 @@ const EmployeesMainPage = () => {
             let newParams = {}      // Lưu danh sách những param khác null
 
             // Thực hiện việc loại bỏ những param có giá trị là null
-            for (let param in params) {
-                if (params[param] === null || params[param] === "") {       // Nếu giá trị của param là null hoặc chuỗi rỗng thì bỏ qua
+            for (const [key, value] of Object.entries(params)) {
+                if (key !== "page") {       // Nếu giá trị của param là null hoặc chuỗi rỗng thì bỏ qua
                     continue
                 }
-                newParams[param] = params[param]
+                newParams[key] = value
             }
 
-            // 
+            //
             setFilters(newParams)
         }
     }, [])
@@ -68,7 +70,7 @@ const EmployeesMainPage = () => {
         })
     }
 
-    // Hàm thay đổi state khi thực hiện tìm kiếm
+    // Hàm xử lý khi thực hiện tìm kiếm
     const handleSearch = (searchTerm) => {
         setFilters({
             ...filters,
@@ -77,7 +79,7 @@ const EmployeesMainPage = () => {
         })
     }
 
-    // Hàm thay đổi state khi thực hiện sắp xếp
+    // Hàm xử lý khi thực hiện sắp xếp danh sách nhân viên
     const handleSort = (sortBy) => {
         if (filters.order === null || !filters.order) {       // Nếu đang không sắp xếp thì thực hiện sắp xếp tăng dần
             setFilters({
@@ -100,6 +102,15 @@ const EmployeesMainPage = () => {
                 order: null
             })
         }
+    }
+
+    // Hàm xử lý khi thực hiện lọc danh sách nhân viên
+    const handleFilterChange = (e) => {
+        setFilters({
+            ...filters,
+            [e.target.name]: e.target.value,
+            page: 1
+        })
     }
 
     return (
@@ -164,9 +175,9 @@ const EmployeesMainPage = () => {
                         >
                             HỌ VÀ TÊN
                             {
-                                (filters.sort === "emp.name" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
-                                    : (filters.sort === "emp.name" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
-                                        : <BiSortAlt2 size={20} />
+                                (filters.sort === "emp.name" && filters.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filters.sort === "emp.name" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                        : <BiSortAlt2 />
                             }
                         </span>
                     </div>
@@ -177,9 +188,9 @@ const EmployeesMainPage = () => {
                         >
                             NGÀY SINH
                             {
-                                (filters.sort === "emp.dateOfBirth" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
-                                    : (filters.sort === "emp.dateOfBirth" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
-                                        : <BiSortAlt2 size={20} />
+                                (filters.sort === "emp.dateOfBirth" && filters.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filters.sort === "emp.dateOfBirth" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                        : <BiSortAlt2 />
                             }
                         </span>
                     </div>
@@ -190,9 +201,9 @@ const EmployeesMainPage = () => {
                         >
                             EMAIL
                             {
-                                (filters.sort === "emp.email" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
-                                    : (filters.sort === "emp.email" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
-                                        : <BiSortAlt2 size={20} />
+                                (filters.sort === "emp.email" && filters.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filters.sort === "emp.email" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                        : <BiSortAlt2 />
                             }
                         </span>
                     </div>
@@ -203,9 +214,9 @@ const EmployeesMainPage = () => {
                         >
                             SĐT
                             {
-                                (filters.sort === "emp.phoneNumber" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
-                                    : (filters.sort === "emp.phoneNumber" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
-                                        : <BiSortAlt2 size={20} />
+                                (filters.sort === "emp.phoneNumber" && filters.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filters.sort === "emp.phoneNumber" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                        : <BiSortAlt2 />
                             }
                         </span>
                     </div>
@@ -216,9 +227,9 @@ const EmployeesMainPage = () => {
                         >
                             PHÒNG BAN
                             {
-                                (filters.sort === "dep.name" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
-                                    : (filters.sort === "dep.name" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
-                                        : <BiSortAlt2 size={20} />
+                                (filters.sort === "dep.name" && filters.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filters.sort === "dep.name" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                        : <BiSortAlt2 />
                             }
                         </span>
                     </div>
@@ -229,14 +240,77 @@ const EmployeesMainPage = () => {
                         >
                             CHỨC VỤ
                             {
-                                (filters.sort === "pos.name" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
-                                    : (filters.sort === "pos.name" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
-                                        : <BiSortAlt2 size={20} />
+                                (filters.sort === "pos.name" && filters.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filters.sort === "pos.name" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                        : <BiSortAlt2 />
                             }
                         </span>
                     </div>
-                    <div className="employee-more" />
+                    <div className="employee-more" onClick={() => setVisileFilter(!visibleFilter)}>
+                        <BiFilterAlt />
+                    </div>
                 </div>
+                {
+                    visibleFilter && (
+                        <div className="employee employee-header animate__animated animate__fadeInRight">
+                            <div className="employee-name">
+                                <Form.Control
+                                    type="search"
+                                    name="name"
+                                    placeholder="Nhập tên..."
+                                    value={filters.name}
+                                    onChange={handleFilterChange}
+                                />
+                            </div>
+                            <div className="employee-dob">
+                                <Form.Control
+                                    type="date"
+                                    name="dob"
+                                    placeholder="Nhập ngày sinh..."
+                                    value={filters.dob}
+                                    onChange={handleFilterChange}
+                                />
+                            </div>
+                            <div className="employee-email">
+                                <Form.Control
+                                    type="email"
+                                    name="email"
+                                    placeholder="Nhập email..."
+                                    value={filters.email}
+                                    onChange={handleFilterChange}
+                                />
+                            </div>
+                            <div className="employee-phoneNumber">
+                                <Form.Control
+                                    type="string"
+                                    name="phone"
+                                    placeholder="Nhập số điện thoại..."
+                                    value={filters.phone}
+                                    onChange={handleFilterChange}
+                                />
+                            </div>
+                            <div className="employee-department">
+                                <Form.Control
+                                    type="string"
+                                    name="dep"
+                                    placeholder="Nhập tên phòng ban..."
+                                    value={filters.dep}
+                                    onChange={handleFilterChange}
+                                />
+                            </div>
+                            <div className="employee-position">
+                                <Form.Control
+                                    type="string"
+                                    name="pos"
+                                    placeholder="Nhập tên chức vụ..."
+                                    value={filters.pos}
+                                    onChange={handleFilterChange}
+                                />
+                            </div>
+                            <div className="employee-more" />
+                        </div>
+                    )
+                }
                 {
                     status === "loading" ? (
                         <Loading />

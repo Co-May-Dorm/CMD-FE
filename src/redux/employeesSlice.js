@@ -17,9 +17,7 @@ const employeesSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchEmployees.pending, (state, action) => {
-                if (state.status !== "success") {
-                    state.status = "loading"
-                } 
+                state.status = "loading"
             })
             .addCase(fetchEmployees.fulfilled, (state, action) => {
                 state.employees = action.payload.employees

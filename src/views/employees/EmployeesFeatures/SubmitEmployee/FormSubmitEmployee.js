@@ -31,7 +31,6 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
             enableLogin: false
         }
     })
-    console.log(employeeInfo)
     const [tab, setTab] = useState('departments')       // State chuyển từ điều chỉnh phòng ban <=> điều chỉnh đội nhóm
     //
 

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -12,6 +13,7 @@ import TaskRow from './TaskRow'
 import AddTask from './TasksFeatures/AddTask'
 import AppSearch from '~/components/AppSearch'
 import Loading from '~/components/Loading'
+import FiltersAdvanced from './TasksFeatures/FiltersAdvanced'
 
 const queryString = require('query-string')
 
@@ -120,7 +122,7 @@ const TasksMainPage = () => {
                         <AddTask />
                     </div>
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
-
+                        <FiltersAdvanced filters={filters} />
                     </div>
                     <Dropdown autoClose="outside" className="col-auto d-sm-none">
                         <Dropdown.Toggle>
@@ -141,26 +143,26 @@ const TasksMainPage = () => {
                     <div className="task-title">
                         <span
                             className="fw-bolder cursor-pointer"
-                            onClick={() => handleSort("emp.name")}
+                            onClick={() => handleSort("title")}
                         >
                             TÊN CÔNG VIỆC
                             {
-                                (filters.sort === "emp.name" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
-                                    : (filters.sort === "emp.name" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
-                                        : <BiSortAlt2 size={20} />
+                                (filters.sort === "title" && filters.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filters.sort === "title" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                        : <BiSortAlt2 />
                             }
                         </span>
                     </div>
                     <div className="task-creator">
                         <span
                             className="fw-bolder cursor-pointer"
-                            onClick={() => handleSort("emp.dateOfBirth")}
+                            onClick={() => handleSort("creator")}
                         >
                             NGƯỜI GIAO
                             {
-                                (filters.sort === "emp.dateOfBirth" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
-                                    : (filters.sort === "emp.dateOfBirth" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
-                                        : <BiSortAlt2 size={20} />
+                                (filters.sort === "creator" && filters.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filters.sort === "creator" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                        : <BiSortAlt2 />
                             }
                         </span>
                     </div>
@@ -168,13 +170,13 @@ const TasksMainPage = () => {
                     <div className="task-receiver">
                         <span
                             className="fw-bolder cursor-pointer"
-                            onClick={() => handleSort("emp.phoneNumber")}
+                            onClick={() => handleSort("receiver")}
                         >
                             NGƯỜI NHẬN
                             {
-                                (filters.sort === "emp.phoneNumber" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
-                                    : (filters.sort === "emp.phoneNumber" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
-                                        : <BiSortAlt2 size={20} />
+                                (filters.sort === "receiver" && filters.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filters.sort === "receiver" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                        : <BiSortAlt2 />
                             }
                         </span>
                     </div>
@@ -185,9 +187,9 @@ const TasksMainPage = () => {
                         >
                             THỜI GIAN
                             {
-                                (filters.sort === "dep.name" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
-                                    : (filters.sort === "dep.name" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
-                                        : <BiSortAlt2 size={20} />
+                                (filters.sort === "dep.name" && filters.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filters.sort === "dep.name" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                        : <BiSortAlt2 />
                             }
                         </span>
                     </div>
@@ -198,22 +200,22 @@ const TasksMainPage = () => {
                         >
                             TÌNH TRẠNG
                             {
-                                (filters.sort === "pos.name" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
-                                    : (filters.sort === "pos.name" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
-                                        : <BiSortAlt2 size={20} />
+                                (filters.sort === "pos.name" && filters.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filters.sort === "pos.name" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                        : <BiSortAlt2 />
                             }
                         </span>
                     </div>
                     <div className="task-rate">
                         <span
-                            className="fw-bolder cursor-pointer"
+                            className="fw-bolder cursor-pointer d-flex justify-content-center"
                             onClick={() => handleSort("pos.name")}
                         >
                             ĐÁNH GIÁ
                             {
-                                (filters.sort === "pos.name" && filters.order === "asc") ? <AiOutlineSortAscending size={20} />
-                                    : (filters.sort === "pos.name" && filters.order === "desc") ? <AiOutlineSortDescending size={20} />
-                                        : <BiSortAlt2 size={20} />
+                                (filters.sort === "pos.name" && filters.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filters.sort === "pos.name" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                        : <BiSortAlt2 />
                             }
                         </span>
                     </div>

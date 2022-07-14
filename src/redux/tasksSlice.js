@@ -30,14 +30,16 @@ const tasksSlice = createSlice({
             .addCase(addTask.fulfilled, (state, action) => {
                 // Nếu thêm công việc thành công
                 if (action.payload.status === "OK") {
-                    // Thực hiện thêm công việc đó vào đầu mảng dữ liệu trên redux và xóa công việc ở cuối mảng để số công việc trên 1 trang luôn đúng
-                    state.tasks.unshift(action.payload.data)
-                    state.tasks.pop()
+                    if (state.pagination.page === 1) {  // Kiểm tra nếu ở trang 1 thì mới hiển thị công việc vừa thêm lên giao diện
+                        // Thực hiện thêm công việc đó vào đầu mảng dữ liệu trên redux và xóa công việc ở cuối mảng để số công việc trên 1 trang luôn đúng
+                        state.tasks.unshift(action.payload.data)
+                        state.tasks.pop()
+                    }
 
                     // Hiển thị thông báo thêm công việc thành công
                     swal({
                         title: "Thêm công việc",
-                        text: `Thêm công việc ${action.payload.data.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })
@@ -48,8 +50,8 @@ const tasksSlice = createSlice({
                     // Hiển thị thông báo dữ liệu thông hợp lệ
                     swal({
                         title: "Thêm công việc",
-                        text: `Thêm công việc thất bại. ${action.payload.message}`,
-                        icon: "error",
+                        text: action.payload.message,
+                        icon: "warning",
                         button: "OK",
                     })
                 }
@@ -76,7 +78,7 @@ const tasksSlice = createSlice({
                     // Hiển thị thông báo chỉnh sửa công việc thành công
                     swal({
                         title: "Chỉnh sửa công việc",
-                        text: `Chỉnh sửa công việc ${action.payload.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })
@@ -88,7 +90,7 @@ const tasksSlice = createSlice({
                     swal({
                         title: "Chỉnh sửa công việc",
                         text: action.payload.message,
-                        icon: "error",
+                        icon: "warning",
                         button: "OK",
                     })
                 }
@@ -111,7 +113,7 @@ const tasksSlice = createSlice({
                     // Hiển thị thông báo xóa công việc thành công
                     swal({
                         title: "Xóa công việc",
-                        text: `Xóa công việc ${action.payload.name} thành công!`,
+                        text: action.payload.message,
                         icon: "success",
                         button: "OK",
                     })

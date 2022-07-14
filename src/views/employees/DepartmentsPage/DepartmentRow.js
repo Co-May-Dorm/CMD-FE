@@ -9,7 +9,6 @@ import EditDepartment from './DepartmentsFeatures/EditDepartment'
 import DeleteDepartment from './DepartmentsFeatures/DeleteDepartment'
 
 const DepartmentRow = ({ department }) => {
-    const [visible, setVisible] = useState(false)
     return (
         <>
             <ListGroup.Item
@@ -32,18 +31,13 @@ const DepartmentRow = ({ department }) => {
                             <Image src={moreIcon} />
                         </Dropdown.Toggle>
                         <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
-                            <Dropdown.Item onClick={() => setVisible(!visible)}>
-                                <BiInfoSquare /> Chi tiết
-                            </Dropdown.Item>
+                            <DepartmentDetail department={department} />
                             <EditDepartment department={department} />
                             <DeleteDepartment departmentId={department.id} />
                         </Dropdown.Menu>
                     </Dropdown>
                 </div>
             </ListGroup.Item>
-            {
-                visible && <DepartmentDetail department={department} visible={visible} setVisible={setVisible} />
-            }
         </>
     )
 }
