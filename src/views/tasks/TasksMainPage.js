@@ -6,101 +6,98 @@ import { AiOutlineSortAscending, AiOutlineSortDescending } from 'react-icons/ai'
 import { BiArrowFromTop, BiSortAlt2 } from 'react-icons/bi'
 import { Card, Container, Dropdown } from 'react-bootstrap'
 
-import { fetchTasks } from '~/redux/tasksSlice'
+import { getTaskList, getTaskListByStatusIds } from '~/redux/tasksSlice'
 import { tasksSelector } from '~/redux/selectors'
 import AppPagination from '~/components/AppPagination'
 import TaskRow from './TaskRow'
 import AddTask from './TasksFeatures/AddTask'
-import AppSearch from '~/components/AppSearch'
 import Loading from '~/components/Loading'
+import FiltersByStatusIds from './TasksFeatures/FiltersByStatusIds'
 import FiltersAdvanced from './TasksFeatures/FiltersAdvanced'
 
 const queryString = require('query-string')
 
 const TasksMainPage = () => {
     const status = useSelector(tasksSelector).status
-    const tasks = useSelector(tasksSelector).tasks           // Lấy danh sách công việc từ redux
-    const pagination = useSelector(tasksSelector).pagination         // Lấy dữ liệu phân trang của danh sách công việc trên
+    const tasks = useSelector(tasksSelector).tasks
+    const pagination = useSelector(tasksSelector).pagination
 
-    const dispatch = useDispatch()          // Dùng để dispatch các action
-    const location = useLocation()          // Lấy thông tin từ URL của trang hiện tại
-    const navigation = useNavigate()        // Thực hiện công việc điều hướng trang
+    const dispatch = useDispatch()
+    const location = useLocation()
+    const navigation = useNavigate()
 
-    const [filters, setFilters] = useState({})      // State lưu trữ các params truyền vào API để lấy dữ liệu từ Back End
+    const [filtersAdvanced, setFiltersAdvanced] = useState({})
+    const [filterByStatusIds, setFilterByStatusIds] = useState({
+        statusIds: [1,2,3,4,5,6,7,8,9]
+    })
 
     useEffect(() => {
         document.title = "Công việc"     // Thiết lập tiêu đề cho trang
 
         // Kiểm tra nếu load lại trang thì giữ nguyên các filter hiện tại
         if (location.search.length > 0) {
-            let params = queryString.parse(location.search)     // Lấy danh sách params từ URL
+            const params = queryString.parse(location.search)     // Lấy danh sách params từ URL
             let newParams = {}      // Lưu danh sách những param khác null
 
-            // Thực hiện việc loại bỏ những param có giá trị là null hoặc chuỗi rỗng
-            for (let param in params) {
-                if (params[param] === null || params[param] === "") {       // Nếu giá trị của param là null hoặc chuỗi rỗng thì bỏ qua
+            // Thực hiện việc loại bỏ những param có giá trị là null
+            for (const [key, value] of Object.entries(params)) {
+                if (key !== "page") {       // Nếu giá trị của param là null hoặc chuỗi rỗng thì bỏ qua
                     continue
                 }
-                newParams[param] = params[param]
+                newParams[key] = value
             }
 
-            // 
-            setFilters({
-                ...filters,
-                ...newParams
-            })
+            //
+            setFiltersAdvanced(newParams)
         }
     }, [])
 
     useEffect(() => {
-        const requestUrl = location.pathname + "?" + queryString.stringify(filters)         // Lấy RequestURL đã gửi API tới Back End
-        navigation(requestUrl)          // Thực hiện điều hướng rới RequestURL đã lấy ở trên
-        dispatch(fetchTasks(filters))        // Dispatch action fetchTasks với tham số truyền vào là filters
-    }, [filters])
+        dispatch(getTaskListByStatusIds(filterByStatusIds))
+    }, [filterByStatusIds])
+    
+    useEffect(() => {
+        const requestUrl = location.pathname + "?" + queryString.stringify(filtersAdvanced)
+        navigation(requestUrl)
+        dispatch(getTaskList(filtersAdvanced))
+    }, [filtersAdvanced])
 
     //  Hàm thay đổi state khi ấn vào trang mới ở phần phân trang
     const handlePageChange = (newPage) => {
-        setFilters({
-            ...filters,
+        setFiltersAdvanced({
+            ...filtersAdvanced,
             page: newPage
         })
     }
 
     // Hàm thay đổi state khi thực hiện tìm kiếm
     const handleSearch = (searchTerm) => {
-        setFilters({
-            ...filters,
+        setFiltersAdvanced({
+            ...filtersAdvanced,
             page: 1,
             name: searchTerm
         })
     }
 
-    // const handleFilter = (e) => {
-    //     setFilters({
-    //         ...filters, 
-    //         [e.target.name]: e.target.value
-    //     })
-    // }
-
     // Hàm thay đổi state khi thực hiện sắp xếp
     const handleSort = (sortBy) => {
-        if (filters.order === null || !filters.order) {       // Nếu đang không sắp xếp thì thực hiện sắp xếp tăng dần
-            setFilters({
-                ...filters,
+        if (filtersAdvanced.order === null || !filtersAdvanced.order) {       // Nếu đang không sắp xếp thì thực hiện sắp xếp tăng dần
+            setFiltersAdvanced({
+                ...filtersAdvanced,
                 sort: sortBy,
                 order: "asc"
             })
         }
-        else if (filters.order === "asc") {         // Nếu đang sắp xếp tăng dần thì thực hiện sắp xếp giảm dần
-            setFilters({
-                ...filters,
+        else if (filtersAdvanced.order === "asc") {         // Nếu đang sắp xếp tăng dần thì thực hiện sắp xếp giảm dần
+            setFiltersAdvanced({
+                ...filtersAdvanced,
                 sort: sortBy,
                 order: "desc"
             })
         }
         else {                              // Nếu đang sắp xếp giảm dần thì thực hiện trở về ban đầu trước khi sắp xếp
-            setFilters({
-                ...filters,
+            setFiltersAdvanced({
+                ...filtersAdvanced,
                 sort: null,
                 order: null
             })
@@ -116,24 +113,14 @@ const TasksMainPage = () => {
                     </div>
                     <div className="col" />
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
-                        <AppSearch value={filters.name} onSearch={handleSearch} />
-                    </div>
-                    <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
                         <AddTask />
                     </div>
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
-                        <FiltersAdvanced filters={filters} />
+                        <FiltersAdvanced filtersAdvanced={filtersAdvanced} setFiltersAdvanced={setFiltersAdvanced} />
                     </div>
-                    <Dropdown autoClose="outside" className="col-auto d-sm-none">
-                        <Dropdown.Toggle>
-                            <BiArrowFromTop />
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
-                            <Dropdown.Item className="d-block m-auto">
-                                <AppSearch value={filters.name} onSearch={handleSearch} />
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
+                    <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
+                        <FiltersByStatusIds filterByStatusIds={filterByStatusIds} setFilterByStatusIds={setFilterByStatusIds} />
+                    </div>
                 </div>
                 <hr />
             </Container>
@@ -147,8 +134,8 @@ const TasksMainPage = () => {
                         >
                             TÊN CÔNG VIỆC
                             {
-                                (filters.sort === "title" && filters.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filters.sort === "title" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                (filtersAdvanced.sort === "title" && filtersAdvanced.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filtersAdvanced.sort === "title" && filtersAdvanced.order === "desc") ? <AiOutlineSortDescending />
                                         : <BiSortAlt2 />
                             }
                         </span>
@@ -156,12 +143,12 @@ const TasksMainPage = () => {
                     <div className="task-creator">
                         <span
                             className="fw-bolder cursor-pointer"
-                            onClick={() => handleSort("creator")}
+                            onClick={() => handleSort("creator.name")}
                         >
                             NGƯỜI GIAO
                             {
-                                (filters.sort === "creator" && filters.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filters.sort === "creator" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                (filtersAdvanced.sort === "creator.name" && filtersAdvanced.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filtersAdvanced.sort === "creator.name" && filtersAdvanced.order === "desc") ? <AiOutlineSortDescending />
                                         : <BiSortAlt2 />
                             }
                         </span>
@@ -170,12 +157,12 @@ const TasksMainPage = () => {
                     <div className="task-receiver">
                         <span
                             className="fw-bolder cursor-pointer"
-                            onClick={() => handleSort("receiver")}
+                            onClick={() => handleSort("receiver.name")}
                         >
                             NGƯỜI NHẬN
                             {
-                                (filters.sort === "receiver" && filters.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filters.sort === "receiver" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                (filtersAdvanced.sort === "receiver.name" && filtersAdvanced.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filtersAdvanced.sort === "receiver.name" && filtersAdvanced.order === "desc") ? <AiOutlineSortDescending />
                                         : <BiSortAlt2 />
                             }
                         </span>
@@ -183,12 +170,12 @@ const TasksMainPage = () => {
                     <div className="task-timeline">
                         <span
                             className="fw-bolder cursor-pointer"
-                            onClick={() => handleSort("dep.name")}
+                            onClick={() => handleSort("startDate")}
                         >
                             THỜI GIAN
                             {
-                                (filters.sort === "dep.name" && filters.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filters.sort === "dep.name" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                (filtersAdvanced.sort === "startDate" && filtersAdvanced.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filtersAdvanced.sort === "startDate" && filtersAdvanced.order === "desc") ? <AiOutlineSortDescending />
                                         : <BiSortAlt2 />
                             }
                         </span>
@@ -196,12 +183,12 @@ const TasksMainPage = () => {
                     <div className="task-status">
                         <span
                             className="fw-bolder cursor-pointer"
-                            onClick={() => handleSort("pos.name")}
+                            onClick={() => handleSort("status.name")}
                         >
                             TÌNH TRẠNG
                             {
-                                (filters.sort === "pos.name" && filters.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filters.sort === "pos.name" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                (filtersAdvanced.sort === "status.name" && filtersAdvanced.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filtersAdvanced.sort === "status.name" && filtersAdvanced.order === "desc") ? <AiOutlineSortDescending />
                                         : <BiSortAlt2 />
                             }
                         </span>
@@ -209,12 +196,12 @@ const TasksMainPage = () => {
                     <div className="task-rate">
                         <span
                             className="fw-bolder cursor-pointer d-flex justify-content-center"
-                            onClick={() => handleSort("pos.name")}
+                            onClick={() => handleSort("priority")}
                         >
                             ĐÁNH GIÁ
                             {
-                                (filters.sort === "pos.name" && filters.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filters.sort === "pos.name" && filters.order === "desc") ? <AiOutlineSortDescending />
+                                (filtersAdvanced.sort === "priority" && filtersAdvanced.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filtersAdvanced.sort === "priority" && filtersAdvanced.order === "desc") ? <AiOutlineSortDescending />
                                         : <BiSortAlt2 />
                             }
                         </span>

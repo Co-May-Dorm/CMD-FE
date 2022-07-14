@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { AiOutlineSortAscending, AiOutlineSortDescending } from 'react-icons/ai'
 import { BiArrowFromTop, BiFilterAlt, BiSortAlt2 } from 'react-icons/bi'
 import { Card, Container, Dropdown, Form } from 'react-bootstrap'
-import clsx from "clsx"
 
 import { fetchEmployees } from '~/redux/employeesSlice'
 import { employeesSelector } from '~/redux/selectors'
@@ -23,8 +22,8 @@ const queryString = require('query-string')
 
 const EmployeesMainPage = () => {
     const status = useSelector(employeesSelector).status
-    const employees = useSelector(employeesSelector).employees           // Lấy danh sách sinh viên từ redux
-    const pagination = useSelector(employeesSelector).pagination         // Lấy dữ liệu phân trang của danh sách sinh viên trên
+    const employees = useSelector(employeesSelector).employees           // Lấy danh sách nhân viên từ redux
+    const pagination = useSelector(employeesSelector).pagination         // Lấy dữ liệu phân trang của danh sách nhân viên trên
 
     const dispatch = useDispatch()          // Dùng để dispatch các action
     const location = useLocation()          // Lấy thông tin từ URL của trang hiện tại
@@ -118,7 +117,7 @@ const EmployeesMainPage = () => {
             <Container fluid>
                 <div className="row justify-content-xl-between justify-content-end align-items-center">
                     <div className="col-auto fw-bolder fs-5 mb-xl-0 mb-3">
-                        DANH SÁCH SINH VIÊN
+                        DANH SÁCH NHÂN VIÊN
                     </div>
                     <div className="col" />
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
