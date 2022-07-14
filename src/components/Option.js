@@ -13,7 +13,7 @@ import useOnClickOutside from '~/customHooks/useOnClickOutside'
     +
 */
 
-const Option = ({ index, value, defaultValue, data, onChange }) => {
+const Option = ({ index, value, defaultValue, data, onChange, ...props }) => {
     const [visible, setVisible] = useState(false)       // State quản lý hiển thị danh sách phòng ban
     const ref = useRef()        // Ref form select Value
 
@@ -24,6 +24,7 @@ const Option = ({ index, value, defaultValue, data, onChange }) => {
             ref={ref}
             onClick={() => setVisible(!visible)}
             className="form-select"
+            {...props}
         >
             {defaultValue?.label || value?.label || data[0].label}
             <div className="select">

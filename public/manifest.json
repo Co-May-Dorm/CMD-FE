@@ -8,7 +8,7 @@
       "type": "image/x-icon"
     }
   ],
-  "start_url": "/posts",
+  "start_url": "/login",
   "scope": "/",
   "display": "standalone",
   "theme_color": "#2F6BB1",

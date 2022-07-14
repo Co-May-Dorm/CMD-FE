@@ -2,9 +2,12 @@ import React from 'react'
 
 import { Dropdown, Image, OverlayTrigger, Tooltip } from 'react-bootstrap'
 
-import moreIcon from "../../assets/icons/more.svg"
+import moreIcon from "~/assets/icons/more.svg"
+import rate0 from "~/assets/icons/rate-0.svg"
+import rate1 from "~/assets/icons/rate-1.svg"
 import EditTask from './TasksFeatures/EditTask'
 import DeleteTask from './TasksFeatures/DeleteTask'
+import TaskDetail from './TaskDetail'
 
 const TaskRow = ({ task }) => {
 
@@ -12,6 +15,30 @@ const TaskRow = ({ task }) => {
     const showDate = (d) => {
         const date = new Date(d)      // Khởi tạo biến date kiểu dữ liệu Date với dữ liệu truyền vào là ngày sinh của công việc được lấy từ database có dạng yyyymmdddd
         return "" + (date.getDate() < 10 ? "0" : "") + date.getDate() + "/" + (date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1) + "/" + date.getFullYear()
+    }
+
+    let rateElement = []
+    if (task.rate > 0) {
+        for (let i = 1; i <= 5; ++i) {
+            if (i <= task.rate) {
+                rateElement.push(
+                    <Image
+                        key={i}
+                        src={rate1}
+                        className="mx-1"
+                    />
+                )
+            }
+            else {
+                rateElement.push(
+                    <Image
+                        key={i}
+                        src={rate0}
+                        className="mx-1"
+                    />
+                )
+            }
+        }
     }
 
     return (
@@ -81,7 +108,7 @@ const TaskRow = ({ task }) => {
                     Thời gian:
                 </div>
                 <div className="col text-break">
-                    {"" + showDate(task.createDate) + " - " + showDate(task.finishDate)}
+                    {showDate(task.createDate) + " - " + showDate(task.finishDate)}
                 </div>
             </div>
             <div className="task-status">
@@ -104,8 +131,8 @@ const TaskRow = ({ task }) => {
                 <div className="d-lg-none fw-bold col text-break">
                     Đánh giá:
                 </div>
-                <div className="col text-break">
-                    3
+                <div className="col d-flex justify-content-center">
+                    {rateElement}
                 </div>
             </div>
             <Dropdown className="task-more">
@@ -113,6 +140,7 @@ const TaskRow = ({ task }) => {
                     <img src={moreIcon} alt="More Icon" />
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
+                    <TaskDetail taskId={task.id} />
                     <EditTask task={task} />
                     <DeleteTask task={task} />
                 </Dropdown.Menu>

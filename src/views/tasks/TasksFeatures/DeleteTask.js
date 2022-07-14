@@ -22,6 +22,8 @@ const DeleteTask = ({ task }) => {
             >
                 <BiTrash /> Xóa
             </Dropdown.Item>
+            {
+                visibleDeleteTask && (
             <Modal
                 scrollable
                 show={visibleDeleteTask}
@@ -33,8 +35,8 @@ const DeleteTask = ({ task }) => {
                 <Modal.Body>
                     Bạn có chắc chắn muốn xóa công việc {" "}
                     <span className="fw-bolder">
-                        {task.name}
-                    </span> khỏi ký túc xá?
+                        {task.title}
+                    </span>?
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
@@ -51,6 +53,8 @@ const DeleteTask = ({ task }) => {
                     </Button>
                 </Modal.Footer>
             </Modal>
+                )
+            }
         </>
     )
 }
