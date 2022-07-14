@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Accordion, Col, Dropdown, Image, Modal, Row } from 'react-bootstrap'
-import { BiInfoSquare } from 'react-icons/bi'
+import { BiInfoSquare, BiSend } from 'react-icons/bi'
 
 import rate0 from "~/assets/icons/rate-0.svg"
 import rate1 from "~/assets/icons/rate-1.svg"
@@ -158,31 +158,30 @@ const TaskDetail = ({ taskId }) => {
                                     <Accordion.Item eventKey="0">
                                         <Accordion.Header>Lịch sử hoạt động</Accordion.Header>
                                         <Accordion.Body>
-                                            
+
                                         </Accordion.Body>
                                     </Accordion.Item>
                                     <Accordion.Item eventKey="1">
                                         <Accordion.Header>Thảo luận</Accordion.Header>
                                         <Accordion.Body>
-                                            <div className="d-flex">
+                                            <div className="d-flex justify-content-evenly">
                                                 <div className="col-auto">
                                                     <Image
-                                                    className="rounded-circle"
-                                                    src={userInfo.avatar || defaultAvatar}
-                                                    width={35}
-                                                    height={35}
+                                                        className="rounded-circle"
+                                                        src={userInfo.avatar || defaultAvatar}
+                                                        width={35}
+                                                        height={35}
                                                     />
                                                 </div>
                                                 <div className="col">
                                                     <input
+                                                        className="form-control"
                                                         type="text"
                                                         placeholder="Nhập nội dung thảo luận"
                                                     />
                                                 </div>
                                                 <div className="col-auto">
-                                                    <Image
-                                                    src={sendIcon}
-                                                    />
+                                                    <BiSend size={35} />
                                                 </div>
                                             </div>
                                         </Accordion.Body>

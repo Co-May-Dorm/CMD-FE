@@ -1,8 +1,8 @@
 const _nav = [
-    {
-        name: 'Bảng tin',
-        to: '/posts',
-    },
+    // {
+    //     name: 'Bảng tin',
+    //     to: '/posts',
+    // },
     {
         name: 'Công việc',
         to: '/tasks',
@@ -12,7 +12,7 @@ const _nav = [
         to: '/requests',
     },
     {
-        name: 'Sinh viên',
+        name: 'Nhân viên',
         to: '/employees',
     }
 ]

@@ -1,29 +1,25 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Button, Col, Form, Modal, Row, Tab, Tabs } from "react-bootstrap"
-import { BiPlusMedical, BiTrash } from "react-icons/bi"
+import { Button, Form, Modal, Row } from "react-bootstrap"
 import { Formik } from "formik"
 import * as Yup from "yup"
 import clsx from "clsx"
 
 import { addTask, updateTask } from "~/redux/tasksSlice"
-import { employeesSelector, departmentsSelector } from "~/redux/selectors"
-import { fetchEmployees } from "~/redux/employeesSlice"
-import Option from "~/components/Option"
+import SelectReiver from "./SelectReceiver"
 
 const FormSubmitTask = ({ visible, setVisible, task = null }) => {
-    const employees = useSelector(employeesSelector).data
     const dispatch = useDispatch()
-
-    useEffect(() => {
-        dispatch(fetchEmployees())
-    }, [])
 
     /* Xử lý Form với Formik */
     let initialValues = {
         title: "",
         creatorId: localStorage.getItem("userInfo").id,
-        receiverId: null,
+        receiverId: {
+            id: -1,
+            label: "Chọn nhân viên"
+        },
         priority: 1,
         description: "",
         startDate: new Date(),
@@ -79,9 +75,9 @@ const FormSubmitTask = ({ visible, setVisible, task = null }) => {
                     onSubmit={handleSubmit}
                 >
                     {
-                        ({ values, touched, errors, handleChange, handleBlur, handleSubmit, isValid, dirty }) => (
+                        ({ values, touched, errors, handleChange, handleBlur, handleSubmit, setFieldValue, isValid, dirty }) => (
                             <Form onSubmit={handleSubmit}>
-                                <div className="mb-3">
+                                <div className="mb-4">
                                     <Form.Label>Tên công việc:</Form.Label>
                                     <Form.Control
                                         type="text"
@@ -98,30 +94,23 @@ const FormSubmitTask = ({ visible, setVisible, task = null }) => {
                                         touched.title && errors.title && <div className="invalid-feedback">{errors.title}</div>
                                     }
                                 </div>
-                                <div className="mb-3">
+                                <div className="mb-4">
                                     <Form.Label>Người nhận:</Form.Label>
-                                    <Option
-                                        index={null}
+                                    <SelectReiver
                                         placeholder="Chọn người nhận"
-                                        className={clsx({
-                                            "is-invalid": touched.receiverId && errors.receiverId
-                                        })}
-                                        value={values.receiverId}
-                                        onChange={(e) => {
-                                            handleChange()
+                                        // className={clsx({
+                                        //     "is-invalid": touched.receiverId && errors.receiverId
+                                        // })}
+                                        current={values.receiverId}
+                                        onChange={(value) => {
+                                            setFieldValue("receiverId", value)
                                         }}
-                                        data={employees?.map(employee => {
-                                            return {
-                                                ...employee,
-                                                label: employee.name
-                                            }
-                                        })}
                                     />
                                     {
-                                        touched.title && errors.title && <div className="invalid-feedback">{errors.title}</div>
+                                        touched.receiverId && errors.receiverId && <div className="invalid-feedback">{errors.receiverId}</div>
                                     }
                                 </div>
-                                <div className="mb-3">
+                                <div className="mb-4">
                                     <Form.Label>Mô tả:</Form.Label>
                                     <Form.Control
                                         type="text"
@@ -138,8 +127,8 @@ const FormSubmitTask = ({ visible, setVisible, task = null }) => {
                                         touched.description && errors.description && <div className="invalid-feedback">{errors.description}</div>
                                     }
                                 </div>
-                                <Row className="mb-3 justify-content-betwween">
-                                    <div className="col-12 mb-3 col-lg-6 mb-lg-0">
+                                <Row className="mb-4 justify-content-betwween">
+                                    <div className="col-12 mb-4 col-lg-6 mb-lg-0">
                                         <Form.Label>Thời gian bắt đầu:</Form.Label>
                                         <Form.Control
                                             type="date"

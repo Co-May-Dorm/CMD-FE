@@ -16,15 +16,26 @@ const tasksSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchTasks.pending, (state, action) => {
+            .addCase(getTaskList.pending, (state, action) => {
                 state.status = "loading"
             })
-            .addCase(fetchTasks.fulfilled, (state, action) => {
+            .addCase(getTaskList.fulfilled, (state, action) => {
                 state.tasks = action.payload.tasks
                 state.pagination = action.payload.pagination
                 state.status = "success"
             })
-            .addCase(fetchTasks.rejected, (state, action) => {
+            .addCase(getTaskList.rejected, (state, action) => {
+                state.status = "error"
+            })
+            .addCase(getTaskListByStatusIds.pending, (state, action) => {
+                state.status = "loading"
+            })
+            .addCase(getTaskListByStatusIds.fulfilled, (state, action) => {
+                state.tasks = action.payload.tasks
+                state.pagination = action.payload.pagination
+                state.status = "success"
+            })
+            .addCase(getTaskListByStatusIds.rejected, (state, action) => {
                 state.status = "error"
             })
             .addCase(addTask.fulfilled, (state, action) => {
@@ -143,8 +154,12 @@ const tasksSlice = createSlice({
 })
 export default tasksSlice
 
-export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async (params) => {
-    const response = await tasksApi.getAll(params)
+export const getTaskList = createAsyncThunk("tasks/getTaskList", async (params) => {
+    const response = await tasksApi.getTaskList(params)
+    return response.data.data
+})
+export const getTaskListByStatusIds = createAsyncThunk("tasks/getTaskListByStatusIds", async (listStatusIds) => {
+    const response = await tasksApi.getTaskListByStatusIds(listStatusIds)
     return response.data.data
 })
 export const addTask = createAsyncThunk("tasks/addTask", async (taskInfo) => {

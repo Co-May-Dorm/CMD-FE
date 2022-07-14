@@ -3,13 +3,17 @@ import axiosClient from "./axiosClient"
 // API liên quan đến phần công việc
 const baseUrl = "/tasks"
 const tasksApi = {
-    getAll: (filtersParams) => {
+    getTaskList: (params) => {
         const requestUrl = `${baseUrl}`
-        return axiosClient.get(requestUrl, { filtersParams })
+        return axiosClient.get(requestUrl, {params})
     },
-    get: (taskId) => {
+    getTaskById: (taskId) => {
         const requestUrl = `${baseUrl}/${taskId}`
         return axiosClient.get(requestUrl)
+    },
+    getTaskListByStatusIds: (listStatusIds) => {
+        const requestUrl = `${baseUrl}/statuses`
+        return axiosClient.post(requestUrl, listStatusIds)
     },
     add: (taskInfo) => {
         const requestUrl = `${baseUrl}/add`
