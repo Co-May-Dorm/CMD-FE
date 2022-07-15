@@ -17,6 +17,7 @@ import AppSearch from '~/components/AppSearch'
 import ButtonShowRoles from './RolesPage/ButtonShowRoles'
 import ExportDataToCSV from './EmployeesFeatures/ExportDataToCSV'
 import Loading from '~/components/Loading'
+import FiltersAdvanced from './EmployeesFeatures/FiltersAdvanced'
 
 const queryString = require('query-string')
 
@@ -136,6 +137,9 @@ const EmployeesMainPage = () => {
                         <AddEmployee />
                     </div>
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
+                        <FiltersAdvanced filters={filters} setFilters={setFilters} />
+                    </div>
+                    <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
                         <ExportDataToCSV data={employees} />
                     </div>
                     <Dropdown autoClose="outside" className="col-auto d-sm-none">
@@ -245,71 +249,7 @@ const EmployeesMainPage = () => {
                             }
                         </span>
                     </div>
-                    <div className="employee-more" onClick={() => setVisileFilter(!visibleFilter)}>
-                        <BiFilterAlt />
-                    </div>
                 </div>
-                {
-                    visibleFilter && (
-                        <div className="employee employee-header animate__animated animate__fadeInRight">
-                            <div className="employee-name">
-                                <Form.Control
-                                    type="search"
-                                    name="name"
-                                    placeholder="Nhập tên..."
-                                    value={filters.name}
-                                    onChange={handleFilterChange}
-                                />
-                            </div>
-                            <div className="employee-dob">
-                                <Form.Control
-                                    type="date"
-                                    name="dob"
-                                    placeholder="Nhập ngày sinh..."
-                                    value={filters.dob}
-                                    onChange={handleFilterChange}
-                                />
-                            </div>
-                            <div className="employee-email">
-                                <Form.Control
-                                    type="email"
-                                    name="email"
-                                    placeholder="Nhập email..."
-                                    value={filters.email}
-                                    onChange={handleFilterChange}
-                                />
-                            </div>
-                            <div className="employee-phoneNumber">
-                                <Form.Control
-                                    type="string"
-                                    name="phone"
-                                    placeholder="Nhập số điện thoại..."
-                                    value={filters.phone}
-                                    onChange={handleFilterChange}
-                                />
-                            </div>
-                            <div className="employee-department">
-                                <Form.Control
-                                    type="string"
-                                    name="dep"
-                                    placeholder="Nhập tên phòng ban..."
-                                    value={filters.dep}
-                                    onChange={handleFilterChange}
-                                />
-                            </div>
-                            <div className="employee-position">
-                                <Form.Control
-                                    type="string"
-                                    name="pos"
-                                    placeholder="Nhập tên chức vụ..."
-                                    value={filters.pos}
-                                    onChange={handleFilterChange}
-                                />
-                            </div>
-                            <div className="employee-more" />
-                        </div>
-                    )
-                }
                 {
                     status === "loading" ? (
                         <Loading />

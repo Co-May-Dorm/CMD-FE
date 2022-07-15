@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Form, Modal, Offcanvas, Row } from 'react-bootstrap'
+import { Button, Form, Offcanvas, Row } from 'react-bootstrap'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 
@@ -63,7 +63,7 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
                                 onSubmit={handleSubmit}
                             >
                                 {
-                                    ({ values, touched, errors, handleChange, handleBlur, handleSubmit, setFieldValue, isValid, dirty }) => (
+                                    ({ values, handleChange, handleBlur, handleSubmit, setFieldValue, isValid, dirty }) => (
                                         <Form onSubmit={handleSubmit}>
                                             <div className="mb-4">
                                                 <Form.Label>Tên công việc:</Form.Label>
