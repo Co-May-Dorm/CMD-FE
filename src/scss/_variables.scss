@@ -46,11 +46,11 @@ $pink: #d63384 !default;
 $red: #b10f1f !default;
 $orange: #fd7e14 !default;
 $yellow: #ffc107 !default;
-$green: #27B5A4 !default;
+$green: #27b5a4 !default;
 $teal: #34beae !default;
 $cyan: #0dcaf0 !default;
-$hover-btn-bg: #DDFFF9 !default;
-$darkBlue: #2F6BB1 !default;
+$hover-btn-bg: #ddfff9 !default;
+$darkBlue: #2f6bb1 !default;
 $grayBlue: #96baec !default;
 // scss-docs-end color-variables
 
@@ -391,7 +391,7 @@ $box-shadow: 0 0rem 0.5rem rgba($blue, 0.15) !default;
 $box-shadow-sm: 0 0.125rem 0.25rem rgba($black, 0.075) !default;
 $box-shadow-lg: 0 1rem 3rem rgba($black, 0.175) !default;
 $box-shadow-inset: inset 0 1px 2px rgba($black, 0.075) !default;
-$box-shadow-bt:  0px 5px 0px 0px #36ACE8 !default;
+$box-shadow-bt: 0px 5px 0px 0px #36ace8 !default;
 // scss-docs-end box-shadow-variables
 
 $component-active-color: $white !default;
@@ -462,8 +462,8 @@ $h5-font-size: $font-size-base + 0.2 !default;
 $h6-font-size: $font-size-base + 0.15 !default;
 $h7-font-size: $font-size-base + 0.1 !default;
 $h8-font-size: $font-size-base !default;
-$h9-font-size: $font-size-base - .125 !default;
-$h10-font-size : $font-size-base - 0.25 !default;
+$h9-font-size: $font-size-base - 0.125 !default;
+$h10-font-size: $font-size-base - 0.25 !default;
 // scss-docs-end font-variables
 
 // scss-docs-start font-sizes
@@ -925,8 +925,9 @@ $form-validation-states: (
 $zindex-dropdown: 1000 !default;
 $zindex-sticky: 1020 !default;
 $zindex-fixed: 1030 !default;
-$zindex-modal-backdrop: 1040 !default;
+$zindex-offcanvas-backdrop: 1040 !default;
 $zindex-offcanvas: 1050 !default;
+$zindex-modal-backdrop: 1040 !default;
 $zindex-modal: 1060 !default;
 $zindex-popover: 1070 !default;
 $zindex-tooltip: 1080 !default;
@@ -1093,6 +1094,13 @@ $pagination-transition: color 0.3s ease-in-out, background-color 0.3s ease-in-ou
 $pagination-border-radius-sm: $border-radius-circle !default;
 $pagination-border-radius-lg: $border-radius-circle !default;
 // scss-docs-end pagination-variables
+
+// Placeholders
+
+// scss-docs-start placeholders
+$placeholder-opacity-max:           .5 !default;
+$placeholder-opacity-min:           .2 !default;
+// scss-docs-end placeholders
 
 // Cards
 
@@ -1446,15 +1454,17 @@ $btn-close-white-filter: invert(1) grayscale(100%) brightness(200%) !default;
 // scss-docs-start offcanvas-variables
 $offcanvas-padding-y: $modal-inner-padding !default;
 $offcanvas-padding-x: $modal-inner-padding !default;
-$offcanvas-horizontal-width: 400px !default;
+$offcanvas-horizontal-width: 600px !default;
 $offcanvas-vertical-height: 30vh !default;
 $offcanvas-transition-duration: 0.3s !default;
 $offcanvas-border-color: $modal-content-border-color !default;
 $offcanvas-border-width: $modal-content-border-width !default;
 $offcanvas-title-line-height: $modal-title-line-height !default;
-$offcanvas-bg-color: $white !default;
-$offcanvas-color: $body-color !default;
+$offcanvas-bg-color: $modal-content-bg !default;
+$offcanvas-color: $modal-content-color !default;
 $offcanvas-box-shadow: $modal-content-box-shadow-xs !default;
+$offcanvas-backdrop-bg: $modal-backdrop-bg !default;
+$offcanvas-backdrop-opacity: $modal-backdrop-opacity !default;
 // scss-docs-end offcanvas-variables
 
 // Code
