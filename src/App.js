@@ -1,10 +1,11 @@
 import React, { Component, lazy, Suspense } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
+import Loading from './components/Loading'
 import './scss/style.scss'
 
 const loading = (
-    <div className="pt-3 text-center">
-        <div className="sk-spinner sk-spinner-pulse"></div>
+    <div className="py-3 text-center">
+        <div className="spinner-border text-primary"></div>
     </div>
 )
 
@@ -30,7 +31,7 @@ class App extends Component {
                 <Routes>
                     <Route path="/login" name="Đăng Nhập" element={<LoginSuccess />} />
                     <Route path="/404" name="Lỗi Trang 404" element={<Page404 />} />
-                    <Route path="/*" name="Trang Chủ" element={<RequireLogin />}/>
+                    <Route path="/*" name="Trang Chủ" element={<RequireLogin />} />
                     <Route path="*" name="Lỗi Trang 404" element={<Page404 />} />
                 </Routes>
             </Suspense>

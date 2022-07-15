@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AiOutlineSortAscending, AiOutlineSortDescending } from 'react-icons/ai'
-import { BiArrowFromTop, BiSortAlt2 } from 'react-icons/bi'
-import { Card, Container, Dropdown } from 'react-bootstrap'
+import { BiSortAlt2 } from 'react-icons/bi'
+import { Card, Container } from 'react-bootstrap'
 
 import { getTaskList, getTaskListByStatusIds } from '~/redux/tasksSlice'
 import { tasksSelector } from '~/redux/selectors'
@@ -67,15 +67,6 @@ const TasksMainPage = () => {
         setFiltersAdvanced({
             ...filtersAdvanced,
             page: newPage
-        })
-    }
-
-    // Hàm thay đổi state khi thực hiện tìm kiếm
-    const handleSearch = (searchTerm) => {
-        setFiltersAdvanced({
-            ...filtersAdvanced,
-            page: 1,
-            name: searchTerm
         })
     }
 

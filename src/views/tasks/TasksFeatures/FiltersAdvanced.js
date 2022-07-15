@@ -1,15 +1,13 @@
 import React, { useState } from 'react'
-import { Button, Form, Modal, OverlayTrigger, Popover, Row } from 'react-bootstrap'
-import { BiFilterAlt } from 'react-icons/bi'
-import { useDispatch } from 'react-redux'
+import { Button, Form, Modal, Row } from 'react-bootstrap'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 
-const FiltersAdvanced = ({ filters, setFilters }) => {
+const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
     const [visible, setVisible] = useState(false)
 
     /* Xử lý Form với Formik */
-    let initialValues = filters
+    let initialValues = filtersAdvanced
 
     const validationSchema = Yup.object({
         title: Yup.string(),
@@ -23,8 +21,8 @@ const FiltersAdvanced = ({ filters, setFilters }) => {
 
     const handleSubmit = async (values, actions) => {
         actions.setSubmitting(true)
-        setFilters({
-            ...filters,
+        setFiltersAdvanced({
+            ...filtersAdvanced,
             ...values
         })
         setVisible(false)
