@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Button, Dropdown, Form, Offcanvas } from 'react-bootstrap'
+import React from 'react'
+import { Dropdown, Form } from 'react-bootstrap'
 import { BiFilterAlt } from 'react-icons/bi'
 
 const FiltersByStatusIds = ({ filterByStatusIds, setFilterByStatusIds }) => {
@@ -19,7 +19,7 @@ const FiltersByStatusIds = ({ filterByStatusIds, setFilterByStatusIds }) => {
     return (
         <>
             <Dropdown >
-                <Dropdown.Toggle autoClose="outside" variant="none">
+                <Dropdown.Toggle autoclose="outside" variant="none">
                     <BiFilterAlt size={30} />
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">

@@ -1,10 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { Accordion, Col, Dropdown, Image, Modal, Row } from 'react-bootstrap'
 import { BiInfoSquare, BiSend } from 'react-icons/bi'
 
 import rate0 from "~/assets/icons/rate-0.svg"
 import rate1 from "~/assets/icons/rate-1.svg"
-import sendIcon from "~/assets/icons/send-comment.svg"
 import defaultAvatar from "~/assets/icons/defaultAvatar.svg"
 import tasksApi from '~/api/tasksApi'
 
@@ -14,7 +14,7 @@ const TaskDetail = ({ taskId }) => {
     const [visible, setVisible] = useState(false)
     const [taskInfo, setTaskInfo] = useState({})
     useEffect(() => {
-        tasksApi.get(taskId)
+        tasksApi.getTaskById(taskId)
             .then((response) => {
                 setTaskInfo(response.data.data)
             })

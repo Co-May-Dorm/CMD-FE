@@ -3,9 +3,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Form, ListGroup } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { fetchEmployees } from '~/redux/employeesSlice'
 import useOnClickOutside from '~/customHooks/useOnClickOutside'
 import { employeesSelector } from '~/redux/selectors'
+import { debounce } from 'lodash'
 
 const SelectReiver = ({ current, placeholder, onChange, ...props }) => {
     const receivers = useSelector(employeesSelector).employees
@@ -15,10 +15,17 @@ const SelectReiver = ({ current, placeholder, onChange, ...props }) => {
     const [searcTerm, setSearchTerm] = useState({
         name: ""
     })
+    const [employeeList, setEmployeeList] = useState([])
 
     const refForm = useRef()        // Ref form select current
 
-    dispatch(fetchEmployees(searcTerm))
+    useEffect(() => {
+        
+    }, [])
+
+    const handleInputChange = () => {
+        
+    }
 
     useOnClickOutside(refForm, () => setVisible(false))     // Hàm xử lý đóng form khi click ra ngoài
 
@@ -31,9 +38,9 @@ const SelectReiver = ({ current, placeholder, onChange, ...props }) => {
                 placeholder={placeholder}
                 onClick={() => setVisible(!visible)}
                 value={current.name}
-                onChange={(e) => setSearchTerm({
+                onChange={(e) => debounce(() => setSearchTerm({
                     name: e.target.value
-                })}
+                }), 1000)}
                 {...props}
             />
             <div className="select">
