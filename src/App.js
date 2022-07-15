@@ -1,6 +1,5 @@
 import React, { Component, lazy, Suspense } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
-import Loading from './components/Loading'
 import './scss/style.scss'
 
 const loading = (

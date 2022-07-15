@@ -26,7 +26,9 @@ const TasksMainPage = () => {
     const location = useLocation()
     const navigation = useNavigate()
 
-    const [filtersAdvanced, setFiltersAdvanced] = useState({})
+    const [filtersAdvanced, setFiltersAdvanced] = useState({
+        page: 1
+    })
     const [filterByStatusIds, setFilterByStatusIds] = useState({
         statusIds: [1,2,3,4,5,6,7,8,9]
     })

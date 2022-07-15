@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Form, Modal, Row } from 'react-bootstrap'
+import { Button, Form, Offcanvas, Row } from 'react-bootstrap'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 
@@ -25,7 +25,6 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
             ...filtersAdvanced,
             ...values
         })
-        setVisible(false)
         actions.setSubmitting(false)
     }
     //
@@ -42,23 +41,29 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
             </Button>
             {
                 visible && (
-                    <Modal
-                        size="md"
-                        scrollable
+                    <Offcanvas
                         show={visible}
                         onHide={() => setVisible(false)}
+                        scroll={true}
+                        backdrop
+                        placement="end"
+                        responsive="lg"
                     >
-                        <Modal.Header closeButton>
-                            <Modal.Title>Bộ lọc nâng cao</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
+                        <Offcanvas.Header className="bg-gradient text-white" closeButton>
+                            <Offcanvas.Title>
+                                <div className="fw-bolder">
+                                    Lọc nâng cao
+                                </div>
+                            </Offcanvas.Title>
+                        </Offcanvas.Header>
+                        <Offcanvas.Body>
                             <Formik
                                 initialValues={initialValues}
                                 validationSchema={validationSchema}
                                 onSubmit={handleSubmit}
                             >
                                 {
-                                    ({ values, touched, errors, handleChange, handleBlur, handleSubmit, setFieldValue, isValid, dirty }) => (
+                                    ({ values, handleChange, handleBlur, handleSubmit, setFieldValue, isValid, dirty }) => (
                                         <Form onSubmit={handleSubmit}>
                                             <div className="mb-4">
                                                 <Form.Label>Tên công việc:</Form.Label>
@@ -147,8 +152,8 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
                                     )
                                 }
                             </Formik>
-                        </Modal.Body>
-                    </Modal>
+                        </Offcanvas.Body>
+                    </Offcanvas>
                 )
             }
         </>

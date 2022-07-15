@@ -5,7 +5,7 @@ const DetailPost = React.lazy(() => import("./views/posts/DetailPost"))
 
 const Employees = React.lazy(() => import("./views/employees/EmployeesMainPage"))
 const Tasks = React.lazy(() => import("./views/tasks/TasksMainPage"))
-const Requests = React.lazy(() => import("./views/requests/RequestsMainPage"))
+const Proposal = React.lazy(() => import("./views/proposals/ProposalsMainPage"))
 
 const Info = React.lazy(() => import("./views/info/Info"))
 
@@ -30,9 +30,9 @@ const routes = [
         element: <Tasks />,
     },
     {
-        path: "requests",
+        path: "proposals",
         name: "Tất cả đề xuất",
-        element: <Requests />,
+        element: <Proposal />,
     },
     {
         path: "employees",
