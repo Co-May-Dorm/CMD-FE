@@ -4,6 +4,10 @@ pipeline {
         stage('Build') { 
             steps {
                 sh 'npm install' 
+            }
+        }
+		stage('Deploy') { 
+            steps {
 				sh 'sudo systemctl enable cmd-fe.service'
 				sh 'sudo systemctl stop cmd-fe'
 				sh 'sudo systemctl start cmd-fe'
