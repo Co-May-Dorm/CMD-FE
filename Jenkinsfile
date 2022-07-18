@@ -4,10 +4,10 @@ pipeline {
         stage('Build') { 
             steps {
                 sh 'npm install' 
-				sh 'systemctl enable cmd-fe.service'
-				sh 'systemctl stop cmd-fe'
-				sh 'systemctl start cmd-fe'
-				sh 'systemctl status cmd-fe'
+				sh 'sudo systemctl enable cmd-fe.service'
+				sh 'sudo systemctl stop cmd-fe'
+				sh 'sudo systemctl start cmd-fe'
+				sh 'sudo systemctl status cmd-fe'
             }
         }
     }
