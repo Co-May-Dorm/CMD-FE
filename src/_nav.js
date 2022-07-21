@@ -4,6 +4,10 @@ const _nav = [
     //     to: '/posts',
     // },
     {
+        name: 'Bảng tin',
+        to: '/newsFeeds',
+    },
+    {
         name: 'Công việc',
         to: '/tasks',
     },

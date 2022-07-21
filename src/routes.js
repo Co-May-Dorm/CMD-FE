@@ -1,4 +1,5 @@
 import React from "react"
+import NewsFeed from "./views/newsFeed/NewsFeed"
 
 const Posts = React.lazy(() => import("./views/posts/Posts"))
 const DetailPost = React.lazy(() => import("./views/posts/DetailPost"))
@@ -43,6 +44,11 @@ const routes = [
         path: "info/:id",
         name: "Thông tin tài khoản",
         element: <Info />,
+    },
+    {
+        path: "newsFeeds",
+        name: "Bảng tin",
+        element: <NewsFeed />,
     },
 ]
 

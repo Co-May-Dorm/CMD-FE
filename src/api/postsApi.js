@@ -1,3 +1,4 @@
+import axios from "axios"
 import axiosClient from "./axiosClient"
 
 // API liên quan đến phần bảng tin
@@ -5,7 +6,7 @@ const baseUrl = "/posts"
 const postsApi = {
     getAll: (filtersParams) => {
         const requestUrl = `${baseUrl}`
-        return axiosClient.get(requestUrl, {filtersParams})
+        return axiosClient.get(requestUrl, {params:{...filtersParams}})
     },
     get: (postId) => {
         const requestUrl = `${baseUrl}/${postId}`
@@ -22,6 +23,10 @@ const postsApi = {
     delete: (postId) => {
         const requestUrl = `${baseUrl}/delete/${postId}`
         return axiosClient.delete(requestUrl)
+    },
+    uploadImages:(data)=>{
+        const url =  "https://noteyard-backend.herokuapp.com/api/blogs/uploadImg"
+        axios.post(url, {data}).then(console.log("thêm thành công"))
     }
 }
 //
