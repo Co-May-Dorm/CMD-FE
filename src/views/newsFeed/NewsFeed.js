@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts } from "~/redux/postsSlice";
 import Loading from "~/components/Loading";
 import icon_edit from "../../assets/icons/edit.svg";
-import img from "../../assets/images/cmd-images/5ef46d0eaa132907968571.jpg"
+// import img from "/var/lib/jenkins/workspace/CMD-image/testimage.jpg"
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { uploadImages } from "~/redux/postsSlice";
@@ -62,8 +62,8 @@ export default function NewsFeed() {
   //   };
   // };
   const API_URl = "https://noteyard-backend.herokuapp.com";
-  const UPLOAD_ENDPOINT = "api/blogs/uploadImg";
-
+  // const UPLOAD_ENDPOINT = "api/blogs/uploadImg";
+  const UPLOAD_ENDPOINT="/post/add"
   function uploadAdapter(loader) {
     return {
       upload: () => {
@@ -78,6 +78,7 @@ export default function NewsFeed() {
               .then((res) => res.json())
               .then((res) => {
                 resolve({ default: `${API_URl}/${res.url}` });
+                console.log("body", body)
               })
               .catch((err) => {
                 reject(err);
@@ -153,7 +154,7 @@ export default function NewsFeed() {
             style={{ height: "100vh", position: "fixed", left: 0 }}
           >
             <div className="mt-3 h-100">
-              <img src={img}></img>
+              <img src="/var/lib/jenkins/workspace/CMD-image/testimage.jpg"></img>
               <Row>
                 <AppSearch value={filter.content} onSearch={searchPost} />
               </Row>
