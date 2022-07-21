@@ -154,7 +154,7 @@ export default function NewsFeed() {
             style={{ height: "100vh", position: "fixed", left: 0 }}
           >
             <div className="mt-3 h-100">
-              <img src="/var/lib/jenkins/workspace/CMD-image/testimage.jpg"></img>
+              <img src="../../../../var/lib/jenkins/workspace/CMD-image/testimage.jpg"></img>
               <Row>
                 <AppSearch value={filter.content} onSearch={searchPost} />
               </Row>
