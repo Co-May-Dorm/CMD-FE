@@ -1,0 +1,141 @@
+.mainNews {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  .post {
+    width: 100%;
+    height: auto;
+    box-shadow: 1px 1px 10px #96baec;
+    margin-bottom: 15px;
+    .p-header {
+      height: 80px;
+      display: flex;
+      align-items: center;
+      padding: 5px;
+      box-sizing: border-box;
+      justify-content: space-between;
+      .avatar {
+        display: flex;
+        align-content: center;
+        img {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+        }
+      }
+      .option {
+        width: 30px;
+        height: 30px;
+      }
+    }
+    .content {
+      .text {
+        padding: 0 15px;
+      }
+      .images {
+        cursor: pointer;
+        display: flex;
+        .main_image {
+          width: 50%;
+        }
+        .grid_images {
+          width: 50%;
+          display: flex;
+          flex-direction: column;
+          max-height: 300px;
+        }
+      }
+    }
+    .react {
+      height: 40px;
+      padding: 0 15px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      .react-item {
+        width: 60px;
+        height: 30px;
+        display: flex;
+        justify-content: space-between;
+        .heart1 {
+          width: 25px;
+          height: 30px;
+          background: linear-gradient(#0b7ce3, #67f3c9);
+          clip-path: path(
+            "M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402m5.726-20.583c-2.203 0-4.446 1.042-5.726 3.238-1.285-2.206-3.522-3.248-5.719-3.248-3.183 0-6.281 2.187-6.281 6.191 0 4.661 5.571 9.429 12 15.809 6.43-6.38 12-11.148 12-15.809 0-4.011-3.095-6.181-6.274-6.181"
+          );
+        }
+        .heart2 {
+          width: 25px;
+          height: 30px;
+          border-width: 10;
+          font-weight: 900;
+          font-size: 30;
+          background: linear-gradient(#0b7ce3, #67f3c9);
+          clip-path: path(
+            "M12 4.419c-2.826-5.695-11.999-4.064-11.999 3.27 0 7.27 9.903 10.938 11.999 15.311 2.096-4.373 12-8.041 12-15.311 0-7.327-9.17-8.972-12-3.27z"
+          );
+        }
+      }
+      .comment {
+        margin-right: 30px;
+      }
+      .react_heart {
+        margin-left: 30px;
+      }
+    }
+    .show-comment {
+      transition-duration: 2s;
+      height: 100px;
+      border-top: 2px solid #2f6bb1;
+      display: none;
+      .typing-comment {
+        width: 100%;
+        display: flex;
+        .avatar {
+          display: flex;
+          align-content: center;
+          img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+          }
+        }
+        .input-comment {
+          border: 1px solid #96baec;
+          display: flex;
+          align-items: center;
+          input {
+            width: 100%;
+            border: none;
+            outline: none;
+          }
+        }
+      }
+    }
+    .active {
+      display: flex;
+    }
+  }
+}
+img {
+  max-width: 100%;
+  background-size: auto;
+  background-clip: content-box;
+}
+.create_post {
+  display: flex;
+  align-items: center;
+  button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    margin-right: 10px;
+    box-shadow: 0px 2px 4px #2F6BB1;
+    img{
+      width: 40px;
+      height: 40px;
+    }
+  }
+}
