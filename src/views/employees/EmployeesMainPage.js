@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AiOutlineSortAscending, AiOutlineSortDescending } from 'react-icons/ai'
-import { BiArrowFromTop, BiFilterAlt, BiSortAlt2 } from 'react-icons/bi'
-import { Card, Container, Dropdown, Form } from 'react-bootstrap'
+import { BiArrowFromTop, BiSortAlt2 } from 'react-icons/bi'
+import { Card, Container, Dropdown } from 'react-bootstrap'
 
-import { fetchEmployees } from '~/redux/employeesSlice'
+import { getEmployeeList } from '~/redux/employeesSlice'
 import { employeesSelector } from '~/redux/selectors'
 import AppPagination from '~/components/AppPagination'
 import EmployeeRow from './EmployeeRow'
@@ -43,9 +43,9 @@ const EmployeesMainPage = () => {
             const params = queryString.parse(location.search)     // Lấy danh sách params từ URL
             let newParams = {}      // Lưu danh sách những param khác null
 
-            // Thực hiện việc loại bỏ những param có giá trị là null
+            // Thực hiện việc loại bỏ những param không có tác dụng phân trang
             for (const [key, value] of Object.entries(params)) {
-                if (key !== "page") {       // Nếu giá trị của param là null hoặc chuỗi rỗng thì bỏ qua
+                if (key !== "page") {
                     continue
                 }
                 newParams[key] = value
@@ -58,7 +58,7 @@ const EmployeesMainPage = () => {
 
     useEffect(() => {
         const requestUrl = location.pathname + "?" + queryString.stringify(filters)         // Lấy RequestURL đã gửi API tới Back End
-        dispatch(fetchEmployees(filters))        // Dispatch action fetchEmployees với tham số truyền vào là filters
+        dispatch(getEmployeeList(filters))        // Dispatch action getEmployeeList với tham số truyền vào là filters
         navigation(requestUrl)          // Thực hiện điều hướng rới RequestURL đã lấy ở trên
     }, [filters])
 
@@ -102,15 +102,6 @@ const EmployeesMainPage = () => {
                 order: null
             })
         }
-    }
-
-    // Hàm xử lý khi thực hiện lọc danh sách nhân viên
-    const handleFilterChange = (e) => {
-        setFilters({
-            ...filters,
-            [e.target.name]: e.target.value,
-            page: 1
-        })
     }
 
     return (

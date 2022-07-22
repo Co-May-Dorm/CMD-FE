@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dropdown } from 'react-bootstrap'
+import { Dropdown, Image } from 'react-bootstrap'
 
 import moreIcon from "~/assets/icons/more.svg"
 import EditEmployee from './EmployeesFeatures/EditEmployee'
@@ -84,7 +84,7 @@ const EmployeeRow = ({ employeeInfo }) => {
             </div>
             <Dropdown className="employee-more">
                 <Dropdown.Toggle variant="none">
-                    <img src={moreIcon} alt="More Icon" />
+                    <Image src={moreIcon} />
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
                     <EditEmployee employee={employeeInfo} />

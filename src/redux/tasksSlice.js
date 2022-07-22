@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-
 import swal from "sweetalert"
+
 import tasksApi from "~/api/tasksApi"
 
 const tasksSlice = createSlice({
@@ -81,8 +81,8 @@ const tasksSlice = createSlice({
                 if (action.payload.status === "OK") {
                     // Tìm kiếm id công việc và thực hiện cập nhật thông tin mới cho công việc đó
                     state.tasks.forEach((task, index, array) => {
-                        if (task.id === action.payload.id) {
-                            array[index] = action.payload
+                        if (task.id === action.payload.data.id) {
+                            array[index] = action.payload.data
                         }
                     })
 
@@ -163,14 +163,14 @@ export const getTaskListByStatusIds = createAsyncThunk("tasks/getTaskListByStatu
     return response.data.data
 })
 export const addTask = createAsyncThunk("tasks/addTask", async (taskInfo) => {
-    const response = await tasksApi.add(taskInfo)
+    const response = await tasksApi.addTask(taskInfo)
     return response.data
 })
 export const updateTask = createAsyncThunk("tasks/updateTask", async (taskInfo) => {
-    const response = await tasksApi.update(taskInfo)
+    const response = await tasksApi.updateTask(taskInfo)
     return response.data
 })
 export const deleteTask = createAsyncThunk("tasks/deleteTask", async (taskId) => {
-    const response = await tasksApi.delete(taskId)
+    const response = await tasksApi.deleteTask(taskId)
     return response.data
 })

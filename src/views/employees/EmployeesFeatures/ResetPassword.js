@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-
 import { Button, Dropdown, Form, Modal } from 'react-bootstrap'
 import { BsShieldLock } from 'react-icons/bs'
 
-import { updateEmployee } from '../../../redux/employeesSlice'
+import { updateEmployee } from '~/redux/employeesSlice'
 
 
 const ResetPassword = ({ employee }) => {

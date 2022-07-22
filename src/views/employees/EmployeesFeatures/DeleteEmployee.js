@@ -4,7 +4,7 @@ import { Button, Dropdown, Modal } from 'react-bootstrap'
 import { BiTrash } from 'react-icons/bi'
 import { useDispatch } from 'react-redux'
 
-import { deleteEmployee } from '../../../redux/employeesSlice'
+import { deleteEmployee } from '~/redux/employeesSlice'
 
 const DeleteEmployee = ({ employee }) => {
     const [visibleDeleteEmployee, setVisibleDeleteEmployee] = useState(false)              // State hiển thị thông báo xác nhận xóa nhân viên

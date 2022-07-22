@@ -1,11 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap'
 import { BiTrash } from 'react-icons/bi'
 
-import { fetchRoles } from '../../../../redux/rolesSlice'
-import { rolesSelector } from '../../../../redux/selectors'
+import { getRoleList } from '~/redux/rolesSlice'
+import { rolesSelector } from '~/redux/selectors'
 
 const Positions = ({ info, setInfo }) => {
     const roles = useSelector(rolesSelector).roles
@@ -13,7 +13,7 @@ const Positions = ({ info, setInfo }) => {
 
     const [visibleDeletePosition, setVisibleDeletePosition] = useState(false)
     useEffect(() => {
-        dispatch(fetchRoles())
+        dispatch(getRoleList())
     }, [])
 
     /* Các hàm thay đổi giá trị của state info mỗi khi người dùng nhập/chọn dữ liệu mới */

@@ -1,22 +1,24 @@
 import React, { useState } from 'react'
-
-import moreIcon from '../../../assets/icons/more.svg'
 import { Dropdown, ListGroup } from 'react-bootstrap'
+import { BiEdit, BiInfoSquare, BiTrash } from 'react-icons/bi'
 
+import moreIcon from '~/assets/icons/more.svg'
 import TeamDetail from './TeamDetail'
-import EditTeam from './TeamsFeatures/EditTeam'
 import DeleteTeam from './TeamsFeatures/DeleteTeam'
+import FormSubmitTeam from './TeamsFeatures/FormSubmitTeam'
 
-const TeamRow = ({ team }) => {
-    const [visible, setVisible] = useState(false)
+const TeamRow = ({ teamInfo }) => {
+    const [visibleTeamDetailUI, setVisibleTeamDetailUI] = useState(false)
+    const [visibleEditTeamUI, setVisibleEditTeamUI] = useState(false)
+    const [visibleDeleteTeamUI, setVisibleDeleteTeamUI] = useState(false)
     return (
         <>
             <ListGroup.Item
                 action
                 className="position-relative"
-                onDoubleClick={() => setVisible(true)}
+                onDoubleClick={() => setVisibleTeamDetailUI(true)}
             >
-                {team.name}
+                {teamInfo.name}
                 <div
                     className="position-absolute"
                     style={{
@@ -30,13 +32,30 @@ const TeamRow = ({ team }) => {
                             <img src={moreIcon} alt="More icon" />
                         </Dropdown.Toggle>
                         <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
-                            <EditTeam team={team} />
-                            <DeleteTeam id={team.id} />
+                            <Dropdown.Item onClick={() => setVisibleTeamDetailUI(true)}>
+                                <BiInfoSquare /> Chi tiết
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => setVisibleEditTeamUI(true)}>
+                                <BiEdit /> Chỉnh sửa
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => setVisibleDeleteTeamUI(true)}>
+                                <BiTrash /> Xóa
+                            </Dropdown.Item>
+                            <DeleteTeam teamId={teamInfo.id} />
                         </Dropdown.Menu>
                     </Dropdown>
                 </div>
             </ListGroup.Item>
-            <TeamDetail team={team} visible={visible} setVisible={setVisible} />
+            {
+                visibleTeamDetailUI && <TeamDetail visible={visibleTeamDetailUI} setVisible={setVisibleTeamDetailUI} teamInfo={teamInfo} />
+            }
+            {
+                visibleEditTeamUI && <FormSubmitTeam visible={visibleEditTeamUI} setVisible={setVisibleEditTeamUI} team={teamInfo} />
+            }
+            {
+                visibleDeleteTeamUI && <DeleteTeam visible={visibleDeleteTeamUI} setVisible={setVisibleDeleteTeamUI} teamId={teamInfo.id} />
+            }
+
         </>
     )
 }

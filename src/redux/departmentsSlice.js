@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-
 import swal from "sweetalert"
+
 import departmentsApi from "~/api/departmentsApi"
 
 const departmentsSlice = createSlice({
@@ -11,21 +11,22 @@ const departmentsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchDepartments.pending, (state, action) => {
+            .addCase(getDepartmentList.pending, (state, action) => {
                 if (state.status !== "success") {
                     state.status = "loading"
                 } 
             })
-            .addCase(fetchDepartments.fulfilled, (state, action) => {
+            .addCase(getDepartmentList.fulfilled, (state, action) => {
                 state.departments = action.payload
                 state.status = "success"
             })
-            .addCase(fetchDepartments.rejected, (state, action) => {
+            .addCase(getDepartmentList.rejected, (state, action) => {
                 state.status = "error"
             })
             .addCase(addDepartment.fulfilled, (state, action) => {
                 // Nếu thêm phòng ban thành công
                 if (action.payload.status === "OK") {
+                    console.log(action.payload)
                         state.departments.push(action.payload.data)
 
                     // Hiển thị thông báo thêm phòng ban thành công
@@ -62,8 +63,8 @@ const departmentsSlice = createSlice({
                 if (action.payload.status === "OK") {
                     // Tìm kiếm id phòng ban và thực hiện cập nhật thông tin mới cho phòng ban đó
                     state.departments.forEach((department, index, array) => {
-                        if (department.id === action.payload.id) {
-                            array[index] = action.payload
+                        if (department.id === action.payload.data.id) {
+                            array[index] = action.payload.data
                         }
                     })
 
@@ -135,19 +136,19 @@ const departmentsSlice = createSlice({
 })
 export default departmentsSlice
 
-export const fetchDepartments = createAsyncThunk("departments/fetchDepartments", async (params) => {
-    const response = await departmentsApi.getAll(params)
+export const getDepartmentList = createAsyncThunk("departments/getDepartmentList", async (params) => {
+    const response = await departmentsApi.getDepartmentList(params)
     return response.data.data
 })
 export const addDepartment = createAsyncThunk("departments/addDepartment", async (departmentInfo) => {
-    const response = await departmentsApi.add(departmentInfo)
+    const response = await departmentsApi.addDepartment(departmentInfo)
     return response.data
 })
 export const updateDepartment = createAsyncThunk("departments/updateDepartment", async (departmentInfo) => {
-    const response = await departmentsApi.update(departmentInfo)
+    const response = await departmentsApi.updateDepartment(departmentInfo)
     return response.data
 })
 export const deleteDepartment = createAsyncThunk("departments/deleteDepartment", async (departmentId) => {
-    const response = await departmentsApi.delete(departmentId)
+    const response = await departmentsApi.deleteDepartment(departmentId)
     return response.data
 })

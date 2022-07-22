@@ -1,25 +1,27 @@
 import axiosClient from "./axiosClient"
 
+const queryString = require("query-string")
+
 // API liên quan đến phần phòng ban
 const baseUrl = "/departments"
 const departmentsApi = {
-    getAll: (filtersParams) => {
-        const requestUrl = `${baseUrl}`
-        return axiosClient.get(requestUrl, {filtersParams})
+    getDepartmentList: (params) => {
+        const requestUrl = `${baseUrl}?${queryString.stringify(params)}`
+        return axiosClient.get(requestUrl)
     },
-    get: (departmentId) => {
+    getDepartmentDetailById: (departmentId) => {
         const requestUrl = `${baseUrl}/${departmentId}`
         return axiosClient.get(requestUrl)
     },
-    add: (departmentInfo) => {
+    addDepartment: (departmentInfo) => {
         const requestUrl = `${baseUrl}/add`
         return axiosClient.post(requestUrl, departmentInfo)
     },
-    update: (departmentInfo) => {
+    updateDepartment: (departmentInfo) => {
         const requestUrl = `${baseUrl}/edit`
         return axiosClient.put(requestUrl, departmentInfo)
     },
-    delete: (departmentId) => {
+    deleteDepartment: (departmentId) => {
         const requestUrl = `${baseUrl}/delete/${departmentId}`
         return axiosClient.delete(requestUrl)
     }

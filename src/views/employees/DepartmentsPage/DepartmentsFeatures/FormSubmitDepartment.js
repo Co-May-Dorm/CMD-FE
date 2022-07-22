@@ -57,18 +57,19 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
         if (form.checkValidity() === true) {
             e.preventDefault()
             e.stopPropagation()
-            if (departmentInfo.fatherDepartmentId === "") {
-                setDepartmentInfo({
-                    ...departmentInfo,
-                    fatherDepartmentId: null
-                })
-            }
             if (departmentInfo.id) {
-                dispatch(updateDepartment(departmentInfo))
+                dispatch(updateDepartment({
+                    ...departmentInfo,
+                    fatherDepartmentId: departmentInfo.fatherDepartmentId === -1 ? null : departmentInfo.fatherDepartmentId
+                }))
             }
             else {
-                dispatch(addDepartment(departmentInfo))
+                dispatch(addDepartment({
+                    ...departmentInfo,
+                    fatherDepartmentId: departmentInfo.fatherDepartmentId === -1 ? null : departmentInfo.fatherDepartmentId
+                }))
             }
+            setVisible(false)
         }
     }
     //
@@ -144,8 +145,9 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
                             <Form.Label>Phòng ban cha:</Form.Label>
                             <FormSelectDepartment
                                 index={null}
-                                current={fatherDepartment}
-                                onChange={handleDepartmentChange}
+                                currentDepartment={fatherDepartment}
+                                onDepartmentChange={handleDepartmentChange}
+                                departments={departments}
                             />
                         </div>
                         <Positions departmentInfo={departmentInfo} setDepartmentInfo={setDepartmentInfo} />

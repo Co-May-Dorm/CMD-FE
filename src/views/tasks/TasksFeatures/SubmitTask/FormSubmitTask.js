@@ -9,54 +9,83 @@ import clsx from "clsx"
 import { addTask, updateTask } from "~/redux/tasksSlice"
 import SelectReiver from "./SelectReceiver"
 
+const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+
 const FormSubmitTask = ({ visible, setVisible, task = null }) => {
     const dispatch = useDispatch()
+
+    const prioritySelectElement = (priority, handlePriorityChange) => {
+        const colors = ["#75FFD6", "#3CEBC1", "#0DD2DE", "#4BA6FB"]
+        const names = ["Thấp", "Bình thường", "Ưu tiên", "Rất ưu tiên"]
+        let els = []
+        for (let i = 1; i <= priority; i++) {
+            els.push(
+                <div key={i} className="col-sm-3 d-flex flex-column w-25">
+                    <Button variant="outline-primary" style={{ backgroundColor: i <= priority ? colors[i - 1] : null, borderColor: i <= priority ? colors[i] : null }} onClick={() => handlePriorityChange(i)} />
+                    <span className="text-center">{names[i - 1]}</span>
+                </div>
+            )
+        }
+        if (priority < colors.length) {
+            for (let i = priority + 1; i <= colors.length; i++) {
+                els.push(
+                    <div key={i} className="col-sm-3 d-flex flex-column w-25">
+                        <Button variant="outline-primary" style={{ backgroundColor: i <= priority ? colors[i - 1] : null }} onClick={() => handlePriorityChange(i)} />
+                        <span className="text-center">{names[i - 1]}</span>
+                    </div>
+                )
+            }
+        }
+        return els.map((item) => item)
+    }
 
     /* Xử lý Form với Formik */
     let initialValues = {
         title: "",
-        creatorId: localStorage.getItem("userInfo").id,
-        receiverId: {
+        creatorId: userInfo.id,
+        receiver: {
             id: -1,
-            label: "Chọn nhân viên"
+            name: "Chọn nhân viên"
         },
         priority: 1,
         description: "",
-        startDate: new Date(),
-        endDate: new Date()
+        startDate: "",
+        finishDate: "",
+        statusId: 1
     }
     if (task?.id) {
-        initialValues = {
-            title: task.title,
-            creatorId: task.creator.id,
-            receiverId: task.receiver.id,
-            priority: task.priority,
-            description: task.description,
-            startDate: task.startDate,
-            endDate: task.endDate
-        }
+        initialValues = task
     }
 
     const validationSchema = Yup.object({
         title: Yup.string().required("Vui lòng nhập tên công việc."),
-        receiverId: Yup.object({
-            id: Yup.number().required(),
+        receiver: Yup.object({
+            id: Yup.number().required("Vui lòng chọn người được giao"),
             name: Yup.string().required()
-        }).required("Vui lòng chọn người được giao"),
+        }),
         priority: Yup.number().required("Vui lòng chọn mức độ ưu tiên"),
         description: Yup.string().required("Vui lòng nhập mô tả công việc"),
         startDate: Yup.date().required("Vui lòng nhập ngày bắt đầu."),
-        endDate: Yup.date().required("Vui lòng nhập ngày kết thúc.")
+        finishDate: Yup.date().required("Vui lòng nhập ngày kết thúc.")
     })
 
     const handleSubmit = async (values, actions) => {
         console.log(values)
         actions.setSubmitting(true)
         if (task?.id) {
-            dispatch(updateTask(values))
+            dispatch(updateTask({
+                ...values,
+                creatorId: userInfo.id,
+                receiverId: values.receiver.id,
+                statusId: values.status.id
+            }))
         }
         else {
-            dispatch(addTask(values))
+            dispatch(addTask({
+                ...values,
+                creatorId: userInfo.id,
+                receiverId: values.receiver.id
+            }))
         }
         setVisible(false)
         actions.setSubmitting(false)
@@ -98,17 +127,22 @@ const FormSubmitTask = ({ visible, setVisible, task = null }) => {
                                     <Form.Label>Người nhận:</Form.Label>
                                     <SelectReiver
                                         placeholder="Chọn người nhận"
-                                        // className={clsx({
-                                        //     "is-invalid": touched.receiverId && errors.receiverId
-                                        // })}
-                                        current={values.receiverId}
-                                        onChange={(value) => {
-                                            setFieldValue("receiverId", value)
+                                        current={values.receiver}
+                                        onChange={(receiver) => {
+                                            setFieldValue("receiver", receiver)
                                         }}
                                     />
                                     {
-                                        touched.receiverId && errors.receiverId && <div className="invalid-feedback">{errors.receiverId}</div>
+                                        touched.receiver?.id && errors.receiver?.id && <div className="invalid-feedback">{errors.receiver?.id}</div>
                                     }
+                                </div>
+                                <div className="mb-4">
+                                    <Form.Label>Mức độ ưu tiên:</Form.Label>
+                                    <Row>
+                                        {prioritySelectElement(values.priority, (priority) => {
+                                            setFieldValue("priority", priority)
+                                        })}
+                                    </Row>
                                 </div>
                                 <div className="mb-4">
                                     <Form.Label>Mô tả:</Form.Label>
@@ -149,17 +183,17 @@ const FormSubmitTask = ({ visible, setVisible, task = null }) => {
                                         <Form.Label>Hạn chót:</Form.Label>
                                         <Form.Control
                                             type="date"
-                                            name="endDate"
+                                            name="finishDate"
                                             placeholder="Nhập mô tả công việc"
                                             className={clsx({
-                                                "is-invalid": touched.endDate && errors.endDate
+                                                "is-invalid": touched.finishDate && errors.finishDate
                                             })}
-                                            value={values.endDate}
+                                            value={values.finishDate}
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                         />
                                         {
-                                            touched.endDate && errors.endDate && <div className="invalid-feedback">{errors.endDate}</div>
+                                            touched.finishDate && errors.finishDate && <div className="invalid-feedback">{errors.finishDate}</div>
                                         }
                                     </div>
                                 </Row>

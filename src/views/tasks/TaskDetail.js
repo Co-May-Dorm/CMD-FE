@@ -5,7 +5,6 @@ import { BiInfoSquare, BiSend } from 'react-icons/bi'
 
 import rate0 from "~/assets/icons/rate-0.svg"
 import rate1 from "~/assets/icons/rate-1.svg"
-import defaultAvatar from "~/assets/icons/defaultAvatar.svg"
 import tasksApi from '~/api/tasksApi'
 
 const userInfo = JSON.parse(localStorage.getItem("userInfo"))
@@ -13,8 +12,9 @@ const userInfo = JSON.parse(localStorage.getItem("userInfo"))
 const TaskDetail = ({ taskId }) => {
     const [visible, setVisible] = useState(false)
     const [taskInfo, setTaskInfo] = useState({})
+
     useEffect(() => {
-        tasksApi.getTaskById(taskId)
+        tasksApi.getTaskDetailById(taskId)
             .then((response) => {
                 setTaskInfo(response.data.data)
             })
@@ -79,7 +79,7 @@ const TaskDetail = ({ taskId }) => {
                                 </Row>
                                 <Row className="m-2">
                                     <Col md={5} className="fw-bolder">Thời hạn:</Col>
-                                    <Col md={7}>{showDate(taskInfo.createDate) + " - " + showDate(taskInfo.finishDate)}</Col>
+                                    <Col md={7}>{showDate(taskInfo.startDate) + " - " + showDate(taskInfo.finishDate)}</Col>
                                 </Row>
                                 <Row className="m-2">
                                     <Col md={5} className="fw-bolder">Mức độ ưu tiên:</Col>
@@ -141,7 +141,7 @@ const TaskDetail = ({ taskId }) => {
                                         {
                                             taskInfo.status.id === 1 ? (
                                                 <>
-                                                    {taskInfo.status.name} ({showDate(taskInfo.finishDate)})
+                                                    {taskInfo.status.name} ({showDate(taskInfo.modifyDate)})
                                                 </>
 
                                             ) : <strong>{taskInfo.status.name}</strong>
@@ -167,8 +167,8 @@ const TaskDetail = ({ taskId }) => {
                                             <div className="d-flex justify-content-evenly">
                                                 <div className="col-auto">
                                                     <Image
-                                                        className="rounded-circle"
-                                                        src={userInfo.avatar || defaultAvatar}
+                                                        className="rounded-circle me-2"
+                                                        src={userInfo.avatar}
                                                         width={35}
                                                         height={35}
                                                     />
@@ -180,7 +180,7 @@ const TaskDetail = ({ taskId }) => {
                                                         placeholder="Nhập nội dung thảo luận"
                                                     />
                                                 </div>
-                                                <div className="col-auto">
+                                                <div className="col-auto ms-2">
                                                     <BiSend size={35} />
                                                 </div>
                                             </div>

@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Dropdown, Image, ListGroup } from 'react-bootstrap'
-import { BiInfoSquare } from 'react-icons/bi'
 
 import departmentLevelIcon from '~/assets/icons/department_level.svg'
 import moreIcon from '~/assets/icons/more.svg'
@@ -31,7 +30,7 @@ const DepartmentRow = ({ department }) => {
                             <Image src={moreIcon} />
                         </Dropdown.Toggle>
                         <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
-                            <DepartmentDetail department={department} />
+                            <DepartmentDetail departmentId={department.id} />
                             <EditDepartment department={department} />
                             <DeleteDepartment departmentId={department.id} />
                         </Dropdown.Menu>
