@@ -1,19 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Dropdown, ListGroup, Modal, Table } from 'react-bootstrap'
 import { BiInfoSquare } from 'react-icons/bi'
 
 import { departmentsSelector } from '~/redux/selectors'
+import departmentsApi from '~/api/departmentsApi'
 
-const DepartmentDetail = ({ department }) => {
-    const [visible, setVisible] = useState(false)
+const DepartmentDetail = ({ departmentId }) => {
     const departments = useSelector(departmentsSelector).departments    // Lấy danh sách phòng ban từ redux
+    const [visible, setVisible] = useState(false)
+    const [departmentInfo, setDepartmentInfo] = useState({})
 
     let parentName = ""     // Khởi tạo tên phòng ban cha mặc định là rỗng
 
+    useEffect(() => {
+        departmentsApi.getDepartmentDetailById(departmentId)
+            .then((response) => {
+                setDepartmentInfo(response.data.data)
+            })
+    }, [])
+
     // Duyệt qua danh sách phòng ban để tìm ra tên phòng ban cha
     departments.forEach(dp => {
-        if (dp.id === department.fatherDepartmentId) {
+        if (dp.id === departmentInfo.fatherDepartmentId) {
             parentName = dp.name
         }
     })
@@ -40,16 +49,16 @@ const DepartmentDetail = ({ department }) => {
                         <Modal.Body>
                             <ListGroup variant="flush">
                                 <ListGroup.Item>
-                                    Mã phòng ban: {department.code}
+                                    Mã phòng ban: {departmentInfo.code}
                                 </ListGroup.Item>
                                 <ListGroup.Item>
-                                    Tên phòng ban: {department.name}
+                                    Tên phòng ban: {departmentInfo.name}
                                 </ListGroup.Item>
                                 <ListGroup.Item>
-                                    Thuộc sự quản lý của phòng ban: {parentName || department.name}
+                                    Thuộc sự quản lý của phòng ban: {parentName || departmentInfo.name}
                                 </ListGroup.Item>
                                 <ListGroup.Item>
-                                    Mô tả về phòng ban: {(department.description === "") ? "Chưa có mô tả" : department.description}
+                                    Mô tả về phòng ban: {(departmentInfo.description === "") ? "Chưa có mô tả" : departmentInfo.description}
                                 </ListGroup.Item>
                                 <ListGroup.Item>
                                     <Table
@@ -74,7 +83,7 @@ const DepartmentDetail = ({ department }) => {
                                         </thead>
                                         <tbody>
                                             {
-                                                department.positions.map((position, index) => (
+                                                departmentInfo.positions.map((position, index) => (
                                                     <tr key={index}>
                                                         <td>{position.name}</td>
                                                         <td>{position.role?.name}</td>

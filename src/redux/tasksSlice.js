@@ -81,8 +81,8 @@ const tasksSlice = createSlice({
                 if (action.payload.status === "OK") {
                     // Tìm kiếm id công việc và thực hiện cập nhật thông tin mới cho công việc đó
                     state.tasks.forEach((task, index, array) => {
-                        if (task.id === action.payload.id) {
-                            array[index] = action.payload
+                        if (task.id === action.payload.data.id) {
+                            array[index] = action.payload.data
                         }
                     })
 

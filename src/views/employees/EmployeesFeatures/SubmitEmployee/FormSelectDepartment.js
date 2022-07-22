@@ -1,14 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
+
+import PropTypes from 'prop-types'
 import { Form, ListGroup } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
 
 import departmentLevelIcon from '~/assets/icons/department_level.svg'
 import useOnClickOutside from '~/customHooks/useOnClickOutside'
-import { fetchDepartments } from '~/redux/departmentsSlice'
-import { departmentsSelector } from '~/redux/selectors'
 
-const FormSelectDepartment = ({ index, current, onDepartmentChange, departments }) => {
+const propTypes = {
+    index: PropTypes.number,
+    currentDepartment: PropTypes.object.isRequired,
+    onDepartmentChange: PropTypes.func.isRequired,
+    departments: PropTypes.array.isRequired
+}
+
+const FormSelectDepartment = ({ index, currentDepartment, onDepartmentChange, departments }) => {
 
     const [visible, setVisible] = useState(false)       // State quản lý hiển thị danh sách phòng ban
 
@@ -31,7 +37,7 @@ const FormSelectDepartment = ({ index, current, onDepartmentChange, departments 
                     level: 0,
                     name: "Không có phòng ban cha"
                 })}
-                active={current.id === null}
+                active={currentDepartment.id === null}
             >
                 Không có phòng ban cha
             </ListGroup.Item>
@@ -49,7 +55,7 @@ const FormSelectDepartment = ({ index, current, onDepartmentChange, departments 
                             borderRadius: "none"
                         }}
                         onClick={() => onDepartmentChange(index, department_child)}
-                        active={current?.id === department_child.id}
+                        active={currentDepartment?.id === department_child.id}
                     >
                         <img src={departmentLevelIcon} alt="Panel" />
                         <span className="ps-2" />
@@ -71,7 +77,7 @@ const FormSelectDepartment = ({ index, current, onDepartmentChange, departments 
                             borderRadius: "none"
                         }}
                         onClick={() => onDepartmentChange(index, department)}
-                        active={current?.name === department.name}
+                        active={currentDepartment?.name === department.name}
                     >
                         <img src={departmentLevelIcon} alt="Panel" />
                         <span className="ps-2" />
@@ -94,7 +100,7 @@ const FormSelectDepartment = ({ index, current, onDepartmentChange, departments 
                 type="text"
                 name="department"
                 placeholder="Chọn phòng ban"
-                value={current?.name || ""}
+                value={currentDepartment?.name || ""}
                 onChange={() => {
 
                 }}
@@ -120,5 +126,7 @@ const FormSelectDepartment = ({ index, current, onDepartmentChange, departments 
         </div>
     )
 }
+
+FormSelectDepartment.propTypes = propTypes
 
 export default FormSelectDepartment

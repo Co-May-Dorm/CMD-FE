@@ -17,7 +17,6 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
 
     /* Quản lý các state */
     const [employeeInfo, setEmployeeInfo] = useState({
-        // State lưu thông tin của nhân viên khi người dùng nhập dữ liệu
         code: "",
         name: "",
         avatar: "",
@@ -177,7 +176,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     }
     //
 
-    /* Xử lý khi click vào button Thêm CLB/Đội nhóm */
+    /* Xử lý khi click vào button Thêm Đội nhóm */
     const handleShowFormSelectTeam = () => {
         if (employeeInfo.teams?.length === 0) {
             setEmployeeInfo({
@@ -446,14 +445,14 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                     </Button>
                                 </div>
                             </Tab>
-                            <Tab eventKey="teams" title="CLB/Đội nhóm">
+                            <Tab eventKey="teams" title="Đội nhóm">
                                 <div className="card-body">
                                     {
                                         employeeInfo.teams?.map((team, index) => (
                                             <div key={index} className="list-group-item bg-light mb-3">
                                                 <div className="d-flex flex-lg-row flex-column">
                                                     <div className="mb-3 mb-lg-0 col">
-                                                        <Form.Label>CLB/Đội nhóm số {index + 1}:</Form.Label>
+                                                        <Form.Label>Đội nhóm số {index + 1}:</Form.Label>
                                                         <FormSelectTeam
                                                             index={index}
                                                             currentTeam={team}
@@ -462,7 +461,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                                         />
                                                     </div>
                                                     <div className="mb-3 ms-lg-3 col">
-                                                        <Form.Label>Chức vụ của CLB/Đội nhóm số {index + 1}:</Form.Label>
+                                                        <Form.Label>Chức vụ của đội nhóm số {index + 1}:</Form.Label>
                                                         <FormSelectPosition
                                                             index={index}
                                                             current={employeeInfo.teams[index]?.position}
@@ -488,7 +487,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                         className="d-block m-auto"
                                         onClick={handleShowFormSelectTeam}
                                     >
-                                        <BiPlusMedical />{" "} Thêm CLB/Đội nhóm {" "}<BiPlusMedical />
+                                        <BiPlusMedical />{" "} Thêm đội nhóm {" "}<BiPlusMedical />
                                     </Button>
                                 </div>
                             </Tab>

@@ -62,81 +62,77 @@ const FormSubmitTeam = ({ visible, setVisible, team = null }) => {
     //
 
     return (
-        <>
-            <Modal
-                className="modal-fullheight"
-                size="md"
-                scrollable
-                show={visible}
-                onHide={() => setVisible(false)}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>
-                        {team?.id ? "CHỈNH SỬA ĐỘI NHÓM" : "THÊM ĐỘI NHÓM MỚI"}
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form
-                        noValidate
-                        validated={validated}
-                        onSubmit={handleSubmit}
+        <Modal
+            className="modal-fullheight"
+            size="md"
+            scrollable
+            show={visible}
+            onHide={() => setVisible(false)}
+        >
+            <Modal.Header closeButton>
+                <Modal.Title>
+                    {team?.id ? "CHỈNH SỬA ĐỘI NHÓM" : "THÊM ĐỘI NHÓM MỚI"}
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form
+                    noValidate
+                    validated={validated}
+                    onSubmit={handleSubmit}
+                >
+                    <div className="mb-3">
+                        <Form.Label>Mã đội nhóm:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="code"
+                            placeholder="Nhập mã đội nhóm..."
+                            value={teamInfo.code}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            Vui lòng nhập mã đội nhóm.
+                        </Form.Control.Feedback>
+                    </div>
+                    <hr />
+                    <div className="mb-3">
+                        <Form.Label>Tên đội nhóm:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="name"
+                            placeholder="Nhập tên đội nhóm..."
+                            value={teamInfo.name}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            Vui lòng nhập tên đội nhóm.
+                        </Form.Control.Feedback>
+                    </div>
+                    <hr />
+                    <div className="mb-3">
+                        <Form.Label>Mô tả:</Form.Label>
+                        <Form.Control
+                            as="textarea"
+                            rows={10}
+                            name="description"
+                            placeholder="Nhập mô tả đội nhóm..."
+                            value={teamInfo.description}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <hr />
+                    <Positions teamInfo={teamInfo} setTeamInfo={setTeamInfo} />
+                    <Button
+                        className="d-table m-auto"
+                        size="lg"
+                        type="submit"
                     >
-                        <div className="mb-3">
-                            <Form.Label>Mã đội nhóm:</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="code"
-                                placeholder="Nhập mã đội nhóm..."
-                                value={teamInfo.code}
-                                onChange={handleInputChange}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Vui lòng nhập mã đội nhóm.
-                            </Form.Control.Feedback>
-                        </div>
-                        <hr />
-                        <div className="mb-3">
-                            <Form.Label>Tên đội nhóm:</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="name"
-                                placeholder="Nhập tên đội nhóm..."
-                                value={teamInfo.name}
-                                onChange={handleInputChange}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Vui lòng nhập tên đội nhóm.
-                            </Form.Control.Feedback>
-                        </div>
-                        <hr />
-                        <div className="mb-3">
-                            <Form.Label>Mô tả:</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                rows={10}
-                                name="description"
-                                placeholder="Nhập mô tả đội nhóm..."
-                                value={teamInfo.description}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <hr />
-                        <Positions teamInfo={teamInfo} setTeamInfo={setTeamInfo} />
-                        <Modal.Footer>
-                            <Button
-                                className="d-table m-auto"
-                                size="lg"
-                                type="submit"
-                            >
-                                {(team?.id) ? "Cập nhật thông tin" : "Xác nhận tạo mới"}
-                            </Button>
-                        </Modal.Footer>
-                    </Form>
-                </Modal.Body>
-            </Modal>
-        </>
+                        {(team?.id) ? "Cập nhật thông tin" : "Xác nhận tạo mới"}
+                    </Button>
+                </Form>
+            </Modal.Body>
+        </Modal>
     )
 }
 

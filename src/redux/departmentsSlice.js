@@ -26,6 +26,7 @@ const departmentsSlice = createSlice({
             .addCase(addDepartment.fulfilled, (state, action) => {
                 // Nếu thêm phòng ban thành công
                 if (action.payload.status === "OK") {
+                    console.log(action.payload)
                         state.departments.push(action.payload.data)
 
                     // Hiển thị thông báo thêm phòng ban thành công

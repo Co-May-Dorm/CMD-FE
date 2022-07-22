@@ -41,7 +41,7 @@ const TeamsMainPage = ({ visible, setVisible }) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title>
-                    CLB/Đội nhóm
+                    Đội nhóm
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -68,7 +68,7 @@ const TeamsMainPage = ({ visible, setVisible }) => {
                                 teams.map((team, index) => (
                                     <TeamRow
                                         key={index}
-                                        team={team}
+                                        teamInfo={team}
                                     />
                                 ))
                             }
