@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-
 import { Button, Dropdown, Modal } from 'react-bootstrap'
 import { BsFillLockFill, BsFillUnlockFill } from 'react-icons/bs'
 
-import { updateEmployee } from '../../../redux/employeesSlice'
+import { updateEmployee } from '~/redux/employeesSlice'
 
 
 const LockEmployee = ({ employee }) => {
@@ -17,7 +16,6 @@ const LockEmployee = ({ employee }) => {
             ...employee,
             active: !employee.active
         }))
-        window.location.reload()
     }
 
     return (

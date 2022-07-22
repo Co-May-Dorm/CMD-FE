@@ -7,14 +7,7 @@ import { teamsSelector } from '~/redux/selectors'
 import useOnClickOutside from '~/customHooks/useOnClickOutside'
 import { fetchTeams } from '~/redux/teamsSlice'
 
-const FormSelectTeam = ({ index, currentTeam, onTeamChange }) => {
-    const teams = useSelector(teamsSelector).teams
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        dispatch(fetchTeams())
-    }, [])
-
+const FormSelectTeam = ({ index, currentTeam, onTeamChange, teams }) => {
     const [visible, setVisible] = useState(false)       // State quản lý hiển thị danh sách phòng ban
 
     const ref = useRef()        // Ref form select team

@@ -14,7 +14,7 @@ const TaskDetail = ({ taskId }) => {
     const [visible, setVisible] = useState(false)
     const [taskInfo, setTaskInfo] = useState({})
     useEffect(() => {
-        tasksApi.getTaskById(taskId)
+        tasksApi.getTaskDetailById(taskId)
             .then((response) => {
                 setTaskInfo(response.data.data)
             })
@@ -167,8 +167,8 @@ const TaskDetail = ({ taskId }) => {
                                             <div className="d-flex justify-content-evenly">
                                                 <div className="col-auto">
                                                     <Image
-                                                        className="rounded-circle"
-                                                        src={userInfo.avatar || defaultAvatar}
+                                                        className="rounded-circle me-2"
+                                                        src={userInfo.avatar}
                                                         width={35}
                                                         height={35}
                                                     />
@@ -180,7 +180,7 @@ const TaskDetail = ({ taskId }) => {
                                                         placeholder="Nhập nội dung thảo luận"
                                                     />
                                                 </div>
-                                                <div className="col-auto">
+                                                <div className="col-auto ms-2">
                                                     <BiSend size={35} />
                                                 </div>
                                             </div>

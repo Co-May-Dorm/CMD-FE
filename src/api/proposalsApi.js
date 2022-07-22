@@ -1,27 +1,37 @@
 import axiosClient from "./axiosClient"
 
+const queryString = require("query-string")
+
 // API liên quan đến phần đề xuất
 const baseUrl = "/proposals"
 const proposalsApi = {
-    getProposalList: (filtersParams) => {
-        const proposalUrl = `${baseUrl}`
-        return axiosClient.get(proposalUrl, {filtersParams})
+    getProposalList: (params, filters) => {
+        const requestUrl = `${baseUrl}?${queryString.stringify(params)}`
+        return axiosClient.post(requestUrl, filters)
     },
-    getProposalById: (proposalId) => {
-        const proposalUrl = `${baseUrl}/${proposalId}`
-        return axiosClient.get(proposalUrl)
+    getProposalListCreatedByMe: (params, filters) => {
+        const requestUrl = `${baseUrl}/createdByMe?${queryString.stringify(params)}`
+        return axiosClient.post(requestUrl, filters)
+    },
+    getProposalListApproveByMe: (params, filters) => {
+        const requestUrl = `${baseUrl}/approveByMe?${queryString.stringify(params)}`
+        return axiosClient.post(requestUrl, filters)
+    },
+    getProposalDetailById: (proposalId) => {
+        const requestUrl = `${baseUrl}/${proposalId}`
+        return axiosClient.get(requestUrl)
     },
     addProposal: (proposalInfo) => {
-        const proposalUrl = `${baseUrl}/add`
-        return axiosClient.post(proposalUrl, proposalInfo)
+        const requestUrl = `${baseUrl}/add`
+        return axiosClient.post(requestUrl, proposalInfo)
     },
     updateProposal: (proposalInfo) => {
-        const proposalUrl = `${baseUrl}/edit`
-        return axiosClient.put(proposalUrl, proposalInfo)
+        const requestUrl = `${baseUrl}/edit`
+        return axiosClient.put(requestUrl, proposalInfo)
     },
     deleteProposal: (proposalId) => {
-        const proposalUrl = `${baseUrl}/delete/${proposalId}`
-        return axiosClient.delete(proposalUrl)
+        const requestUrl = `${baseUrl}/delete/${proposalId}`
+        return axiosClient.delete(requestUrl)
     }
 }
 //

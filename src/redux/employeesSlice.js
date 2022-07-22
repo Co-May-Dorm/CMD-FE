@@ -16,15 +16,15 @@ const employeesSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchEmployees.pending, (state, action) => {
+            .addCase(getEmployeeList.pending, (state, action) => {
                 state.status = "loading"
             })
-            .addCase(fetchEmployees.fulfilled, (state, action) => {
+            .addCase(getEmployeeList.fulfilled, (state, action) => {
                 state.employees = action.payload.employees
                 state.pagination = action.payload.pagination
                 state.status = "success"
             })
-            .addCase(fetchEmployees.rejected, (state, action) => {
+            .addCase(getEmployeeList.rejected, (state, action) => {
                 state.status = "error"
             })
             .addCase(addEmployee.fulfilled, (state, action) => {
@@ -70,8 +70,8 @@ const employeesSlice = createSlice({
                 if (action.payload.status === "OK") {
                     // Tìm kiếm id nhân viên và thực hiện cập nhật thông tin mới cho nhân viên đó
                     state.employees.forEach((employee, index, array) => {
-                        if (employee.id === action.payload.id) {
-                            array[index] = action.payload
+                        if (employee.id === action.payload.data.id) {
+                            array[index] = action.payload.data
                         }
                     })
 
@@ -108,7 +108,7 @@ const employeesSlice = createSlice({
                 // Nếu gửi request xoắ nhân viên thành công lên Server
                 if (action.payload.status === "OK") {
                     // Thực hiện lọc ra những nhân viên có id khác với id nhân viên cần xóa
-                    state.employees = state.employees.filter((employee) => employee.id !== action.payload.id)
+                    state.employees = state.employees.filter((employee) => employee.id !== action.payload.data.id)
 
                     // Hiển thị thông báo xóa nhân viên thành công
                     swal({
@@ -143,19 +143,19 @@ const employeesSlice = createSlice({
 })
 export default employeesSlice
 
-export const fetchEmployees = createAsyncThunk("employees/fetchEmployees", async (params) => {
-    const response = await employeesApi.getAll(params)
+export const getEmployeeList = createAsyncThunk("employees/getEmployeeList", async (params) => {
+    const response = await employeesApi.getEmployeeList(params)
     return response.data.data
 })
 export const addEmployee = createAsyncThunk("employees/addEmployee", async (employeeInfo) => {
-    const response = await employeesApi.add(employeeInfo)
+    const response = await employeesApi.addEmployee(employeeInfo)
     return response.data
 })
 export const updateEmployee = createAsyncThunk("employees/updateEmployee", async (employeeInfo) => {
-    const response = await employeesApi.update(employeeInfo)
+    const response = await employeesApi.updateEmployee(employeeInfo)
     return response.data
 })
 export const deleteEmployee = createAsyncThunk("employees/deleteEmployee", async (employeeId) => {
-    const response = await employeesApi.delete(employeeId)
+    const response = await employeesApi.deleteEmployee(employeeId)
     return response.data
 })

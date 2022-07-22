@@ -8,13 +8,7 @@ import useOnClickOutside from '~/customHooks/useOnClickOutside'
 import { fetchDepartments } from '~/redux/departmentsSlice'
 import { departmentsSelector } from '~/redux/selectors'
 
-const FormSelectDepartment = ({ index, current, onChange }) => {
-    const departments = useSelector(departmentsSelector).departments
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        dispatch(fetchDepartments())
-    }, [])
+const FormSelectDepartment = ({ index, current, onDepartmentChange, departments }) => {
 
     const [visible, setVisible] = useState(false)       // State quản lý hiển thị danh sách phòng ban
 
@@ -32,7 +26,7 @@ const FormSelectDepartment = ({ index, current, onChange }) => {
                     borderRadius: "none",
                     textAlign: "center"
                 }}
-                onClick={() => onChange(index, {
+                onClick={() => onDepartmentChange(index, {
                     id: -1,
                     level: 0,
                     name: "Không có phòng ban cha"
@@ -54,7 +48,7 @@ const FormSelectDepartment = ({ index, current, onChange }) => {
                             paddingLeft: department_child.level * 20,
                             borderRadius: "none"
                         }}
-                        onClick={() => onChange(index, department_child)}
+                        onClick={() => onDepartmentChange(index, department_child)}
                         active={current?.id === department_child.id}
                     >
                         <img src={departmentLevelIcon} alt="Panel" />
@@ -76,7 +70,7 @@ const FormSelectDepartment = ({ index, current, onChange }) => {
                             paddingLeft: department.level * 20,
                             borderRadius: "none"
                         }}
-                        onClick={() => onChange(index, department)}
+                        onClick={() => onDepartmentChange(index, department)}
                         active={current?.name === department.name}
                     >
                         <img src={departmentLevelIcon} alt="Panel" />

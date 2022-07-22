@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-
 import swal from "sweetalert"
+
 import rolesApi from "~/api/rolesApi"
 
 const rolesSlice = createSlice({
@@ -16,17 +16,17 @@ const rolesSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchRoles.pending, (state, action) => {
+            .addCase(getRoleList.pending, (state, action) => {
                 if (state.status !== "success") {
                     state.status = "loading"
                 } 
             })
-            .addCase(fetchRoles.fulfilled, (state, action) => {
+            .addCase(getRoleList.fulfilled, (state, action) => {
                 state.roles = action.payload.roles
                 state.pagination = action.payload.pagination
                 state.status = "success"
             })
-            .addCase(fetchRoles.rejected, (state, action) => {
+            .addCase(getRoleList.rejected, (state, action) => {
                 state.status = "error"
             })
             .addCase(addRole.fulfilled, (state, action) => {
@@ -72,8 +72,8 @@ const rolesSlice = createSlice({
                 if (action.payload.status === "OK") {
                     // Tìm kiếm id vai trò và thực hiện cập nhật thông tin mới cho vai trò đó
                     state.roles.forEach((role, index, array) => {
-                        if (role.id === action.payload.id) {
-                            array[index] = action.payload
+                        if (role.id === action.payload.data.id) {
+                            array[index] = action.payload.data
                         }
                     })
 
@@ -145,19 +145,19 @@ const rolesSlice = createSlice({
 })
 export default rolesSlice
 
-export const fetchRoles = createAsyncThunk("roles/fetchRoles", async (params) => {
-    const response = await rolesApi.getAll(params)
+export const getRoleList = createAsyncThunk("roles/getRoleList", async (params) => {
+    const response = await rolesApi.getRoleList(params)
     return response.data.data
 })
 export const addRole = createAsyncThunk("roles/addRole", async (roleInfo) => {
-    const response = await rolesApi.add(roleInfo)
+    const response = await rolesApi.addRole(roleInfo)
     return response.data
 })
 export const updateRole = createAsyncThunk("roles/updateRole", async (roleInfo) => {
-    const response = await rolesApi.update(roleInfo)
+    const response = await rolesApi.updateRole(roleInfo)
     return response.data
 })
 export const deleteRole = createAsyncThunk("roles/deleteRole", async (roleId) => {
-    const response = await rolesApi.delete(roleId)
+    const response = await rolesApi.deleteRole(roleId)
     return response.data
 })

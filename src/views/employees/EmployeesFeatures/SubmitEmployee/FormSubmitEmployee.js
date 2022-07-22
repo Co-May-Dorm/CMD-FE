@@ -5,13 +5,14 @@ import { Button, Form, Modal, Tab, Tabs } from "react-bootstrap"
 import { BiPlusMedical, BiTrash } from 'react-icons/bi'
 
 import { addEmployee, updateEmployee } from "~/redux/employeesSlice"
-import { departmentsSelector } from "~/redux/selectors"
+import { departmentsSelector, teamsSelector } from "~/redux/selectors"
 import FormSelectDepartment from "./FormSelectDepartment"
 import FormSelectPosition from "./FormSelectPosition"
 import FormSelectTeam from "./FormSelectTeam"
 
 const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     const departments = useSelector(departmentsSelector).departments
+    const teams = useSelector(teamsSelector).teams
     const dispatch = useDispatch()
 
     /* Quản lý các state */
@@ -43,6 +44,12 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                     return {
                         ...employee.departments[index],
                         positions: departments.find(dp => dp.id === department.id).positions
+                    }
+                }),
+                teams: employee.teams.map((team, index, array) => {
+                    return {
+                        ...employee.teams[index],
+                        positions: teams.find(dp => dp.id === team.id).positions
                     }
                 })
             }
@@ -405,6 +412,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                                             index={index}
                                                             current={department}
                                                             onChange={handleDepartmentChange}
+                                                            departments={departments}
                                                         />
                                                     </div>
                                                     <div className="mb-3 ms-lg-3 col">
@@ -450,6 +458,7 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                                             index={index}
                                                             currentTeam={team}
                                                             onTeamChange={handleTeamChange}
+                                                            teams={teams}
                                                         />
                                                     </div>
                                                     <div className="mb-3 ms-lg-3 col">

@@ -1,25 +1,27 @@
 import axiosClient from "./axiosClient"
 
-// API liên quan đến phần CLB - Đội nhóm
+const queryString = require("query-string")
+
+// API liên quan đến phần đội nhóm
 const baseUrl = "/teams"
 const teamsApi = {
-    getAll: (filtersParams) => {
-        const requestUrl = `${baseUrl}`
-        return axiosClient.get(requestUrl, {filtersParams})
+    getTeamList: (params) => {
+        const requestUrl = `${baseUrl}?${queryString.stringify(params)}`
+        return axiosClient.get(requestUrl)
     },
-    get: (teamId) => {
+    getTeamDetailById: (teamId) => {
         const requestUrl = `${baseUrl}/${teamId}`
         return axiosClient.get(requestUrl)
     },
-    add: (teamInfo) => {
+    addTeam: (teamInfo) => {
         const requestUrl = `${baseUrl}/add`
         return axiosClient.post(requestUrl, teamInfo)
     },
-    update: (teamInfo) => {
+    updateTeam: (teamInfo) => {
         const requestUrl = `${baseUrl}/edit`
         return axiosClient.put(requestUrl, teamInfo)
     },
-    delete: (teamId) => {
+    deleteTeam: (teamId) => {
         const requestUrl = `${baseUrl}/delete/${teamId}`
         return axiosClient.delete(requestUrl)
     }

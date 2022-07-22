@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap'
 import { BiTrash } from 'react-icons/bi'
 
-import { fetchRoles } from '~/redux/rolesSlice'
+import { getRoleList } from '~/redux/rolesSlice'
 import { rolesSelector } from '~/redux/selectors'
 import Option from '~/components/Option'
 
@@ -20,7 +20,7 @@ const Positions = ({ departmentInfo, setDepartmentInfo }) => {
 
     const [visibleDeletePosition, setVisibleDeletePosition] = useState(false)
     useEffect(() => {
-        dispatch(fetchRoles())
+        dispatch(getRoleList())
     }, [])
 
     /* Các hàm thay đổi giá trị của state departmentInfo mỗi khi người dùng nhập/chọn dữ liệu mới */

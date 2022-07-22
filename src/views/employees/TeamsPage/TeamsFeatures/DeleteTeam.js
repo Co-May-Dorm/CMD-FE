@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-
 import { Button, Dropdown, Modal } from 'react-bootstrap'
 import { BiTrash } from 'react-icons/bi'
 
-import { deleteTeam } from '../../../../redux/teamsSlice'
+import { deleteTeam } from '~/redux/teamsSlice'
 
 
-const DeleteTeam = ({ id }) => {
+const DeleteTeam = ({ teamId }) => {
     const dispatch = useDispatch()
     const [visibleDeleteTeam, setVisibleDeleteTeam] = useState(false)
-    const handleDelete = (id) => {
-        dispatch(deleteTeam(id))
+    const handleDelete = (teamId) => {
+        dispatch(deleteTeam(teamId))
         setVisibleDeleteTeam(false)
     }
     return (
@@ -25,10 +24,10 @@ const DeleteTeam = ({ id }) => {
                 onHide={() => setVisibleDeleteTeam(false)}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>XÓA CLB - ĐỘI NHÓM</Modal.Title>
+                    <Modal.Title>XÓA ĐỘI NHÓM</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    Bạn có chắc muốn xóa CLB - Đội nhóm này khỏi KTX?
+                    Bạn có chắc muốn xóa Đội nhóm này khỏi KTX?
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
@@ -41,7 +40,7 @@ const DeleteTeam = ({ id }) => {
                     <Button
                         variant="danger"
                         className="text-white"
-                        onClick={() => handleDelete(id)}
+                        onClick={() => handleDelete(teamId)}
                     >
                         Đồng ý
                     </Button>

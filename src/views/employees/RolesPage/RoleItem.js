@@ -1,5 +1,4 @@
 import React from 'react'
-
 import { Accordion, ListGroup, Table } from 'react-bootstrap'
 
 import EditRole from './RolesFeatures/EditRole'

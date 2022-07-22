@@ -3,15 +3,15 @@ import { Dropdown } from 'react-bootstrap'
 import { BiEdit } from 'react-icons/bi'
 import { useDispatch } from 'react-redux'
 
-import { fetchDepartments } from '~/redux/departmentsSlice'
-import { fetchTeams } from '~/redux/teamsSlice'
+import { getDepartmentList } from '~/redux/departmentsSlice'
+import { getTeamList } from '~/redux/teamsSlice'
 import FormSubmitEmployee from './SubmitEmployee/FormSubmitEmployee'
 
 const EditEmployee = ({ employee }) => {
     const dispatch = useDispatch()
     const [visible, setVisible] = useState(false)
-    dispatch(fetchDepartments())
-    dispatch(fetchTeams())
+    dispatch(getDepartmentList())
+    dispatch(getTeamList())
     return (
         <>
             <Dropdown.Item as="button">

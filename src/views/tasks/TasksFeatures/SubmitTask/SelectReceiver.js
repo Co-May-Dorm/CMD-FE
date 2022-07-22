@@ -1,20 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
-
-import { Form, ListGroup } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
+import { Col, Form, Image, ListGroup, Row } from 'react-bootstrap'
+import { useSelector } from 'react-redux'
 
 import useOnClickOutside from '~/customHooks/useOnClickOutside'
 import { employeesSelector } from '~/redux/selectors'
-import { debounce } from 'lodash'
 
-const SelectReiver = ({ current, placeholder, onChange, ...props }) => {
+const SelectReiver = ({ current, placeholder, onChange, onBlur }) => {
     const receivers = useSelector(employeesSelector).employees
-    const dispatch = useDispatch()
 
     const [visible, setVisible] = useState(false)
-    const [searcTerm, setSearchTerm] = useState({
-        name: ""
-    })
+    const [name, setName] = useState("")
     const [employeeList, setEmployeeList] = useState([])
 
     const refForm = useRef()        // Ref form select current
@@ -38,21 +33,32 @@ const SelectReiver = ({ current, placeholder, onChange, ...props }) => {
                 placeholder={placeholder}
                 onClick={() => setVisible(!visible)}
                 value={current.name}
-                onChange={(e) => debounce(() => setSearchTerm({
-                    name: e.target.value
-                }), 1000)}
-                {...props}
+                onChange={(e) => setName(e.target.value)}
+                onBlur={onBlur}
             />
             <div className="select">
                 {
-                    visible && receivers.map((receiver, key) => (
+                    visible && receivers.map((receiver) => (
                         <ListGroup.Item
-                            action
-                            key={key}
+                            className="list-group-item-action"
+                            key={receiver.id}
                             onClick={() => onChange(receiver)}
-                            active={current.name === receiver.name}
+                            active={current.id === receiver.id}
                         >
-                            {receiver.name}
+                                            <Image
+                                                src={receiver.avatar}
+                                                width={40}
+                                                height={40}
+                                                className="rounded-circle col-auto me-2"
+                                            />
+                                            <Row className="flex-column">
+                                                <Col className="fw-bolder">
+                                                    {receiver.name}
+                                                </Col>
+                                                <Col>
+                                                    {receiver.code}
+                                                </Col>
+                                            </Row>
                         </ListGroup.Item>
                     ))
                 }

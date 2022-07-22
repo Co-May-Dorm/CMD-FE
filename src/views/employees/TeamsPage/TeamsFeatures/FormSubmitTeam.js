@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react"
-
 import { Button, Form, Modal } from "react-bootstrap"
 import { useDispatch } from "react-redux"
-import { addTeam, updateTeam } from "../../../../redux/teamsSlice"
 
+import { addTeam, updateTeam } from "~/redux/teamsSlice"
 import Positions from "./Positions"
 
 const FormSubmitTeam = ({ visible, setVisible, team = null }) => {
     const dispatch = useDispatch()
 
     /* Quản lý các state */
-    const [teaminfo, setTeamInfo] = useState({
-        // State lưu thông tin của CLB/Đội nhóm khi người dùng nhập dữ liệu
+    const [teamInfo, setTeamInfo] = useState({
+        // State lưu thông tin của đội nhóm khi người dùng nhập dữ liệu
         code: "",
         name: "",
         description: "",
@@ -25,10 +24,10 @@ const FormSubmitTeam = ({ visible, setVisible, team = null }) => {
         }
     }, [team])
 
-    /* Các hàm thay đổi giá trị của state teaminfo mỗi khi người dùng nhập/chọn dữ liệu mới */
+    /* Các hàm thay đổi giá trị của state teamInfo mỗi khi người dùng nhập/chọn dữ liệu mới */
     const handleInputChange = (e) => {
         setTeamInfo({
-            ...teaminfo,
+            ...teamInfo,
             [e.target.name]: e.target.value
         })
     }
@@ -46,17 +45,17 @@ const FormSubmitTeam = ({ visible, setVisible, team = null }) => {
         if (form.checkValidity() === true) {
             e.preventDefault()
             e.stopPropagation()
-            if (teaminfo.fatherTeamId === "") {
+            if (teamInfo.fatherTeamId === "") {
                 setTeamInfo({
-                    ...teaminfo,
+                    ...teamInfo,
                     fatherTeamId: null
                 })
             }
-            if (teaminfo.id) {
-                dispatch(updateTeam(teaminfo))
+            if (teamInfo.id) {
+                dispatch(updateTeam(teamInfo))
             }
             else {
-                dispatch(addTeam(teaminfo))
+                dispatch(addTeam(teamInfo))
             }
         }
     }
@@ -73,7 +72,7 @@ const FormSubmitTeam = ({ visible, setVisible, team = null }) => {
             >
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        {team?.id ? "CHỈNH SỬA CLB/Đội nhóm" : "THÊM CLB/Đội nhóm MỚI"}
+                        {team?.id ? "CHỈNH SỬA ĐỘI NHÓM" : "THÊM ĐỘI NHÓM MỚI"}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -83,32 +82,32 @@ const FormSubmitTeam = ({ visible, setVisible, team = null }) => {
                         onSubmit={handleSubmit}
                     >
                         <div className="mb-3">
-                            <Form.Label>Mã CLB/Đội nhóm:</Form.Label>
+                            <Form.Label>Mã đội nhóm:</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="code"
-                                placeholder="Nhập mã CLB/Đội nhóm..."
-                                value={teaminfo.code}
+                                placeholder="Nhập mã đội nhóm..."
+                                value={teamInfo.code}
                                 onChange={handleInputChange}
                                 required
                             />
                             <Form.Control.Feedback type="invalid">
-                                Vui lòng nhập mã CLB/Đội nhóm.
+                                Vui lòng nhập mã đội nhóm.
                             </Form.Control.Feedback>
                         </div>
                         <hr />
                         <div className="mb-3">
-                            <Form.Label>Tên CLB/Đội nhóm:</Form.Label>
+                            <Form.Label>Tên đội nhóm:</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="name"
-                                placeholder="Nhập tên CLB/Đội nhóm..."
-                                value={teaminfo.name}
+                                placeholder="Nhập tên đội nhóm..."
+                                value={teamInfo.name}
                                 onChange={handleInputChange}
                                 required
                             />
                             <Form.Control.Feedback type="invalid">
-                                Vui lòng nhập tên CLB/Đội nhóm.
+                                Vui lòng nhập tên đội nhóm.
                             </Form.Control.Feedback>
                         </div>
                         <hr />
@@ -118,13 +117,13 @@ const FormSubmitTeam = ({ visible, setVisible, team = null }) => {
                                 as="textarea"
                                 rows={10}
                                 name="description"
-                                placeholder="Nhập mô tả CLB/Đội nhóm..."
-                                value={teaminfo.description}
+                                placeholder="Nhập mô tả đội nhóm..."
+                                value={teamInfo.description}
                                 onChange={handleInputChange}
                             />
                         </div>
                         <hr />
-                        <Positions teaminfo={teaminfo} setTeamInfo={setTeamInfo} />
+                        <Positions teamInfo={teamInfo} setTeamInfo={setTeamInfo} />
                         <Modal.Footer>
                             <Button
                                 className="d-table m-auto"

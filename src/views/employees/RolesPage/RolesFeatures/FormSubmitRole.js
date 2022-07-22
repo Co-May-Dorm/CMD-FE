@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
-
 import { Button, Form, Modal, Table } from "react-bootstrap"
 import { useDispatch } from "react-redux"
-import rolesApi from "../../../../api/rolesApi"
-import { addRole, updateRole } from "../../../../redux/rolesSlice"
+
+import rolesApi from "~/api/rolesApi"
+import { addRole, updateRole } from "~/redux/rolesSlice"
 
 const FormSubmitRole = ({ visible, setVisible, roleId = null }) => {
     const dispatch = useDispatch()

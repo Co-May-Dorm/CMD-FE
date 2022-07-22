@@ -1,6 +1,12 @@
 import React from 'react'
-
+import PropTypes from 'prop-types'
 import { ListGroup, Modal, Table } from 'react-bootstrap'
+
+const propTypes = {
+    visible: PropTypes.bool.isRequired,
+    setVisible: PropTypes.func.isRequired,
+    team: PropTypes.object.isRequired
+}
 
 const TeamDetail = ({ team, visible, setVisible }) => {
     return (
@@ -13,19 +19,19 @@ const TeamDetail = ({ team, visible, setVisible }) => {
         >
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        Chi tiết CLB/Đội nhóm
+                        Chi tiết đội nhóm
                     </Modal.Title>
                 </Modal.Header>
             <Modal.Body>
                 <ListGroup variant="flush">
                     <ListGroup.Item>
-                        Mã CLB/Đội nhóm: {team.code}
+                        Mã đội nhóm: {team.code}
                     </ListGroup.Item>
                     <ListGroup.Item>
-                        Tên CLB/Đội nhóm: {team.name}
+                        Tên đội nhóm: {team.name}
                     </ListGroup.Item>
                     <ListGroup.Item>
-                        Mô tả về CLB/Đội nhóm: {(team.description === "") ? "Chưa có mô tả" : team.description}
+                        Mô tả về đội nhóm: {(team.description === "") ? "Chưa có mô tả" : team.description}
                     </ListGroup.Item>
                     <ListGroup.Item>
                         <Table
@@ -66,5 +72,7 @@ const TeamDetail = ({ team, visible, setVisible }) => {
 
     )
 }
+
+TeamDetail.propTypes = propTypes
 
 export default TeamDetail

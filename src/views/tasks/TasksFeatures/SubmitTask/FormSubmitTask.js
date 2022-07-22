@@ -98,12 +98,10 @@ const FormSubmitTask = ({ visible, setVisible, task = null }) => {
                                     <Form.Label>Người nhận:</Form.Label>
                                     <SelectReiver
                                         placeholder="Chọn người nhận"
-                                        // className={clsx({
-                                        //     "is-invalid": touched.receiverId && errors.receiverId
-                                        // })}
                                         current={values.receiverId}
-                                        onChange={(value) => {
-                                            setFieldValue("receiverId", value)
+                                        onChange={(receiver) => {
+                                            console.log(receiver)
+                                            setFieldValue("receiver", receiver)
                                         }}
                                     />
                                     {
