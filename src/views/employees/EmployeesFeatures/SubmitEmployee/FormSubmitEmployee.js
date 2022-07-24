@@ -3,12 +3,21 @@ import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Button, Form, Modal, Tab, Tabs } from "react-bootstrap"
 import { BiPlusMedical, BiTrash } from 'react-icons/bi'
+import PropTypes from 'prop-types'
 
 import { addEmployee, updateEmployee } from "~/redux/employeesSlice"
 import { departmentsSelector, teamsSelector } from "~/redux/selectors"
 import FormSelectDepartment from "./FormSelectDepartment"
 import FormSelectPosition from "./FormSelectPosition"
 import FormSelectTeam from "./FormSelectTeam"
+import { getDepartmentList } from "~/redux/departmentsSlice"
+import { getTeamList } from "~/redux/teamsSlice"
+
+const propTypes = {
+    visible: PropTypes.bool.isRequired,
+    setVisible: PropTypes.func.isRequired,
+    employee: PropTypes.object
+}
 
 const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     const departments = useSelector(departmentsSelector).departments
@@ -35,20 +44,25 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
     //
 
     useEffect(() => {
+        dispatch(getDepartmentList())
+        dispatch(getTeamList())
+    }, [])
+
+    useEffect(() => {
         if (employee?.id) {
             let data = {
                 ...employee,
                 user: (employee.user.enableLogin !== false) ? employee.user : { username: "" },
-                departments: employee.departments.map((department, index, array) => {
+                departments: employee.departments.map((department, index) => {
                     return {
                         ...employee.departments[index],
                         positions: departments.find(dp => dp.id === department.id).positions
                     }
                 }),
-                teams: employee.teams.map((team, index, array) => {
+                teams: employee.teams.map((team, index) => {
                     return {
                         ...employee.teams[index],
-                        positions: teams.find(dp => dp.id === team.id).positions
+                        positions: teams.find(tm => tm.id === team.id).positions
                     }
                 })
             }
@@ -296,263 +310,266 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                     {employee?.id ? "Chỉnh sửa nhân viên" : "Thêm nhân viên"}
                 </Modal.Title>
             </Modal.Header>
-            <Form
-                className="modal-body"
-                noValidate
-                validated={validated}
-                onSubmit={handleSubmit}
-            >
-                <div className="modal-body-content">
-                    <div className="mb-3">
-                        <Form.Label>Mã nhân viên:</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="code"
-                            placeholder="Nhập mã nhân viên..."
-                            value={employeeInfo.code}
-                            onChange={handleInputChange}
-                            required
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Vui lòng nhập mã nhân viên.
-                        </Form.Control.Feedback>
-                    </div>
-                    <hr />
-                    <div className="mb-3">
-                        <Form.Label>Họ và tên:</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="name"
-                            placeholder="Nhập họ và tên nhân viên..."
-                            value={employeeInfo.name}
-                            onChange={handleInputChange}
-                            required
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Vui lòng nhập họ và tên nhân viên.
-                        </Form.Control.Feedback>
-                    </div>
-                    <hr />
-                    <div className="mb-3">
-                        <Form.Label>Ngày sinh:</Form.Label>
-                        <Form.Control
-                            type="date"
-                            name="dateOfBirth"
-                            placeholder="Nhập ngày sinh..."
-                            value={employeeInfo.dateOfBirth || ""}
-                            onChange={handleInputChange}
-                            required
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Vui lòng nhập ngày sinh.
-                        </Form.Control.Feedback>
-                    </div>
-                    <hr />
-                    <div className="mb-3">
-                        <Form.Label>Giới tính:</Form.Label>
-                        <Form.Select
-                            name="gender"
-                            value={employeeInfo.gender}
-                            onChange={handleInputChange}
-                            required
-                        >
-                            <option value="0">Nữ</option>
-                            <option value="1">Nam</option>
-                        </Form.Select>
-                        <Form.Control.Feedback type="invalid">
-                            Vui lòng nhập ngày sinh.
-                        </Form.Control.Feedback>
-                    </div>
-                    <hr />
-                    <div className="mb-3">
-                        <Form.Label>Email:</Form.Label>
-                        <Form.Control
-                            type="email"
-                            name="email"
-                            placeholder="Nhập email nhân viên..."
-                            value={employeeInfo.email}
-                            onChange={handleInputChange}
-                            required
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Vui lòng nhập email.
-                        </Form.Control.Feedback>
-                    </div>
-                    <hr />
-                    <div className="mb-3">
-                        <Form.Label>Số điện thoại:</Form.Label>
-                        <Form.Control
-                            type="number"
-                            name="phoneNumber"
-                            placeholder="Nhập số điện thoại của nhân viên..."
-                            value={employeeInfo.phoneNumber}
-                            onChange={handleInputChange}
-                            required
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Vui lòng nhập số điện thoại.
-                        </Form.Control.Feedback>
-                    </div>
-                    <hr />
-                    <div className="card mb-3">
-                        <Tabs
-                            activeKey={tab}
-                            onSelect={(k) => setTab(k)}
-                        >
-                            <Tab eventKey="departments" title="Phòng ban">
-                                <div className="card-body">
-                                    {
-                                        employeeInfo.departments.map((department, index) => (
-                                            <div key={index} className="list-group-item bg-light mb-3">
-                                                <div className="d-flex flex-lg-row flex-column">
-                                                    <div className="mb-3 mb-lg-0 col">
-                                                        <Form.Label>Phòng ban số {index + 1}:</Form.Label>
-                                                        <FormSelectDepartment
-                                                            index={index}
-                                                            current={department}
-                                                            onChange={handleDepartmentChange}
-                                                            departments={departments}
-                                                        />
-                                                    </div>
-                                                    <div className="mb-3 ms-lg-3 col">
-                                                        <Form.Label>Chức vụ của phòng ban số {index + 1}:</Form.Label>
-                                                        <FormSelectPosition
-                                                            index={index}
-                                                            current={employeeInfo.departments[index]?.position}
-                                                            positions={employeeInfo.departments[index]?.positions}
-                                                            onChange={handlePositionOfDepartmentChange}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <Button
-                                                    variant="outline-danger"
-                                                    className="d-block m-auto"
-                                                    onClick={() => handleDeleteFormSelectDepartment(index)}
-                                                >
-                                                    <BiTrash /> Xóa
-                                                </Button>
-                                            </div>
-                                        ))
-                                    }
-                                </div>
-                                <div className="mb-3">
-                                    <Button
-                                        variant="outline-primary"
-                                        className="d-block m-auto"
-                                        onClick={handleShowFormSelectDepartment}
-                                    >
-                                        <BiPlusMedical />{" "} Thêm phòng ban {" "}<BiPlusMedical />
-                                    </Button>
-                                </div>
-                            </Tab>
-                            <Tab eventKey="teams" title="Đội nhóm">
-                                <div className="card-body">
-                                    {
-                                        employeeInfo.teams?.map((team, index) => (
-                                            <div key={index} className="list-group-item bg-light mb-3">
-                                                <div className="d-flex flex-lg-row flex-column">
-                                                    <div className="mb-3 mb-lg-0 col">
-                                                        <Form.Label>Đội nhóm số {index + 1}:</Form.Label>
-                                                        <FormSelectTeam
-                                                            index={index}
-                                                            currentTeam={team}
-                                                            onTeamChange={handleTeamChange}
-                                                            teams={teams}
-                                                        />
-                                                    </div>
-                                                    <div className="mb-3 ms-lg-3 col">
-                                                        <Form.Label>Chức vụ của đội nhóm số {index + 1}:</Form.Label>
-                                                        <FormSelectPosition
-                                                            index={index}
-                                                            current={employeeInfo.teams[index]?.position}
-                                                            positions={employeeInfo.teams[index]?.positions}
-                                                            onChange={handlePositionOfTeamChange}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <Button
-                                                    variant="outline-danger"
-                                                    className="d-block m-auto"
-                                                    onClick={() => handleDeleteFormSelectTeam(index)}
-                                                >
-                                                    <BiTrash /> Xóa
-                                                </Button>
-                                            </div>
-                                        ))
-                                    }
-                                </div>
-                                <div className="mb-3">
-                                    <Button
-                                        variant="outline-primary"
-                                        className="d-block m-auto"
-                                        onClick={handleShowFormSelectTeam}
-                                    >
-                                        <BiPlusMedical />{" "} Thêm đội nhóm {" "}<BiPlusMedical />
-                                    </Button>
-                                </div>
-                            </Tab>
-                        </Tabs>
-                    </div>
-                    <hr />
-                    <div className="card mb-3">
-                        <div className="card-header">
-                            <Form.Check
-                                type="switch"
-                                label="Cho phép đăng nhập"
-                                checked={employeeInfo.user.enableLogin}
-                                onChange={handleToggleLogin}
-                            />
-                        </div>
-                        <div className="card-body">
-                            {(employeeInfo.user.enableLogin) ? (
-                                <>
-                                    <div className="mb-3">
-                                        <Form.Label htmlFor="username" className="mt-3">Tên đăng nhập:</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            name="username"
-                                            placeholder="Nhập tên đăng nhập..."
-                                            value={employeeInfo.user?.username || employeeInfo.email}
-                                            onChange={handleUserChange}
-                                            required
-                                        />
-                                        <Form.Control.Feedback type="invalid">
-                                            Vui lòng nhập tên đăng nhập.
-                                        </Form.Control.Feedback>
-                                    </div>
-                                    {((employee?.id && employee?.user.username === "" && employee?.user.password === "cmdcmdcmd") || !employee) ? (
-                                        <>
-                                            <hr />
-                                            <div className="mb-3">
-                                                <Form.Label htmlFor="password">Mật khẩu:</Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    name="password"
-                                                    placeholder="Nhập mật khẩu..."
-                                                    value={"cmacmacma"}
-                                                    readOnly
-                                                />
-                                                <Form.Control.Feedback type="invalid">
-                                                    Vui lòng nhập mật khẩu.
-                                                </Form.Control.Feedback>
-                                            </div>
-                                        </>
-                                    ) : null}
-                                </>
-                            ) : null}
-                        </div>
-                    </div>
-                </div>
-                <Button
-                    size="lg"
-                    type="submit"
-                    className="d-table m-auto"
+            <Modal.Body>
+                <Form
+                    noValidate
+                    validated={validated}
+                    onSubmit={handleSubmit}
                 >
-                    {(employee?.id) ? "Cập nhật thông tin" : "Xác nhận tạo mới"}
-                </Button>
-            </Form>
+                    <div className="modal-body-content">
+                        <div className="mb-3">
+                            <Form.Label>Mã nhân viên:</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="code"
+                                placeholder="Nhập mã nhân viên..."
+                                value={employeeInfo.code}
+                                onChange={handleInputChange}
+                                required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Vui lòng nhập mã nhân viên.
+                            </Form.Control.Feedback>
+                        </div>
+                        <hr />
+                        <div className="mb-3">
+                            <Form.Label>Họ và tên:</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="name"
+                                placeholder="Nhập họ và tên nhân viên..."
+                                value={employeeInfo.name}
+                                onChange={handleInputChange}
+                                required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Vui lòng nhập họ và tên nhân viên.
+                            </Form.Control.Feedback>
+                        </div>
+                        <hr />
+                        <div className="mb-3">
+                            <Form.Label>Ngày sinh:</Form.Label>
+                            <Form.Control
+                                type="date"
+                                name="dateOfBirth"
+                                placeholder="Nhập ngày sinh..."
+                                value={employeeInfo.dateOfBirth || ""}
+                                onChange={handleInputChange}
+                                required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Vui lòng nhập ngày sinh.
+                            </Form.Control.Feedback>
+                        </div>
+                        <hr />
+                        <div className="mb-3">
+                            <Form.Label>Giới tính:</Form.Label>
+                            <Form.Select
+                                name="gender"
+                                value={employeeInfo.gender}
+                                onChange={handleInputChange}
+                                required
+                            >
+                                <option value="0">Nữ</option>
+                                <option value="1">Nam</option>
+                            </Form.Select>
+                            <Form.Control.Feedback type="invalid">
+                                Vui lòng nhập ngày sinh.
+                            </Form.Control.Feedback>
+                        </div>
+                        <hr />
+                        <div className="mb-3">
+                            <Form.Label>Email:</Form.Label>
+                            <Form.Control
+                                type="email"
+                                name="email"
+                                placeholder="Nhập email nhân viên..."
+                                value={employeeInfo.email}
+                                onChange={handleInputChange}
+                                required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Vui lòng nhập email.
+                            </Form.Control.Feedback>
+                        </div>
+                        <hr />
+                        <div className="mb-3">
+                            <Form.Label>Số điện thoại:</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="phoneNumber"
+                                placeholder="Nhập số điện thoại của nhân viên..."
+                                value={employeeInfo.phoneNumber}
+                                onChange={handleInputChange}
+                                required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Vui lòng nhập số điện thoại.
+                            </Form.Control.Feedback>
+                        </div>
+                        <hr />
+                        <div className="card mb-3">
+                            <Tabs
+                                activeKey={tab}
+                                onSelect={(k) => setTab(k)}
+                            >
+                                <Tab eventKey="departments" title="Phòng ban">
+                                    <div className="card-body">
+                                        {
+                                            employeeInfo.departments.map((department, index) => (
+                                                <div key={index} className="list-group-item bg-light mb-3">
+                                                    <div className="d-flex flex-lg-row flex-column">
+                                                        <div className="mb-3 mb-lg-0 col">
+                                                            <Form.Label>Phòng ban số {index + 1}:</Form.Label>
+                                                            <FormSelectDepartment
+                                                                index={index}
+                                                                currentDepartment={department}
+                                                                onDepartmentChange={handleDepartmentChange}
+                                                                departments={departments}
+                                                            />
+                                                        </div>
+                                                        <div className="mb-3 ms-lg-3 col">
+                                                            <Form.Label>Chức vụ của phòng ban số {index + 1}:</Form.Label>
+                                                            <FormSelectPosition
+                                                                index={index}
+                                                                current={employeeInfo.departments[index]?.position}
+                                                                positions={employeeInfo.departments[index]?.positions}
+                                                                onChange={handlePositionOfDepartmentChange}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <Button
+                                                        variant="outline-danger"
+                                                        className="d-block m-auto"
+                                                        onClick={() => handleDeleteFormSelectDepartment(index)}
+                                                    >
+                                                        <BiTrash /> Xóa
+                                                    </Button>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                    <div className="mb-3">
+                                        <Button
+                                            variant="outline-primary"
+                                            className="d-block m-auto"
+                                            onClick={handleShowFormSelectDepartment}
+                                        >
+                                            <BiPlusMedical />{" "} Thêm phòng ban {" "}<BiPlusMedical />
+                                        </Button>
+                                    </div>
+                                </Tab>
+                                <Tab eventKey="teams" title="Đội nhóm">
+                                    <div className="card-body">
+                                        {
+                                            employeeInfo.teams?.map((team, index) => (
+                                                <div key={index} className="list-group-item bg-light mb-3">
+                                                    <div className="d-flex flex-lg-row flex-column">
+                                                        <div className="mb-3 mb-lg-0 col">
+                                                            <Form.Label>Đội nhóm số {index + 1}:</Form.Label>
+                                                            <FormSelectTeam
+                                                                index={index}
+                                                                currentTeam={team}
+                                                                onTeamChange={handleTeamChange}
+                                                                teams={teams}
+                                                            />
+                                                        </div>
+                                                        <div className="mb-3 ms-lg-3 col">
+                                                            <Form.Label>Chức vụ của đội nhóm số {index + 1}:</Form.Label>
+                                                            <FormSelectPosition
+                                                                index={index}
+                                                                current={employeeInfo.teams[index]?.position}
+                                                                positions={employeeInfo.teams[index]?.positions}
+                                                                onChange={handlePositionOfTeamChange}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <Button
+                                                        variant="outline-danger"
+                                                        className="d-block m-auto"
+                                                        onClick={() => handleDeleteFormSelectTeam(index)}
+                                                    >
+                                                        <BiTrash /> Xóa
+                                                    </Button>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                    <div className="mb-3">
+                                        <Button
+                                            variant="outline-primary"
+                                            className="d-block m-auto"
+                                            onClick={handleShowFormSelectTeam}
+                                        >
+                                            <BiPlusMedical />{" "} Thêm đội nhóm {" "}<BiPlusMedical />
+                                        </Button>
+                                    </div>
+                                </Tab>
+                            </Tabs>
+                        </div>
+                        <hr />
+                        <div className="card mb-3">
+                            <div className="card-header">
+                                <Form.Check
+                                    type="switch"
+                                    label="Cho phép đăng nhập"
+                                    checked={employeeInfo.user.enableLogin}
+                                    onChange={handleToggleLogin}
+                                />
+                            </div>
+                            <div className="card-body">
+                                {(employeeInfo.user.enableLogin) ? (
+                                    <>
+                                        <div className="mb-3">
+                                            <Form.Label htmlFor="username" className="mt-3">Tên đăng nhập:</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                name="username"
+                                                placeholder="Nhập tên đăng nhập..."
+                                                value={employeeInfo.user?.username || employeeInfo.email}
+                                                onChange={handleUserChange}
+                                                required
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                Vui lòng nhập tên đăng nhập.
+                                            </Form.Control.Feedback>
+                                        </div>
+                                        {((employee?.id && employee?.user.username === "" && employee?.user.password === "cmdcmdcmd") || !employee) ? (
+                                            <>
+                                                <hr />
+                                                <div className="mb-3">
+                                                    <Form.Label htmlFor="password">Mật khẩu:</Form.Label>
+                                                    <Form.Control
+                                                        type="text"
+                                                        name="password"
+                                                        placeholder="Nhập mật khẩu..."
+                                                        value={"cmacmacma"}
+                                                        readOnly
+                                                    />
+                                                    <Form.Control.Feedback type="invalid">
+                                                        Vui lòng nhập mật khẩu.
+                                                    </Form.Control.Feedback>
+                                                </div>
+                                            </>
+                                        ) : null}
+                                    </>
+                                ) : null}
+                            </div>
+                        </div>
+                    </div>
+                    <Button
+                        size="lg"
+                        type="submit"
+                        className="d-table m-auto"
+                    >
+                        {(employee?.id) ? "Cập nhật thông tin" : "Xác nhận tạo mới"}
+                    </Button>
+                </Form>
+            </Modal.Body>
         </Modal>
     )
 }
+
+FormSubmitEmployee.propTypes = propTypes
 
 export default FormSubmitEmployee

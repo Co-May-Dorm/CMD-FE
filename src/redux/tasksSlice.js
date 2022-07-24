@@ -119,7 +119,7 @@ const tasksSlice = createSlice({
                 // Nếu gửi request xoắ công việc thành công lên Server
                 if (action.payload.status === "OK") {
                     // Thực hiện lọc ra những công việc có id khác với id công việc cần xóa
-                    state.tasks = state.tasks.filter((task) => task.id !== action.payload.id)
+                    state.tasks = state.tasks.filter((task) => task.id !== action.payload.data)
 
                     // Hiển thị thông báo xóa công việc thành công
                     swal({

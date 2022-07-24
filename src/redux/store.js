@@ -6,7 +6,7 @@ import employeesSlice from './employeesSlice'
 import departmentsSlice from './departmentsSlice'
 import teamsSlice from './teamsSlice'
 import rolesSlice from './rolesSlice'
-import requestsSlice from './proposalsSlice'
+import proposalsSlice from './proposalsSlice'
 import tasksSlice from './tasksSlice'
 
 const store = configureStore({
@@ -17,8 +17,8 @@ const store = configureStore({
         departments: departmentsSlice.reducer,
         teams: teamsSlice.reducer,
         roles: rolesSlice.reducer,
-        requests: requestsSlice.reducer,
-        tasks: tasksSlice.reducer
+        tasks: tasksSlice.reducer,
+        proposals: proposalsSlice.reducer
     }
 })
 

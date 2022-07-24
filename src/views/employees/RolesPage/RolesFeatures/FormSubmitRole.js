@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
 import { Button, Form, Modal, Table } from "react-bootstrap"
 import { useDispatch } from "react-redux"
@@ -521,9 +522,10 @@ const FormSubmitRole = ({ visible, setVisible, roleId = null }) => {
 
     useEffect(() => {
         if (roleId) {
-            rolesApi.get(roleId).then((response) => {
-                setRoleInfo(response.data.data)
-            })
+            rolesApi.getRoleDetailById(roleId)
+                .then((response) => {
+                    setRoleInfo(response.data.data)
+                })
         }
     }, [])
 

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AiOutlineSortAscending, AiOutlineSortDescending } from 'react-icons/ai'
 import { BiArrowFromTop, BiSortAlt2 } from 'react-icons/bi'
-import { Card, Container, Dropdown } from 'react-bootstrap'
+import { Button, Card, Container, Dropdown } from 'react-bootstrap'
 
 import { getEmployeeList } from '~/redux/employeesSlice'
 import { employeesSelector } from '~/redux/selectors'
@@ -30,7 +30,7 @@ const EmployeesMainPage = () => {
     const location = useLocation()          // Lấy thông tin từ URL của trang hiện tại
     const navigation = useNavigate()        // Thực hiện công việc điều hướng trang
 
-    const [visibleFilter, setVisileFilter] = useState(false)
+    const [visibleFiltersAdvancedUI, setVisibleFiltersAdvancedUI] = useState(false)
     const [filters, setFilters] = useState({
         page: 1
     })      // State lưu trữ các params truyền vào API để lấy dữ liệu từ Back End
@@ -128,7 +128,15 @@ const EmployeesMainPage = () => {
                         <AddEmployee />
                     </div>
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
-                        <FiltersAdvanced filters={filters} setFilters={setFilters} />
+                        <Button
+                            variant="outline-primary"
+                            onClick={() => setVisibleFiltersAdvancedUI(true)}
+                        >
+                            <div className="fw-bolder">
+                                Lọc nâng cao
+                            </div>
+                        </Button>
+                        <FiltersAdvanced visible={visibleFiltersAdvancedUI} setVisible={setVisibleFiltersAdvancedUI} filters={filters} setFilters={setFilters} />
                     </div>
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
                         <ExportDataToCSV data={employees} />

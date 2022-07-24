@@ -9,13 +9,22 @@ const AppContent = () => {
         <div className="container-fluid mt-3">
             <Routes>
                 {
-                    routes.map((route, index) => {
+                    routes.map((route) => {
                         return (
                             route.element && (
                                 <Route
-                                    key={index}
+                                    key={route.name}
                                     {...route}
-                                />
+                                >
+                                    {
+                                        route.children && route.children.length > 0 && route.children.map((children) => (
+                                            <Route
+                                                key={children.name}
+                                                {...children}
+                                            />
+                                        ))
+                                    }
+                                </Route>
                             )
                         )
                     })

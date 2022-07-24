@@ -108,7 +108,7 @@ const employeesSlice = createSlice({
                 // Nếu gửi request xoắ nhân viên thành công lên Server
                 if (action.payload.status === "OK") {
                     // Thực hiện lọc ra những nhân viên có id khác với id nhân viên cần xóa
-                    state.employees = state.employees.filter((employee) => employee.id !== action.payload.data.id)
+                    state.employees = state.employees.filter((employee) => employee.id !== action.payload.data)
 
                     // Hiển thị thông báo xóa nhân viên thành công
                     swal({

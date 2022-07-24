@@ -100,7 +100,7 @@ const teamsSlice = createSlice({
                 // Nếu gửi request xoắ đội nhóm thành công lên Server
                 if (action.payload.status === "OK") {
                     // Thực hiện lọc ra những đội nhóm có id khác với id đội nhóm cần xóa
-                    state.teams = state.teams.filter((team) => team.id !== action.payload.id)
+                    state.teams = state.teams.filter((team) => team.id !== action.payload.data)
 
                     // Hiển thị thông báo xóa đội nhóm thành công
                     swal({

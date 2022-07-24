@@ -101,7 +101,7 @@ const departmentsSlice = createSlice({
                 // Nếu gửi request xoắ phòng ban thành công lên Server
                 if (action.payload.status === "OK") {
                     // Thực hiện lọc ra những phòng ban có id khác với id phòng ban cần xóa
-                    state.departments = state.departments.filter((department) => department.id !== action.payload.id)
+                    state.departments = state.departments.filter((department) => department.id !== action.payload.data)
 
                     // Hiển thị thông báo xóa phòng ban thành công
                     swal({

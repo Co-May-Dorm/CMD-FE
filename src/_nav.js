@@ -13,7 +13,7 @@ const _nav = [
     },
     {
         name: 'Đề xuất',
-        to: '/requests',
+        to: '/proposals',
     },
     {
         name: 'Nhân viên',
