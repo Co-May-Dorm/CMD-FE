@@ -61,8 +61,8 @@ const TeamDetail = ({ visible, setVisible, teamId }) => {
                             </thead>
                             <tbody>
                                 {
-                                    teamInfo.positions.map((position, index) => (
-                                        <tr key={index}>
+                                    teamInfo.positions?.map((position) => (
+                                        <tr key={position.id}>
                                             <td>{position.name}</td>
                                             <td>{position.role?.name}</td>
                                         </tr>

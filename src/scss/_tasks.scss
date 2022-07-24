@@ -17,6 +17,7 @@
         .task-creator {
             flex: 0 0 auto;
             width: 120px;
+            text-align: end;
         }
         .task-arrow {
             flex: 0 0 auto;
@@ -83,7 +84,7 @@
         .task-status {
             flex: 0 0 auto;
             width: 10%;
-            text-align: right;
+            text-align: end;
         }
         .task-rate {
             flex: 0 0 auto;

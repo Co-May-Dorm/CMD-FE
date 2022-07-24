@@ -7,22 +7,22 @@ import { BiSortAlt2 } from 'react-icons/bi'
 import { Button, Card, Container } from 'react-bootstrap'
 import clsx from 'clsx'
 
-import { getTaskList, getTaskListByStatusIds } from '~/redux/tasksSlice'
+import { getTaskListAssignedToMe, getTaskListByStatusIds } from '~/redux/tasksSlice'
 import { tasksSelector } from '~/redux/selectors'
 import AppPagination from '~/components/AppPagination'
-import TaskRow from './TaskRow'
-import AddTask from './TasksFeatures/AddTask'
 import Loading from '~/components/Loading'
-import FiltersByStatusIds from './TasksFeatures/FiltersByStatusIds'
-import FiltersAdvanced from './TasksFeatures/FiltersAdvanced'
+import TaskRow from '../TaskRow'
+import AddTask from '../TasksFeatures/AddTask'
+import FiltersByStatusIds from '../TasksFeatures/FiltersByStatusIds'
+import FiltersAdvanced from '../TasksFeatures/FiltersAdvanced'
 
 const queryString = require('query-string')
 
-const TasksMainPage = () => {
+const TasksAssignedToMe = () => {
     const status = useSelector(tasksSelector).status
     const tasks = useSelector(tasksSelector).tasks
     const pagination = useSelector(tasksSelector).pagination
-
+    
     const dispatch = useDispatch()
     const location = useLocation()
     const navigation = useNavigate()
@@ -35,7 +35,7 @@ const TasksMainPage = () => {
     })
 
     useEffect(() => {
-        document.title = "Công việc"     // Thiết lập tiêu đề cho trang
+        document.title = "Công việc của tôi"     // Thiết lập tiêu đề cho trang
 
         // Kiểm tra nếu load lại trang thì giữ nguyên các filter hiện tại
         if (location.search.length > 0) {
@@ -62,7 +62,7 @@ const TasksMainPage = () => {
     useEffect(() => {
         const requestUrl = location.pathname + "?" + queryString.stringify(filtersAdvanced)
         navigation(requestUrl)
-        dispatch(getTaskList(filtersAdvanced))
+        dispatch(getTaskListAssignedToMe(filtersAdvanced))
     }, [filtersAdvanced])
 
     //  Hàm thay đổi state khi ấn vào trang mới ở phần phân trang
@@ -103,7 +103,7 @@ const TasksMainPage = () => {
             <Container fluid>
                 <div className="row justify-content-xl-between justify-content-end align-items-center">
                     <div className="col-auto fw-bolder fs-5 mb-xl-0 mb-3">
-                        TẤT CẢ CÔNG VIỆC
+                        CÔNG VIỆC CỦA TÔI
                     </div>
                     <div className="col" />
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
@@ -216,6 +216,7 @@ const TasksMainPage = () => {
                             }
                         </span>
                     </div>
+                    <div className="task-more" />
                 </div>
                 {
                     status === "loading" ? (
@@ -251,4 +252,4 @@ const TasksMainPage = () => {
     )
 }
 
-export default TasksMainPage
+export default TasksAssignedToMe

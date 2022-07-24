@@ -38,7 +38,7 @@ const DepartmentsMainPage = ({ visible, setVisible }) => {
                 departmentsElement.push(
                     <DepartmentRow
                         key={department_child.id}
-                        department={department_child}
+                        departmentInfo={department_child}
                     />
                 )
                 recursiveDepartmentChild(department_child, level + 1)
@@ -51,7 +51,7 @@ const DepartmentsMainPage = ({ visible, setVisible }) => {
                 departmentsElement.push(
                     <DepartmentRow
                         key={department.id}
-                        department={department}
+                        departmentInfo={department}
                     />
                 )
                 recursiveDepartmentChild(department, 2)

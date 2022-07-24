@@ -27,6 +27,17 @@ const tasksSlice = createSlice({
             .addCase(getTaskList.rejected, (state, action) => {
                 state.status = "error"
             })
+            .addCase(getTaskListAssignedToMe.pending, (state, action) => {
+                state.status = "loading"
+            })
+            .addCase(getTaskListAssignedToMe.fulfilled, (state, action) => {
+                state.tasks = action.payload.tasks
+                state.pagination = action.payload.pagination
+                state.status = "success"
+            })
+            .addCase(getTaskListAssignedToMe.rejected, (state, action) => {
+                state.status = "error"
+            })
             .addCase(getTaskListByStatusIds.pending, (state, action) => {
                 state.status = "loading"
             })
@@ -156,6 +167,10 @@ export default tasksSlice
 
 export const getTaskList = createAsyncThunk("tasks/getTaskList", async (params) => {
     const response = await tasksApi.getTaskList(params)
+    return response.data.data
+})
+export const getTaskListAssignedToMe = createAsyncThunk("tasks/getTaskListAssignedToMe", async (params) => {
+    const response = await tasksApi.getTaskListAssignedToMe(params)
     return response.data.data
 })
 export const getTaskListByStatusIds = createAsyncThunk("tasks/getTaskListByStatusIds", async (listStatusIds) => {

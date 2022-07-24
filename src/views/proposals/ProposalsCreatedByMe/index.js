@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { AiOutlineSortAscending, AiOutlineSortDescending } from 'react-icons/ai'
 import { BiSortAlt2 } from 'react-icons/bi'
-import { Card, Container } from 'react-bootstrap'
+import { Button, Card, Container } from 'react-bootstrap'
+import clsx from 'clsx'
 
-import { getProposalList } from '~/redux/proposalsSlice'
+import { getProposalListCreatedByMe } from '~/redux/proposalsSlice'
 import { proposalsSelector } from '~/redux/selectors'
 import AppPagination from '~/components/AppPagination'
 import Loading from '~/components/Loading'
@@ -37,7 +38,7 @@ const ProposalsCreatedByMe = () => {
     })
 
     useEffect(() => {
-        document.title = "Đề xuất"     // Thiết lập tiêu đề cho trang
+        document.title = "Đề xuất của tôi"     // Thiết lập tiêu đề cho trang
 
         // Kiểm tra nếu load lại trang thì giữ nguyên các filter hiện tại
         if (location.search.length > 0) {
@@ -58,7 +59,7 @@ const ProposalsCreatedByMe = () => {
     }, [])
 
     useEffect(() => {
-        dispatch(getProposalList({
+        dispatch(getProposalListCreatedByMe({
             params: filtersBase,
             filters: filtersAdvanced
         }))
@@ -67,7 +68,7 @@ const ProposalsCreatedByMe = () => {
     useEffect(() => {
         const requestUrl = location.pathname + "?" + queryString.stringify(filtersBase)
         navigation(requestUrl)
-        dispatch(getProposalList({
+        dispatch(getProposalListCreatedByMe({
             params: filtersBase,
             filters: filtersAdvanced
         }))
@@ -125,6 +126,29 @@ const ProposalsCreatedByMe = () => {
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
                         <FiltersAdvanced filtersAdvanced={filtersAdvanced} setFiltersAdvanced={setFiltersAdvanced} />
                     </div>
+                </div>
+                <div className="d-flex justify-content-start align-items-center">
+                    <NavLink to="/proposals" end>
+                        {
+                            ({ isActive }) => <Button className="col-auto m-1" variant={clsx({ "primary": isActive, "outline-primary": !isActive })}>
+                                Tất cả
+                            </Button>
+                        }
+                    </NavLink>
+                    <NavLink to="/proposals/created-by-me">
+                        {
+                            ({ isActive }) => <Button className="col-auto m-1" variant={clsx({ "primary": isActive, "outline-primary": !isActive })}>
+                                Đề xuất của tôi
+                            </Button>
+                        }
+                    </NavLink>
+                    <NavLink to="/proposals/approve-by-me">
+                        {
+                            ({ isActive }) => <Button className="col-auto m-1" variant={clsx({ "primary": isActive, "outline-primary": !isActive })}>
+                                Đề xuất tôi duyệt
+                            </Button>
+                        }
+                    </NavLink>
                 </div>
                 <hr />
             </Container>

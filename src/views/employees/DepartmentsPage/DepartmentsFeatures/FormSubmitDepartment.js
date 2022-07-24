@@ -80,90 +80,88 @@ const FormSubmitDepartment = ({ visible, setVisible, department = null }) => {
         name: "Không có phòng ban cha"
     }
     return (
-        <>
-            <Modal
-                className="modal-fullheight"
-                size="md"
-                scrollable
-                show={visible}
-                onHide={() => setVisible(false)}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>
-                        {department?.id ? "CHỈNH SỬA PHÒNG BAN" : "THÊM PHÒNG BAN MỚI"}
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form
-                        noValidate
-                        validated={validated}
-                        onSubmit={handleSubmit}
-                    >
-                        <div className="mb-3">
-                            <Form.Label>Mã phòng ban:</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="code"
-                                placeholder="Nhập mã phòng ban..."
-                                value={departmentInfo.code}
-                                onChange={handleInputChange}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Vui lòng nhập mã phòng ban.
-                            </Form.Control.Feedback>
-                        </div>
-                        <hr />
-                        <div className="mb-3">
-                            <Form.Label>Tên phòng ban:</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="name"
-                                placeholder="Nhập tên phòng ban..."
-                                value={departmentInfo.name}
-                                onChange={handleInputChange}
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Vui lòng nhập tên phòng ban.
-                            </Form.Control.Feedback>
-                        </div>
-                        <hr />
-                        <div className="mb-3">
-                            <Form.Label>Mô tả:</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                rows={10}
-                                name="description"
-                                placeholder="Nhập mô tả phòng ban..."
-                                value={departmentInfo.description}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <hr />
-                        <div className="mb-3">
-                            <Form.Label>Phòng ban cha:</Form.Label>
-                            <FormSelectDepartment
-                                index={null}
-                                currentDepartment={fatherDepartment}
-                                onDepartmentChange={handleDepartmentChange}
-                                departments={departments}
-                            />
-                        </div>
-                        <Positions departmentInfo={departmentInfo} setDepartmentInfo={setDepartmentInfo} />
-                        <Modal.Footer>
-                            <Button
-                                className="d-table m-auto"
-                                size="lg"
-                                type="submit"
-                            >
-                                {(department?.id) ? "Cập nhật thông tin" : "Xác nhận tạo mới"}
-                            </Button>
-                        </Modal.Footer>
-                    </Form>
-                </Modal.Body>
-            </Modal>
-        </>
+        <Modal
+            className="modal-fullheight"
+            size="md"
+            scrollable
+            show={visible}
+            onHide={() => setVisible(false)}
+        >
+            <Modal.Header closeButton>
+                <Modal.Title>
+                    {department?.id ? "CHỈNH SỬA PHÒNG BAN" : "THÊM PHÒNG BAN MỚI"}
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form
+                    noValidate
+                    validated={validated}
+                    onSubmit={handleSubmit}
+                >
+                    <div className="mb-3">
+                        <Form.Label>Mã phòng ban:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="code"
+                            placeholder="Nhập mã phòng ban..."
+                            value={departmentInfo.code}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            Vui lòng nhập mã phòng ban.
+                        </Form.Control.Feedback>
+                    </div>
+                    <hr />
+                    <div className="mb-3">
+                        <Form.Label>Tên phòng ban:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="name"
+                            placeholder="Nhập tên phòng ban..."
+                            value={departmentInfo.name}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            Vui lòng nhập tên phòng ban.
+                        </Form.Control.Feedback>
+                    </div>
+                    <hr />
+                    <div className="mb-3">
+                        <Form.Label>Mô tả:</Form.Label>
+                        <Form.Control
+                            as="textarea"
+                            rows={10}
+                            name="description"
+                            placeholder="Nhập mô tả phòng ban..."
+                            value={departmentInfo.description}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <hr />
+                    <div className="mb-3">
+                        <Form.Label>Phòng ban cha:</Form.Label>
+                        <FormSelectDepartment
+                            index={null}
+                            currentDepartment={fatherDepartment}
+                            onDepartmentChange={handleDepartmentChange}
+                            departments={departments}
+                        />
+                    </div>
+                    <Positions departmentInfo={departmentInfo} setDepartmentInfo={setDepartmentInfo} />
+                    <Modal.Footer>
+                        <Button
+                            className="d-table m-auto"
+                            size="lg"
+                            type="submit"
+                        >
+                            {(department?.id) ? "Cập nhật thông tin" : "Xác nhận tạo mới"}
+                        </Button>
+                    </Modal.Footer>
+                </Form>
+            </Modal.Body>
+        </Modal>
     )
 }
 
