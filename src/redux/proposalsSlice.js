@@ -130,7 +130,7 @@ const proposalsSlice = createSlice({
                 // Nếu gửi proposal xoắ đề xuất thành công lên Server
                 if (action.payload.status === "OK") {
                     // Thực hiện lọc ra những đề xuất có id khác với id đề xuất cần xóa
-                    state.proposals = state.proposals.filter((proposal) => proposal.id !== action.payload.id)
+                    state.proposals = state.proposals.filter((proposal) => proposal.id !== action.payload.data)
 
                     // Hiển thị thông báo xóa đề xuất thành công
                     swal({
@@ -170,7 +170,7 @@ export const getProposalList = createAsyncThunk("proposals/getProposalList", asy
     return response.data.data
 })
 export const getProposalListCreatedByMe = createAsyncThunk("proposals/getProposalListCreatedByMe", async (params) => {
-    const response = await proposalsApi.getProposalListCreatedByMe(params.params, params.filters)
+    const response = await proposalsApi.getProposalListCreatedByMe(params.filtersBase, params.filtersAdvanced)
     return response.data.data
 })
 export const getProposalListApproveByMe = createAsyncThunk("proposals/getProposalListApproveByMe", async (params) => {

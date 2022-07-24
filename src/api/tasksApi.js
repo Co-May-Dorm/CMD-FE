@@ -21,6 +21,10 @@ const tasksApi = {
         const requestUrl = `${baseUrl}/statuses`
         return axiosClient.post(requestUrl, listStatusIds)
     },
+    getStatusList: () => {
+        const requestUrl = `/status`
+        return axiosClient.get(requestUrl)
+    },
     addTask: (taskInfo) => {
         const requestUrl = `${baseUrl}/add`
         return axiosClient.post(requestUrl, taskInfo)

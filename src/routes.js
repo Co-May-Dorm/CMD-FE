@@ -1,14 +1,17 @@
 import React from "react"
-import NewsFeed from "./views/newsFeed/NewsFeed"
+import NewsFeed from "~/views/newsFeed/NewsFeed"
 
-const Posts = React.lazy(() => import("./views/posts/Posts"))
-const DetailPost = React.lazy(() => import("./views/posts/DetailPost"))
+const Posts = React.lazy(() => import("~/views/posts/Posts"))
+const DetailPost = React.lazy(() => import("~/views/posts/DetailPost"))
 
-const Employees = React.lazy(() => import("./views/employees/EmployeesMainPage"))
-const Tasks = React.lazy(() => import("./views/tasks/TasksMainPage"))
-const Proposal = React.lazy(() => import("./views/proposals/ProposalsMainPage"))
+const Employees = React.lazy(() => import("~/views/employees/EmployeesMainPage"))
+const Tasks = React.lazy(() => import("~/views/tasks/TasksMainPage"))
 
-const Info = React.lazy(() => import("./views/info/Info"))
+const ProposalsForAll = React.lazy(() => import("~/views/proposals/ProposalsForAll"))
+const ProposalsCreatedByMe = React.lazy(() => import("~/views/proposals/ProposalsCreatedByMe"))
+const ProposalsApproveByMe = React.lazy(() => import("~/views/proposals/ProposalsApproveByMe"))
+
+const Info = React.lazy(() => import("~/views/info/Info"))
 
 const routes = [
     {
@@ -32,8 +35,20 @@ const routes = [
     },
     {
         path: "proposals",
-        name: "Tất cả đề xuất",
-        element: <Proposal />,
+        name: "Đề xuất",
+        element: <ProposalsForAll />,
+        children: [
+            {
+                index: true,
+                name: "Đề xuất của tôi",
+                element: <ProposalsCreatedByMe />
+            },
+            {
+                index: true,
+                name: "Đề xuất tôi duyệt",
+                element: <ProposalsApproveByMe />
+            }
+        ]
     },
     {
         path: "employees",

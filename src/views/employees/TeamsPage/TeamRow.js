@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Dropdown, ListGroup } from 'react-bootstrap'
+import { Dropdown, Image, ListGroup } from 'react-bootstrap'
 import { BiEdit, BiInfoSquare, BiTrash } from 'react-icons/bi'
 
 import moreIcon from '~/assets/icons/more.svg'
@@ -11,6 +11,7 @@ const TeamRow = ({ teamInfo }) => {
     const [visibleTeamDetailUI, setVisibleTeamDetailUI] = useState(false)
     const [visibleEditTeamUI, setVisibleEditTeamUI] = useState(false)
     const [visibleDeleteTeamUI, setVisibleDeleteTeamUI] = useState(false)
+
     return (
         <>
             <ListGroup.Item
@@ -29,7 +30,7 @@ const TeamRow = ({ teamInfo }) => {
                 >
                     <Dropdown className="col-auto">
                         <Dropdown.Toggle variant="none" className="text-white">
-                            <img src={moreIcon} alt="More icon" />
+                            <Image src={moreIcon} />
                         </Dropdown.Toggle>
                         <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
                             <Dropdown.Item onClick={() => setVisibleTeamDetailUI(true)}>

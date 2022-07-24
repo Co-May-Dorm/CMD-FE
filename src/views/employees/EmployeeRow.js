@@ -1,15 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Dropdown, Image } from 'react-bootstrap'
+import { BiEdit } from 'react-icons/bi'
+import { BsFillLockFill, BsFillUnlockFill } from 'react-icons/bs'
 
 import moreIcon from "~/assets/icons/more.svg"
-import EditEmployee from './EmployeesFeatures/EditEmployee'
 import DeleteEmployee from './EmployeesFeatures/DeleteEmployee'
 import LockEmployee from './EmployeesFeatures/LockEmployee'
 import ResetPassword from './EmployeesFeatures/ResetPassword'
+import FormSubmitEmployee from './EmployeesFeatures/SubmitEmployee/FormSubmitEmployee'
 
 const EmployeeRow = ({ employeeInfo }) => {
+    const [visibleEditEmployeeUI, setVisibleEditEmployeeUI] = useState(false)
+    const [visibleLockEmployeeUI, setVisibleLockEmployeeUI] = useState(false)
+    const [visibleDeleteEmployeeUI, setVisibleDeleteEmployeeUI] = useState(false)
 
-    // Hàm hiển thị ngày sinh
     const showDate = () => {
         const dateOfBirth = new Date(employeeInfo.dateOfBirth)      // Khởi tạo biến dateOfBirth kiểu dữ liệu Date với dữ liệu truyền vào là ngày sinh của sinh viên được lấy từ database có dạng yyyymmdd
         return "" + (dateOfBirth.getDate() < 10 ? "0" : "") + dateOfBirth.getDate() + "/" + (dateOfBirth.getMonth() + 1 < 10 ? "0" : "") + (dateOfBirth.getMonth() + 1) + "/" + dateOfBirth.getFullYear()
@@ -39,6 +43,7 @@ const EmployeeRow = ({ employeeInfo }) => {
                     Họ và tên:
                 </div>
                 <div className="col text-break">
+                    <Image src={employeeInfo.avatar} width={40} className="rounded-circle me-2" />
                     {employeeInfo.name}
                 </div>
             </div>
@@ -82,17 +87,29 @@ const EmployeeRow = ({ employeeInfo }) => {
                     {mainDepartment.position?.name || "Trống"}
                 </div>
             </div>
-            <Dropdown className="employee-more">
+            <Dropdown className="employee-more more">
                 <Dropdown.Toggle variant="none">
                     <Image src={moreIcon} />
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
-                    <EditEmployee employee={employeeInfo} />
+                    <Dropdown.Item onClick={() => setVisibleEditEmployeeUI(true)}>
+                        <BiEdit /> Chỉnh sửa
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => setVisibleLockEmployeeUI(true)}>
+                        {
+                            employeeInfo.active ? <><BsFillLockFill /> Khóa tài khoản</> : <><BsFillUnlockFill /> Mở khóa tài khoản</>
+                        }
+                    </Dropdown.Item>
                     <DeleteEmployee employee={employeeInfo} />
-                    <LockEmployee employee={employeeInfo} />
                     <ResetPassword employee={employeeInfo} />
                 </Dropdown.Menu>
             </Dropdown>
+            {
+                visibleEditEmployeeUI && <FormSubmitEmployee visible={visibleEditEmployeeUI} setVisible={setVisibleEditEmployeeUI} employee={employeeInfo} />
+            }
+            {
+                visibleLockEmployeeUI && <LockEmployee visible={visibleLockEmployeeUI} setVisible={setVisibleLockEmployeeUI} employee={employeeInfo} />
+            }
         </div>
     )
 }

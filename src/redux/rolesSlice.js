@@ -110,7 +110,7 @@ const rolesSlice = createSlice({
                 // Nếu gửi request xoắ vai trò thành công lên Server
                 if (action.payload.status === "OK") {
                     // Thực hiện lọc ra những vai trò có id khác với id vai trò cần xóa
-                    state.roles = state.roles.filter((role) => role.id !== action.payload.id)
+                    state.roles = state.roles.filter((role) => role.id !== action.payload.data)
 
                     // Hiển thị thông báo xóa vai trò thành công
                     swal({

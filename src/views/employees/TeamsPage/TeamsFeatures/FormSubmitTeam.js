@@ -45,12 +45,6 @@ const FormSubmitTeam = ({ visible, setVisible, team = null }) => {
         if (form.checkValidity() === true) {
             e.preventDefault()
             e.stopPropagation()
-            if (teamInfo.fatherTeamId === "") {
-                setTeamInfo({
-                    ...teamInfo,
-                    fatherTeamId: null
-                })
-            }
             if (teamInfo.id) {
                 dispatch(updateTeam(teamInfo))
             }

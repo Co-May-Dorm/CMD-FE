@@ -7,7 +7,7 @@ import { BiTrash } from 'react-icons/bi'
 import { getRoleList } from '~/redux/rolesSlice'
 import { rolesSelector } from '~/redux/selectors'
 
-const Positions = ({ info, setInfo }) => {
+const Positions = ({ teamInfo, setTeamInfo }) => {
     const roles = useSelector(rolesSelector).roles
     const dispatch = useDispatch()
 
@@ -16,19 +16,19 @@ const Positions = ({ info, setInfo }) => {
         dispatch(getRoleList())
     }, [])
 
-    /* Các hàm thay đổi giá trị của state info mỗi khi người dùng nhập/chọn dữ liệu mới */
+    /* Các hàm thay đổi giá trị của state teamInfo mỗi khi người dùng nhập/chọn dữ liệu mới */
     const handleInputChange = (e) => {
         const index = e.target.tabIndex
         const name = e.target.name
         const value = (e.target.type === "checkbox") ? e.target.checked : e.target.value
-        const start = info.positions.slice(0, index) || []
-        const end = info.positions.slice(index + 1, info.positions.length + 1) || []
-        setInfo({
-            ...info,
+        const start = teamInfo.positions.slice(0, index) || []
+        const end = teamInfo.positions.slice(index + 1, teamInfo.positions.length + 1) || []
+        setTeamInfo({
+            ...teamInfo,
             positions: [
                 ...start,
                 {
-                    ...info.positions[index],
+                    ...teamInfo.positions[index],
                     [name]: value
                 },
                 ...end]
@@ -38,14 +38,14 @@ const Positions = ({ info, setInfo }) => {
         const index = e.target.tabIndex
         const value = e.target.value
         const findName = roles.find(role => role.id === Number(value))?.name
-        const start = info.positions.slice(0, index) || []
-        const end = info.positions.slice(index + 1, info.positions.length + 1) || []
-        setInfo({
-            ...info,
+        const start = teamInfo.positions.slice(0, index) || []
+        const end = teamInfo.positions.slice(index + 1, teamInfo.positions.length + 1) || []
+        setTeamInfo({
+            ...teamInfo,
             positions: [
                 ...start,
                 {
-                    ...info.positions[index],
+                    ...teamInfo.positions[index],
                     role: {
                         id: Number(value),
                         name: findName
@@ -55,9 +55,9 @@ const Positions = ({ info, setInfo }) => {
         })
     }
     const handleDelete = (index) => {
-        const array = info.positions.filter((e, idx) => index !== idx)
-        setInfo({
-            ...info,
+        const array = teamInfo.positions.filter((e, idx) => index !== idx)
+        setTeamInfo({
+            ...teamInfo,
             positions: array
         })
     }
@@ -65,9 +65,9 @@ const Positions = ({ info, setInfo }) => {
 
     // Thêm một form nhập chức vụ mới mỗi khi click vào Button Thêm chức vụ
     const handleShowFormAddPostion = () => {
-        if (info.positions?.length === 0) {
-            setInfo({
-                ...info,
+        if (teamInfo.positions?.length === 0) {
+            setTeamInfo({
+                ...teamInfo,
                 positions: [{
                     name: "",
                     isManager: false,
@@ -79,10 +79,10 @@ const Positions = ({ info, setInfo }) => {
             })
         }
         else {
-            setInfo({
-                ...info,
+            setTeamInfo({
+                ...teamInfo,
                 positions: [
-                    ...info.positions,
+                    ...teamInfo.positions,
                     {
                         name: "",
                         isManager: false,
@@ -99,7 +99,7 @@ const Positions = ({ info, setInfo }) => {
     return (
         <>
             {
-                info?.positions?.map((position, index) => (
+                teamInfo?.positions?.map((position, index) => (
                     <div key={index}>
                         <ListGroup.Item className="bg-light text-body">
                             <Form.Group className="mb-3">
@@ -138,7 +138,7 @@ const Positions = ({ info, setInfo }) => {
                                     name="isManager"
                                     className="col ms-3"
                                     tabIndex={index}
-                                    disabled={info.positions.some(e => e.isManager === true) && position.isManager === false}
+                                    disabled={teamInfo.positions.some(e => e.isManager === true) && position.isManager === false}
                                     checked={position.isManager}
                                     onChange={handleInputChange}
                                 />
