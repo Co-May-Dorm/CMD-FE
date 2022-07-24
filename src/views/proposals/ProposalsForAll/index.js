@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { AiOutlineSortAscending, AiOutlineSortDescending } from 'react-icons/ai'
 import { BiSortAlt2 } from 'react-icons/bi'
-import { Card, Container } from 'react-bootstrap'
+import { Button, Card, Container } from 'react-bootstrap'
+import clsx from 'clsx'
 
 import { getProposalList } from '~/redux/proposalsSlice'
 import { proposalsSelector } from '~/redux/selectors'
@@ -125,6 +126,29 @@ const ProposalsForAll = () => {
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
                         <FiltersAdvanced filtersAdvanced={filtersAdvanced} setFiltersAdvanced={setFiltersAdvanced} />
                     </div>
+                </div>
+                <div className="d-flex justify-content-start align-items-center">
+                    <NavLink to="/proposals" end>
+                        {
+                            ({ isActive }) => <Button className="col-auto m-1" variant={clsx({ "primary": isActive, "outline-primary": !isActive })}>
+                                Tất cả
+                            </Button>
+                        }
+                    </NavLink>
+                    <NavLink to="/proposals/created-by-me">
+                        {
+                            ({ isActive }) => <Button className="col-auto m-1" variant={clsx({ "primary": isActive, "outline-primary": !isActive })}>
+                                Đề xuất của tôi
+                            </Button>
+                        }
+                    </NavLink>
+                    <NavLink to="/proposals/approve-by-me">
+                        {
+                            ({ isActive }) => <Button className="col-auto m-1" variant={clsx({ "primary": isActive, "outline-primary": !isActive })}>
+                                Đề xuất tôi duyệt
+                            </Button>
+                        }
+                    </NavLink>
                 </div>
                 <hr />
             </Container>

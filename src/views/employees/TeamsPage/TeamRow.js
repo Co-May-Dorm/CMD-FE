@@ -42,21 +42,19 @@ const TeamRow = ({ teamInfo }) => {
                             <Dropdown.Item onClick={() => setVisibleDeleteTeamUI(true)}>
                                 <BiTrash /> Xóa
                             </Dropdown.Item>
-                            <DeleteTeam teamId={teamInfo.id} />
                         </Dropdown.Menu>
                     </Dropdown>
                 </div>
             </ListGroup.Item>
             {
-                visibleTeamDetailUI && <TeamDetail visible={visibleTeamDetailUI} setVisible={setVisibleTeamDetailUI} teamInfo={teamInfo} />
+                visibleTeamDetailUI && <TeamDetail visible={visibleTeamDetailUI} setVisible={setVisibleTeamDetailUI} teamId={teamInfo.id} />
             }
             {
                 visibleEditTeamUI && <FormSubmitTeam visible={visibleEditTeamUI} setVisible={setVisibleEditTeamUI} team={teamInfo} />
             }
             {
-                visibleDeleteTeamUI && <DeleteTeam visible={visibleDeleteTeamUI} setVisible={setVisibleDeleteTeamUI} teamId={teamInfo.id} />
+                visibleDeleteTeamUI && <DeleteTeam visible={visibleDeleteTeamUI} setVisible={setVisibleDeleteTeamUI} teamInfo={teamInfo} />
             }
-
         </>
     )
 }

@@ -5,7 +5,7 @@ import { Button, Modal } from 'react-bootstrap'
 import { deleteTeam } from '~/redux/teamsSlice'
 
 
-const DeleteTeam = ({ visible, setVisible, teamId }) => {
+const DeleteTeam = ({ visible, setVisible, teamInfo }) => {
     const dispatch = useDispatch()
 
     const handleDelete = (teamId) => {
@@ -24,7 +24,7 @@ const DeleteTeam = ({ visible, setVisible, teamId }) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                Bạn có chắc muốn xóa Đội nhóm này khỏi KTX?
+                Bạn có chắc muốn xóa Đội nhóm <span className="fw-bolder">{teamInfo.name}</span> khỏi KTX?
             </Modal.Body>
             <Modal.Footer>
                 <Button
@@ -37,7 +37,7 @@ const DeleteTeam = ({ visible, setVisible, teamId }) => {
                 <Button
                     variant="danger"
                     className="text-white"
-                    onClick={() => handleDelete(teamId)}
+                    onClick={() => handleDelete(teamInfo.id)}
                 >
                     Đồng ý
                 </Button>

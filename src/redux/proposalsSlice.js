@@ -170,7 +170,7 @@ export const getProposalList = createAsyncThunk("proposals/getProposalList", asy
     return response.data.data
 })
 export const getProposalListCreatedByMe = createAsyncThunk("proposals/getProposalListCreatedByMe", async (params) => {
-    const response = await proposalsApi.getProposalListCreatedByMe(params.filtersBase, params.filtersAdvanced)
+    const response = await proposalsApi.getProposalListCreatedByMe(params.params, params.filters)
     return response.data.data
 })
 export const getProposalListApproveByMe = createAsyncThunk("proposals/getProposalListApproveByMe", async (params) => {

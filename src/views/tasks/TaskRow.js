@@ -135,7 +135,7 @@ const TaskRow = ({ task }) => {
                     {rateElement}
                 </div>
             </div>
-            <Dropdown className="task-more">
+            <Dropdown className="task-more more">
                 <Dropdown.Toggle variant="none">
                     <Image src={moreIcon} />
                 </Dropdown.Toggle>

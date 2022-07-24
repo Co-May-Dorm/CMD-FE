@@ -5,14 +5,14 @@ import { Button, Modal } from 'react-bootstrap'
 import { updateEmployee } from '~/redux/employeesSlice'
 
 
-const LockEmployee = ({ visible, setVisible, employee }) => {
+const LockEmployee = ({ visible, setVisible, employeeInfo }) => {
     const dispatch = useDispatch()
 
     // Hàm xử lý khóa tài khoản
-    const handleLock = (employee) => {
+    const handleLock = (employeeInfo) => {
         dispatch(updateEmployee({
-            ...employee,
-            active: !employee.active
+            ...employeeInfo,
+            active: !employeeInfo.active
         }))
         setVisible(false)
     }
@@ -26,21 +26,21 @@ const LockEmployee = ({ visible, setVisible, employee }) => {
             <Modal.Header closeButton>
                 <Modal.Title>
                     {
-                        employee.active ? <>Khóa tài khoản - {employee.name}</> : <>Mở khóa tài khoản - {employee.name}</>
+                        employeeInfo.active ? <>Khóa tài khoản - {employeeInfo.name}</> : <>Mở khóa tài khoản - {employeeInfo.name}</>
                     }
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {
-                    employee.active ? <>
+                    employeeInfo.active ? <>
                         Bạn có chắc chắn muốn khóa tài khoản {" "}
                         <span className="fw-bolder">
-                            {employee.name}
+                            {employeeInfo.name}
                         </span>?
                     </> : <>
                         Bạn có chắc chắn muốn mở khóa khóa tài khoản {" "}
                         <span className="fw-bolder">
-                            {employee.name}
+                            {employeeInfo.name}
                         </span>?
                     </>
                 }
@@ -55,7 +55,7 @@ const LockEmployee = ({ visible, setVisible, employee }) => {
                 </Button>
                 <Button
                     variant="primary"
-                    onClick={() => handleLock(employee)}
+                    onClick={() => handleLock(employeeInfo)}
                 >
                     Xác nhận
                 </Button>

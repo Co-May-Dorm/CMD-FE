@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Dropdown, Image } from 'react-bootstrap'
-import { BiEdit } from 'react-icons/bi'
+import { BiEdit, BiTrash } from 'react-icons/bi'
 import { BsFillLockFill, BsFillUnlockFill } from 'react-icons/bs'
 
 import moreIcon from "~/assets/icons/more.svg"
@@ -100,7 +100,9 @@ const EmployeeRow = ({ employeeInfo }) => {
                             employeeInfo.active ? <><BsFillLockFill /> Khóa tài khoản</> : <><BsFillUnlockFill /> Mở khóa tài khoản</>
                         }
                     </Dropdown.Item>
-                    <DeleteEmployee employee={employeeInfo} />
+                    <Dropdown.Item onClick={() => setVisibleDeleteEmployeeUI(true)}>
+                        <BiTrash /> Xóa
+                    </Dropdown.Item>
                     <ResetPassword employee={employeeInfo} />
                 </Dropdown.Menu>
             </Dropdown>
@@ -108,7 +110,10 @@ const EmployeeRow = ({ employeeInfo }) => {
                 visibleEditEmployeeUI && <FormSubmitEmployee visible={visibleEditEmployeeUI} setVisible={setVisibleEditEmployeeUI} employee={employeeInfo} />
             }
             {
-                visibleLockEmployeeUI && <LockEmployee visible={visibleLockEmployeeUI} setVisible={setVisibleLockEmployeeUI} employee={employeeInfo} />
+                visibleLockEmployeeUI && <LockEmployee visible={visibleLockEmployeeUI} setVisible={setVisibleLockEmployeeUI} employeeInfo={employeeInfo} />
+            }
+            {
+                visibleDeleteEmployeeUI && <DeleteEmployee visible={visibleDeleteEmployeeUI} setVisible={setVisibleDeleteEmployeeUI} employeeInfo={employeeInfo} />
             }
         </div>
     )

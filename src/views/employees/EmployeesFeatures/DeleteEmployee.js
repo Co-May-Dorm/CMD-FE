@@ -1,33 +1,22 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-import { Button, Dropdown, Modal } from 'react-bootstrap'
-import { BiTrash } from 'react-icons/bi'
+import { Button, Modal } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 
 import { deleteEmployee } from '~/redux/employeesSlice'
 
-const DeleteEmployee = ({ employee }) => {
-    const [visibleDeleteEmployee, setVisibleDeleteEmployee] = useState(false)              // State hiển thị thông báo xác nhận xóa nhân viên
+const DeleteEmployee = ({ visible, setVisible, employeeInfo }) => {
     const dispatch = useDispatch()
     const handleDelete = (employeeId) => {
         dispatch(deleteEmployee(employeeId))
-        setVisibleDeleteEmployee(false)
+        setVisible(false)
     }
 
     return (
-        <>
-            <Dropdown.Item
-                component="button"
-                onClick={() => setVisibleDeleteEmployee(!visibleDeleteEmployee)}
-            >
-                <BiTrash /> Xóa
-            </Dropdown.Item>
-            {
-                visibleDeleteEmployee && (
                     <Modal
                         scrollable
-                        show={visibleDeleteEmployee}
-                        onHide={() => setVisibleDeleteEmployee(false)}
+                        show={visible}
+                        onHide={() => setVisible(false)}
                     >
                         <Modal.Header closeButton>
                             <Modal.Title>XÓA NHÂN VIÊN</Modal.Title>
@@ -35,27 +24,24 @@ const DeleteEmployee = ({ employee }) => {
                         <Modal.Body>
                             Bạn có chắc chắn muốn xóa nhân viên {" "}
                             <span className="fw-bolder">
-                                {employee.name}
+                                {employeeInfo.name}
                             </span> khỏi ký túc xá?
                         </Modal.Body>
                         <Modal.Footer>
                             <Button
                                 variant="secondary"
-                                onClick={() => setVisibleDeleteEmployee(false)}
+                                onClick={() => setVisible(false)}
                             >
                                 Hủy
                             </Button>
                             <Button
                                 variant="danger"
-                                onClick={() => handleDelete(employee.id)}
+                                onClick={() => handleDelete(employeeInfo.id)}
                             >
                                 Xóa
                             </Button>
                         </Modal.Footer>
                     </Modal>
-                )
-            }
-        </>
     )
 }
 
