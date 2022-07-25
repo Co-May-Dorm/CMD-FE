@@ -54,7 +54,7 @@ const routes = [
         element: <Info />
     },
     {
-        path: "newsFeeds",
+        path: "newsFeeds/",
         name: "Bảng tin",
         element: <NewsFeed />
     }
