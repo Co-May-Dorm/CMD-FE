@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-
 import swal from "sweetalert"
+
 import teamsApi from "~/api/teamsApi"
 
 const teamsSlice = createSlice({
@@ -11,16 +11,16 @@ const teamsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchTeams.pending, (state, action) => {
+            .addCase(getTeamList.pending, (state, action) => {
                 if (state.status !== "success") {
                     state.status = "loading"
                 } 
             })
-            .addCase(fetchTeams.fulfilled, (state, action) => {
+            .addCase(getTeamList.fulfilled, (state, action) => {
                 state.teams = action.payload
                 state.status = "success"
             })
-            .addCase(fetchTeams.rejected, (state, action) => {
+            .addCase(getTeamList.rejected, (state, action) => {
                 state.status = "error"
             })
             .addCase(addTeam.fulfilled, (state, action) => {
@@ -100,7 +100,7 @@ const teamsSlice = createSlice({
                 // Nếu gửi request xoắ đội nhóm thành công lên Server
                 if (action.payload.status === "OK") {
                     // Thực hiện lọc ra những đội nhóm có id khác với id đội nhóm cần xóa
-                    state.teams = state.teams.filter((team) => team.id !== action.payload.id)
+                    state.teams = state.teams.filter((team) => team.id !== action.payload.data)
 
                     // Hiển thị thông báo xóa đội nhóm thành công
                     swal({
@@ -135,19 +135,19 @@ const teamsSlice = createSlice({
 })
 export default teamsSlice
 
-export const fetchTeams = createAsyncThunk("teams/fetchTeams", async (params) => {
-    const response = await teamsApi.getAll(params)
+export const getTeamList = createAsyncThunk("teams/getTeamList", async (params) => {
+    const response = await teamsApi.getTeamList(params)
     return response.data.data
 })
 export const addTeam = createAsyncThunk("teams/addTeam", async (teamInfo) => {
-    const response = await teamsApi.add(teamInfo)
+    const response = await teamsApi.addTeam(teamInfo)
     return response.data
 })
 export const updateTeam = createAsyncThunk("teams/updateTeam", async (teamInfo) => {
-    const response = await teamsApi.update(teamInfo)
+    const response = await teamsApi.updateTeam(teamInfo)
     return response.data
 })
 export const deleteTeam = createAsyncThunk("teams/deleteTeam", async (teamId) => {
-    const response = await teamsApi.delete(teamId)
+    const response = await teamsApi.deleteTeam(teamId)
     return response.data
 })

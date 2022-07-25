@@ -34,7 +34,7 @@
         }
         > .more {
             position: absolute;
-            right: 0;
+            right: 0.5%;
         }
     }
 
@@ -103,10 +103,6 @@
         .employee-position {
             flex: 0 0 auto;
             width: 15%;
-        }
-        .employee-more {
-            flex: 0 0 auto;
-            width: 2%;
         }
     }
 }

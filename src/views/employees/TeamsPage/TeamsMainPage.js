@@ -1,13 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-
 import { ListGroup, Modal } from 'react-bootstrap'
 
-import { fetchTeams } from '../../../redux/teamsSlice'
-import AppSearch from '../../../components/AppSearch'
+import { teamsSelector } from '~/redux/selectors'
+import { getTeamList } from '~/redux/teamsSlice'
+import AppSearch from '~/components/AppSearch'
 import TeamRow from './TeamRow'
 import AddTeam from './TeamsFeatures/AddTeam'
-import { teamsSelector } from '../../../redux/selectors'
 import Loading from '~/components/Loading'
 
 const TeamsMainPage = ({ visible, setVisible }) => {
@@ -21,7 +21,7 @@ const TeamsMainPage = ({ visible, setVisible }) => {
     })
 
     useEffect(() => {
-        dispatch(fetchTeams(filters))
+        dispatch(getTeamList(filters))
     }, [filters])
 
     const handleSearchTerm = (searchTerm) => {
@@ -41,7 +41,7 @@ const TeamsMainPage = ({ visible, setVisible }) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title>
-                    CLB/Đội nhóm
+                    Đội nhóm
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -68,7 +68,7 @@ const TeamsMainPage = ({ visible, setVisible }) => {
                                 teams.map((team, index) => (
                                     <TeamRow
                                         key={index}
-                                        team={team}
+                                        teamInfo={team}
                                     />
                                 ))
                             }

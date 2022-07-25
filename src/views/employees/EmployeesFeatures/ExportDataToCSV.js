@@ -1,8 +1,7 @@
 import React from 'react'
-
 import { CSVLink } from 'react-csv'
 
-import downloadIcon from '../../../assets/icons/download.svg'
+import downloadIcon from '~/assets/icons/download.svg'
 
 const ExportDataToCSV = ({ data }) => {
     let dataReport = data.map(item => {

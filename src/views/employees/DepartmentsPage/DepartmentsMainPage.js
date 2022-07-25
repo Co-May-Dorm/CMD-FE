@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { ListGroup, Modal } from 'react-bootstrap'
 
-import { fetchDepartments } from '../../../redux/departmentsSlice'
+import { getDepartmentList } from '../../../redux/departmentsSlice'
 import { departmentsSelector } from '../../../redux/selectors'
 import AppSearch from '../../../components/AppSearch'
 import DepartmentRow from './DepartmentRow'
@@ -21,7 +21,7 @@ const DepartmentsMainPage = ({ visible, setVisible }) => {
     })
 
     useEffect(() => {
-        dispatch(fetchDepartments(filters))
+        dispatch(getDepartmentList(filters))
     }, [filters])
 
     const handleSearchTerm = (searchTerm) => {
@@ -38,7 +38,7 @@ const DepartmentsMainPage = ({ visible, setVisible }) => {
                 departmentsElement.push(
                     <DepartmentRow
                         key={department_child.id}
-                        department={department_child}
+                        departmentInfo={department_child}
                     />
                 )
                 recursiveDepartmentChild(department_child, level + 1)
@@ -51,7 +51,7 @@ const DepartmentsMainPage = ({ visible, setVisible }) => {
                 departmentsElement.push(
                     <DepartmentRow
                         key={department.id}
-                        department={department}
+                        departmentInfo={department}
                     />
                 )
                 recursiveDepartmentChild(department, 2)

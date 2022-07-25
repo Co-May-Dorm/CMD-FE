@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts } from "~/redux/postsSlice";
 import Loading from "~/components/Loading";
 import icon_edit from "../../assets/icons/edit.svg";
-import search_icon from "../../assets/icons/search.svg";
 import FormPost from "./FormPost";
 const hastags = [
   { nameHastag: "hastag1", numFeeds: 123 },

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-
 import swal from "sweetalert"
+
 import proposalsApi from "~/api/proposalsApi"
 
 const proposalsSlice = createSlice({
@@ -16,17 +16,37 @@ const proposalsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchProposals.pending, (state, action) => {
-                if (state.status !== "success") {
-                    state.status = "loading"
-                } 
+            .addCase(getProposalList.pending, (state, action) => {
+                state.status = "loading"
             })
-            .addCase(fetchProposals.fulfilled, (state, action) => {
+            .addCase(getProposalList.fulfilled, (state, action) => {
                 state.proposals = action.payload.proposals
                 state.pagination = action.payload.pagination
                 state.status = "success"
             })
-            .addCase(fetchProposals.rejected, (state, action) => {
+            .addCase(getProposalList.rejected, (state, action) => {
+                state.status = "error"
+            })
+            .addCase(getProposalListCreatedByMe.pending, (state, action) => {
+                state.status = "loading"
+            })
+            .addCase(getProposalListCreatedByMe.fulfilled, (state, action) => {
+                state.proposals = action.payload.proposals
+                state.pagination = action.payload.pagination
+                state.status = "success"
+            })
+            .addCase(getProposalListCreatedByMe.rejected, (state, action) => {
+                state.status = "error"
+            })
+            .addCase(getProposalListApproveByMe.pending, (state, action) => {
+                state.status = "loading"
+            })
+            .addCase(getProposalListApproveByMe.fulfilled, (state, action) => {
+                state.proposals = action.payload.proposals
+                state.pagination = action.payload.pagination
+                state.status = "success"
+            })
+            .addCase(getProposalListApproveByMe.rejected, (state, action) => {
                 state.status = "error"
             })
             .addCase(addProposal.fulfilled, (state, action) => {
@@ -110,7 +130,7 @@ const proposalsSlice = createSlice({
                 // Nếu gửi proposal xoắ đề xuất thành công lên Server
                 if (action.payload.status === "OK") {
                     // Thực hiện lọc ra những đề xuất có id khác với id đề xuất cần xóa
-                    state.proposals = state.proposals.filter((proposal) => proposal.id !== action.payload.id)
+                    state.proposals = state.proposals.filter((proposal) => proposal.id !== action.payload.data)
 
                     // Hiển thị thông báo xóa đề xuất thành công
                     swal({
@@ -145,19 +165,27 @@ const proposalsSlice = createSlice({
 })
 export default proposalsSlice
 
-export const fetchProposals = createAsyncThunk("proposals/fetchProposals", async (params) => {
-    const response = await proposalsApi.getAll(params)
+export const getProposalList = createAsyncThunk("proposals/getProposalList", async (params) => {
+    const response = await proposalsApi.getProposalList(params.params, params.filters)
+    return response.data.data
+})
+export const getProposalListCreatedByMe = createAsyncThunk("proposals/getProposalListCreatedByMe", async (params) => {
+    const response = await proposalsApi.getProposalListCreatedByMe(params.params, params.filters)
+    return response.data.data
+})
+export const getProposalListApproveByMe = createAsyncThunk("proposals/getProposalListApproveByMe", async (params) => {
+    const response = await proposalsApi.getProposalListApproveByMe(params.params, params.filters)
     return response.data.data
 })
 export const addProposal = createAsyncThunk("proposals/addProposal", async (proposalInfo) => {
-    const response = await proposalsApi.add(proposalInfo)
+    const response = await proposalsApi.addProposal(proposalInfo)
     return response.data
 })
 export const updateProposal = createAsyncThunk("proposals/updateProposal", async (proposalInfo) => {
-    const response = await proposalsApi.update(proposalInfo)
+    const response = await proposalsApi.updateProposal(proposalInfo)
     return response.data
 })
 export const deleteProposal = createAsyncThunk("proposals/deleteProposal", async (proposalId) => {
-    const response = await proposalsApi.delete(proposalId)
+    const response = await proposalsApi.deleteProposal(proposalId)
     return response.data
 })

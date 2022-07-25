@@ -108,7 +108,7 @@ const TaskRow = ({ task }) => {
                     Thời gian:
                 </div>
                 <div className="col text-break">
-                    {showDate(task.createDate) + " - " + showDate(task.finishDate)}
+                    {showDate(task.startDate) + " - " + showDate(task.finishDate)}
                 </div>
             </div>
             <div className="task-status">
@@ -120,7 +120,7 @@ const TaskRow = ({ task }) => {
                         task.status.id === 1 ? (
                             <>
                                 <strong>{task.status.name}</strong><br />
-                                {showDate(task.finishDate)}
+                                {showDate(task.modifyDate)}
                             </>
 
                         ) : <strong>{task.status.name}</strong>
@@ -135,9 +135,9 @@ const TaskRow = ({ task }) => {
                     {rateElement}
                 </div>
             </div>
-            <Dropdown className="task-more">
+            <Dropdown className="task-more more">
                 <Dropdown.Toggle variant="none">
-                    <img src={moreIcon} alt="More Icon" />
+                    <Image src={moreIcon} />
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
                     <TaskDetail taskId={task.id} />

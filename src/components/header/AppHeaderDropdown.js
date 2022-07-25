@@ -31,7 +31,7 @@ const AppHeaderDropdown = () => {
                     }}
                     className="col-auto me-2"
                 />
-                <div className="col d-flex flex-column text-start">
+                <div className="col d-flex flex-column">
                     <span className="fw-bolder">
                         {userInfo.name}
                     </span>

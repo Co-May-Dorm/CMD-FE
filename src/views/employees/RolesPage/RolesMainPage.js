@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Accordion, Modal } from 'react-bootstrap'
 
-import { fetchRoles } from '~/redux/rolesSlice'
+import { getRoleList } from '~/redux/rolesSlice'
 import { rolesSelector } from '~/redux/selectors'
 import AppPagination from '~/components/AppPagination'
 import AppSearch from '~/components/AppSearch'
@@ -19,7 +19,7 @@ const RolesMainPage = ({ visible, setVisible }) => {
     const [filters, setFilters] = useState({})
 
     useEffect(() => {
-        dispatch(fetchRoles(filters))
+        dispatch(getRoleList(filters))
     }, [filters])
 
     const handlePageChange = newPage => {

@@ -1,25 +1,31 @@
 import axiosClient from "./axiosClient"
 
+const queryString = require("query-string")
+
 // API liên quan đến phần nhân viên
 const baseUrl = "/employees"
 const employeesApi = {
-    getAll: (params) => {
-        const requestUrl = `${baseUrl}`
-        return axiosClient.get(requestUrl, {params})
+    getEmployeeList: (params) => {
+        const requestUrl = `${baseUrl}?${queryString.stringify(params)}`
+        return axiosClient.get(requestUrl)
     },
-    get: (employeeId) => {
+    getEmployeeListByName: (employeeName) => {
+        const requestUrl = `${baseUrl}/name?name=${employeeName}`
+        return axiosClient.get(requestUrl)
+    },
+    getEmployeeDetailById: (employeeId) => {
         const requestUrl = `${baseUrl}/${employeeId}`
         return axiosClient.get(requestUrl)
     },
-    add: (employeeInfo) => {
+    addEmployee: (employeeInfo) => {
         const requestUrl = `${baseUrl}/add`
         return axiosClient.post(requestUrl, employeeInfo)
     },
-    update: (employeeInfo) => {
+    updateEmployee: (employeeInfo) => {
         const requestUrl = `${baseUrl}/edit`
         return axiosClient.put(requestUrl, employeeInfo)
     },
-    delete: (employeeId) => {
+    deleteEmployee: (employeeId) => {
         const requestUrl = `${baseUrl}/delete/${employeeId}`
         return axiosClient.delete(requestUrl)
     }

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-
 import swal from "sweetalert"
+
 import tasksApi from "~/api/tasksApi"
 
 const tasksSlice = createSlice({
@@ -25,6 +25,17 @@ const tasksSlice = createSlice({
                 state.status = "success"
             })
             .addCase(getTaskList.rejected, (state, action) => {
+                state.status = "error"
+            })
+            .addCase(getTaskListAssignedToMe.pending, (state, action) => {
+                state.status = "loading"
+            })
+            .addCase(getTaskListAssignedToMe.fulfilled, (state, action) => {
+                state.tasks = action.payload.tasks
+                state.pagination = action.payload.pagination
+                state.status = "success"
+            })
+            .addCase(getTaskListAssignedToMe.rejected, (state, action) => {
                 state.status = "error"
             })
             .addCase(getTaskListByStatusIds.pending, (state, action) => {
@@ -81,8 +92,8 @@ const tasksSlice = createSlice({
                 if (action.payload.status === "OK") {
                     // Tìm kiếm id công việc và thực hiện cập nhật thông tin mới cho công việc đó
                     state.tasks.forEach((task, index, array) => {
-                        if (task.id === action.payload.id) {
-                            array[index] = action.payload
+                        if (task.id === action.payload.data.id) {
+                            array[index] = action.payload.data
                         }
                     })
 
@@ -119,7 +130,7 @@ const tasksSlice = createSlice({
                 // Nếu gửi request xoắ công việc thành công lên Server
                 if (action.payload.status === "OK") {
                     // Thực hiện lọc ra những công việc có id khác với id công việc cần xóa
-                    state.tasks = state.tasks.filter((task) => task.id !== action.payload.id)
+                    state.tasks = state.tasks.filter((task) => task.id !== action.payload.data)
 
                     // Hiển thị thông báo xóa công việc thành công
                     swal({
@@ -158,19 +169,23 @@ export const getTaskList = createAsyncThunk("tasks/getTaskList", async (params) 
     const response = await tasksApi.getTaskList(params)
     return response.data.data
 })
+export const getTaskListAssignedToMe = createAsyncThunk("tasks/getTaskListAssignedToMe", async (params) => {
+    const response = await tasksApi.getTaskListAssignedToMe(params)
+    return response.data.data
+})
 export const getTaskListByStatusIds = createAsyncThunk("tasks/getTaskListByStatusIds", async (listStatusIds) => {
     const response = await tasksApi.getTaskListByStatusIds(listStatusIds)
     return response.data.data
 })
 export const addTask = createAsyncThunk("tasks/addTask", async (taskInfo) => {
-    const response = await tasksApi.add(taskInfo)
+    const response = await tasksApi.addTask(taskInfo)
     return response.data
 })
 export const updateTask = createAsyncThunk("tasks/updateTask", async (taskInfo) => {
-    const response = await tasksApi.update(taskInfo)
+    const response = await tasksApi.updateTask(taskInfo)
     return response.data
 })
 export const deleteTask = createAsyncThunk("tasks/deleteTask", async (taskId) => {
-    const response = await tasksApi.delete(taskId)
+    const response = await tasksApi.deleteTask(taskId)
     return response.data
 })

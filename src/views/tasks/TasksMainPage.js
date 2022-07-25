@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { AiOutlineSortAscending, AiOutlineSortDescending } from 'react-icons/ai'
 import { BiSortAlt2 } from 'react-icons/bi'
-import { Card, Container } from 'react-bootstrap'
+import { Button, Card, Container } from 'react-bootstrap'
+import clsx from 'clsx'
 
 import { getTaskList, getTaskListByStatusIds } from '~/redux/tasksSlice'
 import { tasksSelector } from '~/redux/selectors'
@@ -30,7 +31,7 @@ const TasksMainPage = () => {
         page: 1
     })
     const [filterByStatusIds, setFilterByStatusIds] = useState({
-        statusIds: [1,2,3,4,5,6,7,8,9]
+        statusIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     })
 
     useEffect(() => {
@@ -57,7 +58,7 @@ const TasksMainPage = () => {
     useEffect(() => {
         dispatch(getTaskListByStatusIds(filterByStatusIds))
     }, [filterByStatusIds])
-    
+
     useEffect(() => {
         const requestUrl = location.pathname + "?" + queryString.stringify(filtersAdvanced)
         navigation(requestUrl)
@@ -102,7 +103,7 @@ const TasksMainPage = () => {
             <Container fluid>
                 <div className="row justify-content-xl-between justify-content-end align-items-center">
                     <div className="col-auto fw-bolder fs-5 mb-xl-0 mb-3">
-                        DANH SÁCH CÔNG VIỆC
+                        TẤT CẢ CÔNG VIỆC
                     </div>
                     <div className="col" />
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
@@ -114,6 +115,22 @@ const TasksMainPage = () => {
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
                         <FiltersByStatusIds filterByStatusIds={filterByStatusIds} setFilterByStatusIds={setFilterByStatusIds} />
                     </div>
+                </div>
+                <div className="d-flex justify-content-start align-items-center">
+                    <NavLink to="/tasks" end>
+                        {
+                            ({ isActive }) => <Button className="col-auto m-1" variant={clsx({ "primary": isActive, "outline-primary": !isActive })}>
+                                Tất cả
+                            </Button>
+                        }
+                    </NavLink>
+                    <NavLink to="/tasks/assigned-to-me">
+                        {
+                            ({ isActive }) => <Button className="col-auto m-1" variant={clsx({ "primary": isActive, "outline-primary": !isActive })}>
+                                Công việc của tôi
+                            </Button>
+                        }
+                    </NavLink>
                 </div>
                 <hr />
             </Container>
@@ -199,7 +216,6 @@ const TasksMainPage = () => {
                             }
                         </span>
                     </div>
-                    <div className="task-more" />
                 </div>
                 {
                     status === "loading" ? (

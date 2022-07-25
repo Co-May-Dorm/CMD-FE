@@ -1,25 +1,27 @@
 import axiosClient from "./axiosClient"
 
+const queryString = require("query-string")
+
 // API liên quan đến phần vai trò
 const baseUrl = "/roles"
 const rolesApi = {
-    getAll: (filtersParams) => {
-        const requestUrl = `${baseUrl}`
-        return axiosClient.get(requestUrl, {filtersParams})
+    getRoleList: (params) => {
+        const requestUrl = `${baseUrl}?${queryString.stringify(params)}`
+        return axiosClient.get(requestUrl)
     },
-    get: (roleId) => {
+    getRoleDetailById: (roleId) => {
         const requestUrl = `${baseUrl}/${roleId}`
         return axiosClient.get(requestUrl)
     },
-    add: (roleInfo) => {
+    addRole: (roleInfo) => {
         const requestUrl = `${baseUrl}/add`
         return axiosClient.post(requestUrl, roleInfo)
     },
-    update: (roleInfo) => {
+    updateRole: (roleInfo) => {
         const requestUrl = `${baseUrl}/edit`
         return axiosClient.put(requestUrl, roleInfo)
     },
-    delete: (roleId) => {
+    deleteRole: (roleId) => {
         const requestUrl = `${baseUrl}/delete/${roleId}`
         return axiosClient.delete(requestUrl)
     }

@@ -1,23 +1,27 @@
 import React, { useState } from 'react'
 import { Dropdown, Image, ListGroup } from 'react-bootstrap'
-import { BiInfoSquare } from 'react-icons/bi'
+import { BiEdit, BiInfoSquare, BiTrash } from 'react-icons/bi'
 
 import departmentLevelIcon from '~/assets/icons/department_level.svg'
 import moreIcon from '~/assets/icons/more.svg'
 import DepartmentDetail from './DepartmentDetail'
-import EditDepartment from './DepartmentsFeatures/EditDepartment'
 import DeleteDepartment from './DepartmentsFeatures/DeleteDepartment'
+import FormSubmitDepartment from './DepartmentsFeatures/FormSubmitDepartment'
 
-const DepartmentRow = ({ department }) => {
+const DepartmentRow = ({ departmentInfo }) => {
+    const [visibleDepartmentDetailUI, setVisibleDepartmentDetailUI] = useState(false)
+    const [visibleEditDepartmentUI, setVisibleEditDepartmentUI] = useState(false)
+    const [visibleDeleteDepartmentUI, setVisibleDeleteDepartmentUI] = useState(false)
+
     return (
         <>
             <ListGroup.Item
                 action
                 className="position-relative"
-                style={{ paddingLeft: department.level * 40 }}
+                style={{ paddingLeft: departmentInfo.level * 40 }}
             >
                 <Image src={departmentLevelIcon} />
-                <span className="ps-2" /> {department.name}
+                <span className="ps-2" /> {departmentInfo.name}
                 <div
                     className="position-absolute"
                     style={{
@@ -31,13 +35,28 @@ const DepartmentRow = ({ department }) => {
                             <Image src={moreIcon} />
                         </Dropdown.Toggle>
                         <Dropdown.Menu className="animate__animated animate__zoomIn animate__faster">
-                            <DepartmentDetail department={department} />
-                            <EditDepartment department={department} />
-                            <DeleteDepartment departmentId={department.id} />
+                            <Dropdown.Item onClick={() => setVisibleDepartmentDetailUI(true)}>
+                                <BiInfoSquare /> Chi tiết
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => setVisibleEditDepartmentUI(true)}>
+                                <BiEdit /> Chỉnh sửa
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => setVisibleDeleteDepartmentUI(true)}>
+                                <BiTrash /> Xóa
+                            </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                 </div>
             </ListGroup.Item>
+            {
+                visibleDepartmentDetailUI && <DepartmentDetail visible={visibleDepartmentDetailUI} setVisible={setVisibleDepartmentDetailUI} departmentId={departmentInfo.id} />
+            }
+            {
+                visibleEditDepartmentUI && <FormSubmitDepartment visible={visibleEditDepartmentUI} setVisible={setVisibleEditDepartmentUI} department={departmentInfo} />
+            }
+            {
+                visibleDeleteDepartmentUI && <DeleteDepartment visible={visibleDeleteDepartmentUI} setVisible={setVisibleDeleteDepartmentUI} departmentInfo={departmentInfo} />
+            }
         </>
     )
 }

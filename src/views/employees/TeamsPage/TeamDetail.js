@@ -1,8 +1,19 @@
-import React from 'react'
-
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react'
 import { ListGroup, Modal, Table } from 'react-bootstrap'
 
-const TeamDetail = ({ team, visible, setVisible }) => {
+import teamsApi from '~/api/teamsApi'
+
+const TeamDetail = ({ visible, setVisible, teamId }) => {
+    const [teamInfo, setTeamInfo] = useState({})
+
+    useEffect(() => {
+        teamsApi.getTeamDetailById(teamId)
+            .then((response) => {
+                setTeamInfo(response.data.data)
+            })
+    }, [])
+
     return (
         <Modal
             className="modal-fullheight"
@@ -11,21 +22,21 @@ const TeamDetail = ({ team, visible, setVisible }) => {
             show={visible}
             onHide={() => setVisible(false)}
         >
-                <Modal.Header closeButton>
-                    <Modal.Title>
-                        Chi tiết CLB/Đội nhóm
-                    </Modal.Title>
-                </Modal.Header>
+            <Modal.Header closeButton>
+                <Modal.Title>
+                    Chi tiết đội nhóm
+                </Modal.Title>
+            </Modal.Header>
             <Modal.Body>
                 <ListGroup variant="flush">
                     <ListGroup.Item>
-                        Mã CLB/Đội nhóm: {team.code}
+                        Mã đội nhóm: {teamInfo.code}
                     </ListGroup.Item>
                     <ListGroup.Item>
-                        Tên CLB/Đội nhóm: {team.name}
+                        Tên đội nhóm: {teamInfo.name}
                     </ListGroup.Item>
                     <ListGroup.Item>
-                        Mô tả về CLB/Đội nhóm: {(team.description === "") ? "Chưa có mô tả" : team.description}
+                        Mô tả về đội nhóm: {(teamInfo.description === "") ? "Chưa có mô tả" : teamInfo.description}
                     </ListGroup.Item>
                     <ListGroup.Item>
                         <Table
@@ -50,10 +61,10 @@ const TeamDetail = ({ team, visible, setVisible }) => {
                             </thead>
                             <tbody>
                                 {
-                                    team.positions?.map((position, index) => (
-                                        <tr key={index}>
+                                    teamInfo.positions?.map((position) => (
+                                        <tr key={position.id}>
                                             <td>{position.name}</td>
-                                            <td>{position.role.name}</td>
+                                            <td>{position.role?.name}</td>
                                         </tr>
                                     ))
                                 }
@@ -63,7 +74,6 @@ const TeamDetail = ({ team, visible, setVisible }) => {
                 </ListGroup>
             </Modal.Body>
         </Modal>
-
     )
 }
 

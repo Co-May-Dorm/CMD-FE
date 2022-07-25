@@ -1,26 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { Form, ListGroup } from 'react-bootstrap'
 
-import { teamsSelector } from '~/redux/selectors'
 import useOnClickOutside from '~/customHooks/useOnClickOutside'
-import { fetchTeams } from '~/redux/teamsSlice'
 
-const FormSelectTeam = ({ index, currentTeam, onTeamChange }) => {
-    const teams = useSelector(teamsSelector).teams
-    const dispatch = useDispatch()
+const FormSelectTeam = ({ index, currentTeam, onTeamChange, teams }) => {
+    const [visible, setVisible] = useState(false)
 
-    useEffect(() => {
-        dispatch(fetchTeams())
-    }, [])
+    const ref = useRef()
 
-    const [visible, setVisible] = useState(false)       // State quản lý hiển thị danh sách phòng ban
-
-    const ref = useRef()        // Ref form select team
-
-    useOnClickOutside(ref, () => setVisible(false))     // Hàm xử lý đóng form select team khi click ra ngoài
-
+    useOnClickOutside(ref, () => setVisible(false))
 
     return (
         <div

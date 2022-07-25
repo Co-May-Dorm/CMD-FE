@@ -1,53 +1,48 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
+import { Button, Modal } from 'react-bootstrap'
 
-import { Button, Dropdown, Modal } from 'react-bootstrap'
-import { BiTrash } from 'react-icons/bi'
-
-import { deleteTeam } from '../../../../redux/teamsSlice'
+import { deleteTeam } from '~/redux/teamsSlice'
 
 
-const DeleteTeam = ({ id }) => {
+const DeleteTeam = ({ visible, setVisible, teamInfo }) => {
     const dispatch = useDispatch()
-    const [visibleDeleteTeam, setVisibleDeleteTeam] = useState(false)
-    const handleDelete = (id) => {
-        dispatch(deleteTeam(id))
-        setVisibleDeleteTeam(false)
+
+    const handleDelete = (teamId) => {
+        dispatch(deleteTeam(teamId))
+        setVisible(false)
     }
     return (
-        <>
-            <Dropdown.Item onClick={() => setVisibleDeleteTeam(!visibleDeleteTeam)}>
-                <BiTrash /> Xóa
-            </Dropdown.Item>
-            <Modal
-                scrollable
-                show={visibleDeleteTeam}
-                onHide={() => setVisibleDeleteTeam(false)}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>XÓA CLB - ĐỘI NHÓM</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    Bạn có chắc muốn xóa CLB - Đội nhóm này khỏi KTX?
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        variant="secondary"
-                        className="text-white"
-                        onClick={() => setVisibleDeleteTeam(false)}
-                    >
-                        Hủy
-                    </Button>
-                    <Button
-                        variant="danger"
-                        className="text-white"
-                        onClick={() => handleDelete(id)}
-                    >
-                        Đồng ý
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </>
+        <Modal
+            scrollable
+            show={visible}
+            onHide={() => setVisible(false)}
+        >
+            <Modal.Header closeButton>
+                <Modal.Title>
+                    XÓA ĐỘI NHÓM
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                Bạn có chắc muốn xóa Đội nhóm <span className="fw-bolder">{teamInfo.name}</span> khỏi KTX?
+            </Modal.Body>
+            <Modal.Footer>
+                <Button
+                    variant="secondary"
+                    className="text-white"
+                    onClick={() => setVisible(false)}
+                >
+                    Hủy
+                </Button>
+                <Button
+                    variant="danger"
+                    className="text-white"
+                    onClick={() => handleDelete(teamInfo.id)}
+                >
+                    Đồng ý
+                </Button>
+            </Modal.Footer>
+        </Modal>
     )
 }
 

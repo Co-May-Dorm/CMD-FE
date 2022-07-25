@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
-
 import { Button, Form, Modal, Table } from "react-bootstrap"
 import { useDispatch } from "react-redux"
-import rolesApi from "../../../../api/rolesApi"
-import { addRole, updateRole } from "../../../../redux/rolesSlice"
+
+import rolesApi from "~/api/rolesApi"
+import { addRole, updateRole } from "~/redux/rolesSlice"
 
 const FormSubmitRole = ({ visible, setVisible, roleId = null }) => {
     const dispatch = useDispatch()
@@ -521,9 +522,10 @@ const FormSubmitRole = ({ visible, setVisible, roleId = null }) => {
 
     useEffect(() => {
         if (roleId) {
-            rolesApi.get(roleId).then((response) => {
-                setRoleInfo(response.data.data)
-            })
+            rolesApi.getRoleDetailById(roleId)
+                .then((response) => {
+                    setRoleInfo(response.data.data)
+                })
         }
     }, [])
 

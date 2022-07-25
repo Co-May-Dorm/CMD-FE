@@ -1,55 +1,63 @@
 import React from "react"
-import NewsFeed from "./views/newsFeed/NewsFeed"
 
-const Posts = React.lazy(() => import("./views/posts/Posts"))
-const DetailPost = React.lazy(() => import("./views/posts/DetailPost"))
+const NewsFeed = React.lazy(() => import("~/views/newsFeed/NewsFeed"))
 
-const Employees = React.lazy(() => import("./views/employees/EmployeesMainPage"))
-const Tasks = React.lazy(() => import("./views/tasks/TasksMainPage"))
-const Proposal = React.lazy(() => import("./views/proposals/ProposalsMainPage"))
+const Employees = React.lazy(() => import("~/views/employees/EmployeesMainPage"))
 
-const Info = React.lazy(() => import("./views/info/Info"))
+const Tasks = React.lazy(() => import("~/views/tasks/TasksMainPage"))
+const TasksAssignedToMe = React.lazy(() => import("~/views/tasks/TasksAssignedToMe"))
+
+const ProposalsForAll = React.lazy(() => import("~/views/proposals/ProposalsForAll"))
+const ProposalsCreatedByMe = React.lazy(() => import("~/views/proposals/ProposalsCreatedByMe"))
+const ProposalsApproveByMe = React.lazy(() => import("~/views/proposals/ProposalsApproveByMe"))
+
+const Info = React.lazy(() => import("~/views/info/Info"))
 
 const routes = [
     {
-        path: "/",
         name: "Home",
+        path: "newsFeeds"
     },
     {
-        path: "posts",
-        name: "Bảng tin",
-        element: <Posts />,
-    },
-    {
-        path: "posts/:id",
-        name: "Chi tiết bài viết",
-        element: <DetailPost />,
-    },
-    {
-        path: "tasks",
         name: "Tất cả công việc",
-        element: <Tasks />,
+        path: "tasks",
+        element: <Tasks />
     },
     {
-        path: "proposals",
+        name: "Công việc của tôi",
+        path: "tasks/assigned-to-me",
+        element: <TasksAssignedToMe />
+    },
+    {
         name: "Tất cả đề xuất",
-        element: <Proposal />,
+        path: "proposals",
+        element: <ProposalsForAll />
+    },
+    {
+        name: "Đề xuất của tôi",
+        path: "proposals/created-by-me",
+        element: <ProposalsCreatedByMe />
+    },
+    {
+        name: "Đề xuất tôi duyệt",
+        path: "proposals/approve-by-me",
+        element: <ProposalsApproveByMe />
     },
     {
         path: "employees",
         name: "Nhân viên",
-        element: <Employees />,
+        element: <Employees />
     },
     {
         path: "info/:id",
         name: "Thông tin tài khoản",
-        element: <Info />,
+        element: <Info />
     },
     {
         path: "newsFeeds",
         name: "Bảng tin",
-        element: <NewsFeed />,
-    },
+        element: <NewsFeed />
+    }
 ]
 
 export default routes

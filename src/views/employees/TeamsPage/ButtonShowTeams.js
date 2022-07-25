@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-
 import { Button } from 'react-bootstrap'
 
 import Teams from './TeamsMainPage'
@@ -13,7 +12,7 @@ const ButtonShowTeams = () => {
                 onClick={() => setVisible(!visible)}
             >
                 <span className="fw-bold">
-                    CLB/Đội nhóm
+                    Đội nhóm
                 </span>
             </Button>
             {
