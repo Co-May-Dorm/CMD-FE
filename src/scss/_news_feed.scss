@@ -139,3 +139,12 @@ img {
     }
   }
 }
+.title{
+  border: 1px solid $primary;
+  border-radius: 15px;
+  input{
+    width: 100%;
+    border: none;
+    outline: none;
+  }
+}
