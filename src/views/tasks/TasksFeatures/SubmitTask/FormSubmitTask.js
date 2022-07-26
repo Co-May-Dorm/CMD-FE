@@ -93,9 +93,17 @@ const FormSubmitTask = ({ visible, setVisible, task = null }) => {
     //
 
     return (
-        <Modal className="modal-fullheight" size="md" scrollable show={visible} onHide={() => setVisible(false)}>
+        <Modal
+            className="modal-fullheight"
+            size="md"
+            scrollable
+            show={visible}
+            onHide={() => setVisible(false)}
+        >
             <Modal.Header closeButton>
-                <Modal.Title className="text-white">{task?.id ? "Chỉnh sửa công việc" : "Thêm công việc"}</Modal.Title>
+                <Modal.Title>
+                    {task?.id ? "Chỉnh sửa công việc" : "Thêm công việc"}
+                </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Formik

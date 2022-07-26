@@ -21,6 +21,14 @@ const proposalsApi = {
         const requestUrl = `${baseUrl}/${proposalId}`
         return axiosClient.get(requestUrl)
     },
+    getProposalTypeList: () => {
+        const requestUrl = `/proposal-types`
+        return axiosClient.get(requestUrl)
+    },
+    getProposalTypeDetail: (proposalTypeId) => {
+        const requestUrl = `/proposal-type-detail/${proposalTypeId}`
+        return axiosClient.get(requestUrl)
+    },
     addProposal: (proposalInfo) => {
         const requestUrl = `${baseUrl}/add`
         return axiosClient.post(requestUrl, proposalInfo)

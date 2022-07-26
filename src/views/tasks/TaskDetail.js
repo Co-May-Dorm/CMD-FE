@@ -132,6 +132,12 @@ const TaskDetail = ({ taskId }) => {
                                     </Col>
                                 </Row>
                                 <Row className="m-2">
+                                    <Col md={5} className="fw-bolder">Phòng ban:</Col>
+                                    <Col md={7}>
+                                        {taskInfo.department[0].name}
+                                    </Col>
+                                </Row>
+                                <Row className="m-2">
                                     <span className="fw-bolder">Mô tả:</span>
                                     <span>{taskInfo.description}</span>
                                 </Row>
