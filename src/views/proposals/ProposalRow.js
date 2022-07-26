@@ -58,7 +58,7 @@ const ProposalRow = ({ proposalInfo }) => {
                     Ngày tạo:
                 </div>
                 <div className="col text-break">
-                    {showDate(proposalInfo.createDate)}
+                    {showDate(proposalInfo.createdDate)}
                 </div>
             </div>
             <div className="proposal-status">
@@ -86,7 +86,7 @@ const ProposalRow = ({ proposalInfo }) => {
                 </Dropdown.Menu>
             </Dropdown>
             {
-                visibleProposalDetailUI && <ProposalDetail visible={visibleProposalDetailUI} setVisible={setVisibleProposalDetailUI} proposalInfo={proposalInfo} />
+                visibleProposalDetailUI && <ProposalDetail visible={visibleProposalDetailUI} setVisible={setVisibleProposalDetailUI} proposalId={proposalInfo.id} />
             }
             {
                 visibleEditProposalUI && <FormSubmitProposal visible={visibleEditProposalUI} setVisible={setVisibleEditProposalUI} proposal={proposalInfo} />
