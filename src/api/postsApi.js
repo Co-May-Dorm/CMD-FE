@@ -25,8 +25,8 @@ const postsApi = {
         return axiosClient.delete(requestUrl)
     },
     uploadImages:(data)=>{
-        const url =  "https://noteyard-backend.herokuapp.com/api/blogs/uploadImg"
-        axios.post(url, {data}).then(console.log("thêm thành công"))
+        const url =  "api/upload-images"
+       return axiosClient.post(url, data)
     }
 }
 //

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container } from "react-bootstrap";
-import { Row, Col, Modal, Button } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import AppSearch from "~/components/AppSearch";
 import Post from "./Post";
 import { postsSelector } from "~/redux/selectors";
@@ -9,12 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts } from "~/redux/postsSlice";
 import Loading from "~/components/Loading";
 import icon_edit from "../../assets/icons/edit.svg";
-// import img from "/var/lib/jenkins/workspace/CMD-image/testimage.jpg"
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { uploadImages } from "~/redux/postsSlice";
-import { addPost } from "~/redux/postsSlice";
-// import CKFinder from "@ckeditor/ckeditor5-ckfinder/src/ckfinder";
+import FormPost from "./FormPost";
 const hastags = [
   { nameHastag: "hastag1", numFeeds: 123 },
   { nameHastag: "hastag2", numFeeds: 13 },
@@ -27,7 +22,9 @@ export default function NewsFeed() {
   const posts = useSelector(postsSelector).posts;
   const status = useSelector(postsSelector).status;
   const [filter, setFilter] = useState({ content: "" });
-  const [contentPost, setContentPost] = useState({title:"", content:"", isPulised:true})
+  const [show, setShow] = useState(false);
+  const handleShow = () => setShow(true);
+
   // console.log("từ reducer", posts);
   useEffect(() => {
     dispatch(fetchPosts(filter)); // Dispatch action fetchEmployees với tham số truyền vào là filters
@@ -43,103 +40,9 @@ export default function NewsFeed() {
     setFilter({ ...filter, content: input });
   };
 
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  // //upload adapter
-  // const uploadAdapter = (loader) => {
-  //   const body = new FormData();
-  //   loader.file.then((file) => {
-  //     body.append("uploadImages", file);
-  //     uploadImages(body);
-  //   });
-  //   return;
-  // };
-  // //upload plugin
-  // const uploadPlugin = (editor) => {
-  //   editor.plugins.get("FileReponsitory").createUploadAdapter = (loader) => {
-  //     return uploadAdapter(loader);
-  //   };
-  // };
-  const API_URl = "https://noteyard-backend.herokuapp.com";
-  // const UPLOAD_ENDPOINT = "api/blogs/uploadImg";
-  const UPLOAD_ENDPOINT="/post/add"
-  function uploadAdapter(loader) {
-    return {
-      upload: () => {
-        return new Promise((resolve, reject) => {
-          const body = new FormData();
-          loader.file.then((file) => {
-            body.append("uploadImg", file);
-            fetch(`${API_URl}/${UPLOAD_ENDPOINT}`, {
-              method: "post",
-              body: body,
-            })
-              .then((res) => res.json())
-              .then((res) => {
-                resolve({ default: `${API_URl}/${res.url}` });
-                console.log("body", body)
-              })
-              .catch((err) => {
-                reject(err);
-              });
-          });
-        });
-      },
-    };
-  }
-
-  function uploadPlugin(editor) {
-    editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-      return uploadAdapter(loader);
-    };
-  }
-  const them=()=>{
-    addPost(contentPost)
-  }
   return (
     <Container fluid>
-      <Container fluid>
-        <div className="row justify-content-xl-between justify-content-end align-items-center">
-          <Modal scrollable show={show} onHide={() => setShow(false)}>
-            <Modal.Header closeButton>
-              <Modal.Title>TẠO MỚI BÀI VIẾT</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <CKEditor
-                // plugins={[CKFinder]}
-                config={{
-                  // ckfinder: {
-                  //   uploadUrl: "https://noteyard-backend.herokuapp.com/api/blogs/uploadImg",
-                  // },
-                  extraPlugins: [uploadPlugin],
-                }}
-                editor={ClassicEditor}
-                data="<p>Hello from CKEditor 5!</p>"
-                onReady={(editor) => {
-                  // You can store the "editor" and use when it is needed.
-                  console.log("Editor is ready to use!", editor);
-                }}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  setContentPost({...contentPost, content: data})
-                  console.log({ event, editor, data });
-                }}
-                onBlur={(event, editor) => {
-                  console.log("Blur.", editor);
-                }}
-                onFocus={(event, editor) => {
-                  console.log("Focus.", editor);
-                }}
-              />
-            </Modal.Body>
-            <Modal.Footer>
-              <Button onClick={them}>OK</Button>
-            </Modal.Footer>
-          </Modal>
-        </div>
-        <hr />
-      </Container>
+      <FormPost show={show} setShow={() => setShow(!show)} />
       <Container style={{ marginTop: "-15px" }}>
         <div
           className="row"
@@ -154,7 +57,6 @@ export default function NewsFeed() {
             style={{ height: "100vh", position: "fixed", left: 0 }}
           >
             <div className="mt-3 h-100">
-              <img src="../../../../var/lib/jenkins/workspace/CMD-image/testimage.jpg"></img>
               <Row>
                 <AppSearch value={filter.content} onSearch={searchPost} />
               </Row>
@@ -174,18 +76,29 @@ export default function NewsFeed() {
             </div>
           </div>
           <div className="col-md-6" style={{ position: "sticky" }}>
-            <div className="mainNews">
+            <div
+              className=" d-none d-sm-block d-md-none position-fixed justify-content w-auto"
+              style={{ right: 0, zIndex: 10 }}
+            >
+              <AppSearch value={filter.content} onSearch={searchPost} />
+            </div>
+            <div className="mainNews d-flex flex-column position-relative">
               {status === "loading" ? (
                 <Loading />
               ) : status === "error" ? (
                 <div className="text-center py-3">
                   Có lỗi trong quá trình lấy dữ liệu từ Server
                 </div>
+              ) : posts.length === 0 ? (
+                <div className="mt-5 text-center">
+                  Không có bài đăng khả dụng
+                </div>
               ) : (
                 posts.map((post) => {
                   return (
                     <Post
                       myKey={post.id}
+                      title={post.title}
                       creator={post.creator}
                       html={post.content}
                       createDate={post.createDate}
@@ -193,6 +106,14 @@ export default function NewsFeed() {
                   );
                 })
               )}
+              <div
+                className="create_post d-none d-sm-block d-md-none  position-fixed"
+                style={{ right: 0 , marginTop:"25px"}}
+              >
+                <button className="bg-gradient" onClick={handleShow}>
+                  <img alt="icon_edit" src={icon_edit}></img>
+                </button>
+              </div>
             </div>
           </div>
           <div
