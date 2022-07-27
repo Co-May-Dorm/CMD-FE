@@ -38,17 +38,6 @@ const tasksSlice = createSlice({
             .addCase(getTaskListAssignedToMe.rejected, (state, action) => {
                 state.status = "error"
             })
-            .addCase(getTaskListByStatusIds.pending, (state, action) => {
-                state.status = "loading"
-            })
-            .addCase(getTaskListByStatusIds.fulfilled, (state, action) => {
-                state.tasks = action.payload.tasks
-                state.pagination = action.payload.pagination
-                state.status = "success"
-            })
-            .addCase(getTaskListByStatusIds.rejected, (state, action) => {
-                state.status = "error"
-            })
             .addCase(addTask.fulfilled, (state, action) => {
                 // Nếu thêm công việc thành công
                 if (action.payload.status === "OK") {
@@ -166,15 +155,11 @@ const tasksSlice = createSlice({
 export default tasksSlice
 
 export const getTaskList = createAsyncThunk("tasks/getTaskList", async (params) => {
-    const response = await tasksApi.getTaskList(params)
+    const response = await tasksApi.getTaskList(params.params, params.filters)
     return response.data.data
 })
 export const getTaskListAssignedToMe = createAsyncThunk("tasks/getTaskListAssignedToMe", async (params) => {
-    const response = await tasksApi.getTaskListAssignedToMe(params)
-    return response.data.data
-})
-export const getTaskListByStatusIds = createAsyncThunk("tasks/getTaskListByStatusIds", async (listStatusIds) => {
-    const response = await tasksApi.getTaskListByStatusIds(listStatusIds)
+    const response = await tasksApi.getTaskListAssignedToMe(params.params, params.filters)
     return response.data.data
 })
 export const addTask = createAsyncThunk("tasks/addTask", async (taskInfo) => {

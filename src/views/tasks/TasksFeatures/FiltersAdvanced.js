@@ -1,29 +1,99 @@
-import React, { useState } from 'react'
-import { Button, Form, Offcanvas, Row } from 'react-bootstrap'
+import React, { useEffect, useState } from 'react'
+import { Button, Form, Offcanvas } from 'react-bootstrap'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 
+import employeesApi from '~/api/employeesApi'
+import MultiSelect from '~/components/MultiSelect'
+import tasksApi from '~/api/tasksApi'
+import departmentsApi from '~/api/departmentsApi'
+
 const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
     const [visible, setVisible] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [creatorList, setCreatorList] = useState([])
+    const [receiverList, setReceiverList] = useState([])
+    const [departmentList, setDepartmentList] = useState([])
+    const [statusList, setStatusList] = useState([])
+
+    useEffect(() => {
+        employeesApi.getEmployeeListByName("")
+            .then((response) => {
+                setCreatorList(response.data.data.employees)
+                setReceiverList(response.data.data.employees)
+            })
+        tasksApi.getStatusList()
+            .then((response) => {
+                setStatusList(response.data.data)
+            })
+        departmentsApi.getDepartmentList()
+            .then((response) => {
+                setDepartmentList(response.data.data)
+            })
+    }, [])
+
+    const handleCreatorSearch = (value) => {
+        setLoading(true)
+        employeesApi.getEmployeeListByName(value)
+            .then((response) => {
+                setCreatorList(response.data.data.employees)
+            })
+        setLoading(false)
+    }
+    const handleReceiverSearch = (value) => {
+        setLoading(true)
+        employeesApi.getEmployeeListByName(value)
+            .then((response) => {
+                setReceiverList(response.data.data.employees)
+            })
+        setLoading(false)
+    }
+    const handleStatusSearch = (value) => {
+        setLoading(true)
+        tasksApi.getStatusList()
+            .then((response) => {
+                const results = response.data.data.filter((status) => status.name.includes(value))
+                setStatusList(results)
+            })
+        setLoading(false)
+    }
+    const handleDepartmentSearch = (value) => {
+        setLoading(true)
+        departmentsApi.getDepartmentList()
+            .then((response) => {
+                const results = response.data.data.filter((department) => department.name.includes(value))
+                setDepartmentList(results)
+            })
+        setLoading(false)
+    }
 
     /* Xử lý Form với Formik */
     let initialValues = filtersAdvanced
 
     const validationSchema = Yup.object({
         title: Yup.string(),
-        creator: Yup.string(),
-        receiver: Yup.string(),
-        createFrom: Yup.date(),
-        createTo: Yup.date(),
-        finishFrom: Yup.date(),
-        finishTo: Yup.date()
+        creators: Yup.array(),
+        receivers: Yup.array(),
+        startDate: Yup.date(),
+        finishDate: Yup.date(),
+        statuses: Yup.array(),
+        departments: Yup.array(),
+        rate: Yup.number(),
+        priority: Yup.number(),
     })
 
     const handleSubmit = async (values, actions) => {
         actions.setSubmitting(true)
+        const data = {
+            ...values,
+            creatorIds: values.creators?.map((creator) => creator.id) || [],
+            receiverIds: values.receivers?.map((receiver) => receiver.id) || [],
+            statusIds: values.statuses?.map((status) => status.id) || [],
+            departmentIds: values.departments?.map((department) => department.id) || [],
+        }
         setFiltersAdvanced({
             ...filtersAdvanced,
-            ...values
+            ...data
         })
         actions.setSubmitting(false)
     }
@@ -63,7 +133,7 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
                                 onSubmit={handleSubmit}
                             >
                                 {
-                                    ({ values, handleChange, handleBlur, handleSubmit, setFieldValue, isValid, dirty }) => (
+                                    ({ values, handleChange, handleSubmit, handleReset, setFieldValue }) => (
                                         <Form onSubmit={handleSubmit}>
                                             <div className="mb-4">
                                                 <Form.Label>Tên công việc:</Form.Label>
@@ -73,75 +143,97 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
                                                     placeholder="Nhập tên công việc..."
                                                     value={values.title}
                                                     onChange={handleChange}
-                                                    onBlur={handleBlur}
                                                 />
                                             </div>
                                             <div className="mb-4">
                                                 <Form.Label>Người giao:</Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    name="creator"
-                                                    placeholder="Nhập tên người giao..."
-                                                    value={values.creator}
-                                                    onChange={handleChange}
-                                                    onBlur={handleBlur}
+                                                <MultiSelect
+                                                    placeholder="Chọn người giao..."
+                                                    displayValue="name"
+                                                    showCheckbox
+                                                    options={creatorList}
+                                                    loading={loading}
+                                                    onSelect={(selectedList) => {
+                                                        setFieldValue("creators", selectedList)
+                                                    }}
+                                                    onRemove={(selectedList) => {
+                                                        setFieldValue("creators", selectedList)
+                                                    }}
+                                                    onSearch={handleCreatorSearch}
                                                 />
                                             </div>
                                             <div className="mb-4">
                                                 <Form.Label>Người nhận:</Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    name="receiver"
-                                                    placeholder="Nhập tên người nhận..."
-                                                    value={values.receiver}
-                                                    onChange={handleChange}
-                                                    onBlur={handleBlur}
+                                                <MultiSelect
+                                                    placeholder="Chọn người nhận..."
+                                                    displayValue="name"
+                                                    showCheckbox
+                                                    options={receiverList}
+                                                    loading={loading}
+                                                    onSelect={(selectedList) => {
+                                                        setFieldValue("receivers", selectedList)
+                                                    }}
+                                                    onRemove={(selectedList) => {
+                                                        setFieldValue("receivers", selectedList)
+                                                    }}
+                                                    onSearch={handleReceiverSearch}
                                                 />
                                             </div>
-                                            <Row className="mb-4 justify-content-betwween">
-                                                <div className="col-12 col-lg-6">
-                                                    <Form.Label>Ngày tạo từ:</Form.Label>
-                                                    <Form.Control
-                                                        type="date"
-                                                        name="createFrom"
-                                                        value={values.createFrom}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                    />
-                                                </div>
-                                                <div className="col-12 col-lg-6">
-                                                    <Form.Label>Đến ngày:</Form.Label>
-                                                    <Form.Control
-                                                        type="date"
-                                                        name="createTo"
-                                                        value={values.createTo}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                    />
-                                                </div>
-                                            </Row>
-                                            <Row className="mb-4 justify-content-betwween">
-                                                <div className="col-12 col-lg-6">
-                                                    <Form.Label>Ngày hoàn thành từ:</Form.Label>
-                                                    <Form.Control
-                                                        type="date"
-                                                        name="finishFrom"
-                                                        value={values.finishFrom}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                    />
-                                                </div>
-                                                <div className="col-12 col-lg-6">
-                                                    <Form.Label>Đến ngày:</Form.Label>
-                                                    <Form.Control
-                                                        type="date"
-                                                        name="finishTo"
-                                                        value={values.finishTo}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                    />
-                                                </div>
-                                            </Row>
+                                            <div className="mb-4">
+                                                <Form.Label>Trạng thái:</Form.Label>
+                                                <MultiSelect
+                                                    placeholder="Chọn trạng thái..."
+                                                    displayValue="name"
+                                                    showCheckbox
+                                                    options={statusList}
+                                                    loading={loading}
+                                                    onSelect={(selectedList) => {
+                                                        setFieldValue("statuses", selectedList)
+                                                    }}
+                                                    onRemove={(selectedList) => {
+                                                        setFieldValue("statuses", selectedList)
+                                                    }}
+                                                    onSearch={handleStatusSearch}
+                                                />
+                                            </div>
+                                            <div className="mb-4">
+                                                <Form.Label>Phòng ban:</Form.Label>
+                                                <MultiSelect
+                                                    placeholder="Chọn phòng ban..."
+                                                    displayValue="name"
+                                                    showCheckbox
+                                                    options={departmentList}
+                                                    loading={loading}
+                                                    onSelect={(selectedList) => {
+                                                        setFieldValue("departments", selectedList)
+                                                    }}
+                                                    onRemove={(selectedList) => {
+                                                        setFieldValue("departments", selectedList)
+                                                    }}
+                                                    onSearch={handleDepartmentSearch}
+                                                />
+                                            </div>
+                                            <div className="mb-4">
+                                                <Form.Label>Ngày tạo từ:</Form.Label>
+                                                <Form.Control
+                                                    type="date"
+                                                    name="startDate"
+                                                    value={values.startDate}
+                                                    onChange={handleChange}
+                                                />
+                                            </div>
+                                            <div className="mb-4">
+                                                <Form.Label>Ngày hoàn thành từ:</Form.Label>
+                                                <Form.Control
+                                                    type="date"
+                                                    name="finishDate"
+                                                    value={values.finishDate}
+                                                    onChange={handleChange}
+                                                />
+                                            </div>
+                                            <Button variant="primary" onClick={handleReset}>
+                                                Đặt lại
+                                            </Button>
                                             <Button
                                                 type="submit"
                                                 className="d-table m-auto"

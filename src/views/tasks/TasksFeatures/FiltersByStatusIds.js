@@ -3,7 +3,7 @@ import { Dropdown, Form } from 'react-bootstrap'
 import { BiFilterAlt } from 'react-icons/bi'
 import tasksApi from '~/api/tasksApi'
 
-const FiltersByStatusIds = ({ filterByStatusIds, setFilterByStatusIds }) => {
+const FiltersByStatusIds = ({ filtersByStatusIds, setFiltersByStatusIds }) => {
     const [statuses, setStatuses] = useState([])
 
     useEffect(() => {
@@ -15,16 +15,14 @@ const FiltersByStatusIds = ({ filterByStatusIds, setFilterByStatusIds }) => {
 
     const handleChange = (e) => {
         const currentStatusId = Number.parseInt(e.target.name)
-        let listStatusIds = filterByStatusIds.statusIds
+        let listStatusIds = filtersByStatusIds
         if (listStatusIds.includes(currentStatusId)) {
             listStatusIds = listStatusIds.filter(statusId => statusId !== currentStatusId)
         }
         else {
             listStatusIds.push(currentStatusId)
         }
-        setFilterByStatusIds({
-            statusIds: listStatusIds
-        })
+        setFiltersByStatusIds(listStatusIds)
     }
     return (
         <>
@@ -41,7 +39,7 @@ const FiltersByStatusIds = ({ filterByStatusIds, setFilterByStatusIds }) => {
                                     type="switch"
                                     name={status.id}
                                     label={status.name}
-                                    checked={filterByStatusIds.statusIds.includes(status.id)}
+                                    checked={filtersByStatusIds?.includes(status.id)}
                                     onChange={handleChange}
                                 />
                             ))
