@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Form, Offcanvas } from 'react-bootstrap'
+import { Button, Form, Image, Offcanvas } from 'react-bootstrap'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 
@@ -7,6 +7,7 @@ import employeesApi from '~/api/employeesApi'
 import MultiSelect from '~/components/MultiSelect'
 import tasksApi from '~/api/tasksApi'
 import departmentsApi from '~/api/departmentsApi'
+import resetIcon from '~/assets/icons/reset-form.svg'
 
 const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
     const [visible, setVisible] = useState(false)
@@ -153,6 +154,7 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
                                                     showCheckbox
                                                     options={creatorList}
                                                     loading={loading}
+                                                    selectedValues={filtersAdvanced.creators}
                                                     onSelect={(selectedList) => {
                                                         setFieldValue("creators", selectedList)
                                                     }}
@@ -170,6 +172,7 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
                                                     showCheckbox
                                                     options={receiverList}
                                                     loading={loading}
+                                                    selectedValues={filtersAdvanced.receivers}
                                                     onSelect={(selectedList) => {
                                                         setFieldValue("receivers", selectedList)
                                                     }}
@@ -187,6 +190,7 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
                                                     showCheckbox
                                                     options={statusList}
                                                     loading={loading}
+                                                    selectedValues={filtersAdvanced.statuses}
                                                     onSelect={(selectedList) => {
                                                         setFieldValue("statuses", selectedList)
                                                     }}
@@ -204,6 +208,7 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
                                                     showCheckbox
                                                     options={departmentList}
                                                     loading={loading}
+                                                    selectedValues={filtersAdvanced.departments}
                                                     onSelect={(selectedList) => {
                                                         setFieldValue("departments", selectedList)
                                                     }}
@@ -231,11 +236,12 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
                                                     onChange={handleChange}
                                                 />
                                             </div>
-                                            <Button variant="primary" onClick={handleReset}>
-                                                Đặt lại
+                                            <Button variant="none" onClick={handleReset}>
+                                                <Image src={resetIcon} />
                                             </Button>
                                             <Button
                                                 type="submit"
+                                                size="lg"
                                                 className="d-table m-auto"
                                             >
                                                 Áp dụng

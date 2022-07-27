@@ -56,13 +56,13 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                 departments: employee.departments.map((department, index) => {
                     return {
                         ...employee.departments[index],
-                        positions: departments.find(dp => dp.id === department.id).positions
+                        positions: departments.find(dp => dp.id === department.id)?.positions
                     }
                 }),
                 teams: employee.teams.map((team, index) => {
                     return {
                         ...employee.teams[index],
-                        positions: teams.find(tm => tm.id === team.id).positions
+                        positions: teams.find(tm => tm.id === team.id)?.positions
                     }
                 })
             }
@@ -325,11 +325,13 @@ const FormSubmitEmployee = ({ visible, setVisible, employee = null }) => {
                                 placeholder="Nhập mã nhân viên..."
                                 value={employeeInfo.code}
                                 onChange={handleInputChange}
+                                isInvalid={employeeInfo.code?.length > 10}
                                 required
                             />
                             <Form.Control.Feedback type="invalid">
-                                Vui lòng nhập mã nhân viên.
+                                Mã nhân viên không hợp lệ.
                             </Form.Control.Feedback>
+                            Mã nhân viên không được vượt quá 10 ký tự.
                         </div>
                         <hr />
                         <div className="mb-3">

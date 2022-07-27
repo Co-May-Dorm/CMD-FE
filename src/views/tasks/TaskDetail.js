@@ -94,17 +94,17 @@ const TaskDetail = ({ taskId }) => {
                                     <Col md={7}>
                                         <div className="d-flex">
                                             <Image
-                                                src={taskInfo.creator.avatar}
+                                                src={taskInfo.creator?.avatar}
                                                 width={40}
                                                 height={40}
                                                 className="rounded-circle col-auto me-2"
                                             />
                                             <Row className="flex-column">
                                                 <Col className="fw-bolder text-primary">
-                                                    {taskInfo.creator.name}
+                                                    {taskInfo.creator?.name}
                                                 </Col>
                                                 <Col>
-                                                    {taskInfo.creator.code}
+                                                    {taskInfo.creator?.code}
                                                 </Col>
                                             </Row>
                                         </div>
@@ -134,7 +134,7 @@ const TaskDetail = ({ taskId }) => {
                                 <Row className="m-2">
                                     <Col md={5} className="fw-bolder">Phòng ban:</Col>
                                     <Col md={7}>
-                                        {taskInfo.department[0].name}
+                                        {taskInfo.department[0]?.name}
                                     </Col>
                                 </Row>
                                 <Row className="m-2">
@@ -145,12 +145,12 @@ const TaskDetail = ({ taskId }) => {
                                     <Col md={5} className="fw-bolder">Trạng thái:</Col>
                                     <Col md={7}>
                                         {
-                                            taskInfo.status.id === 1 ? (
+                                            taskInfo.status?.id === 1 ? (
                                                 <>
-                                                    {taskInfo.status.name} ({showDate(taskInfo.modifyDate)})
+                                                    {taskInfo.status?.name} ({showDate(taskInfo.modifyDate)})
                                                 </>
 
-                                            ) : <strong>{taskInfo.status.name}</strong>
+                                            ) : <strong>{taskInfo.status?.name}</strong>
                                         }
                                     </Col>
                                 </Row>
