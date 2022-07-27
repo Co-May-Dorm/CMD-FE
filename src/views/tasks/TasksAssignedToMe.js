@@ -17,6 +17,7 @@ import FiltersByStatusIds from './TasksFeatures/FiltersByStatusIds'
 import FiltersAdvanced from './TasksFeatures/FiltersAdvanced'
 
 const queryString = require('query-string')
+const userInfo = JSON.parse(localStorage.getItem("userInfo"))
 
 const TasksAssignedToMe = () => {
     const status = useSelector(tasksSelector).status
@@ -40,36 +41,27 @@ const TasksAssignedToMe = () => {
         departmentIds: [],
         rate: "",
         priority: "",
+        employeeId: userInfo.id
     })
 
 
     useEffect(() => {
-        document.title = "Công việc"     // Thiết lập tiêu đề cho trang
+        document.title = "Công việc"
 
-        // Kiểm tra nếu load lại trang thì giữ nguyên các filter hiện tại
         if (location.search.length > 0) {
-            const params = queryString.parse(location.search)     // Lấy danh sách params từ URL
-            let newParams = {}      // Lưu danh sách những param khác null
+            const params = queryString.parse(location.search)
+            let newParams = {}
 
-            // Thực hiện việc loại bỏ những param có giá trị là null
             for (const [key, value] of Object.entries(params)) {
-                if (key !== "page") {       // Nếu giá trị của param là null hoặc chuỗi rỗng thì bỏ qua
+                if (key !== "page") {
                     continue
                 }
                 newParams[key] = value
             }
 
-            //
             setFiltersBase(newParams)
         }
     }, [])
-
-    useEffect(() => {
-        dispatch(getTaskListAssignedToMe({
-            params: filtersBase,
-            filters: filtersAdvanced
-        }))
-    }, [filtersBase, filtersAdvanced])
 
     useEffect(() => {
         const requestUrl = location.pathname + "?" + queryString.stringify(filtersBase)
@@ -113,8 +105,8 @@ const TasksAssignedToMe = () => {
         }
     }
     const handleFilterByStatusIds = (statusIds) => {
-        setFiltersBase({
-            ...filtersBase,
+        setFiltersAdvanced({
+            ...filtersAdvanced,
             statusIds: statusIds
         })
     }
@@ -134,7 +126,7 @@ const TasksAssignedToMe = () => {
                         <FiltersAdvanced filtersAdvanced={filtersAdvanced} setFiltersAdvanced={setFiltersAdvanced} />
                     </div>
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
-                        <FiltersByStatusIds filtersByStatusIds={filtersBase.statusIds} setFiltersByStatusIds={handleFilterByStatusIds} />
+                        <FiltersByStatusIds filtersByStatusIds={filtersAdvanced.statusIds} setFiltersByStatusIds={handleFilterByStatusIds} />
                     </div>
                 </div>
                 <div className="d-flex justify-content-start align-items-center">

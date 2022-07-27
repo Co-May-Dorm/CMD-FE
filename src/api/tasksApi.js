@@ -9,9 +9,9 @@ const tasksApi = {
         const requestUrl = `${baseUrl}?${queryString.stringify(params)}`
         return axiosClient.post(requestUrl, filters)
     },
-    getTaskListAssignedToMe: (params) => {
-        const requestUrl = `${baseUrl}/assigeToMe?${queryString.stringify(params)}`
-        return axiosClient.get(requestUrl)
+    getTaskListAssignedToMe: (params, filters) => {
+        const requestUrl = `${baseUrl}/assige-to-me?${queryString.stringify(params)}`
+        return axiosClient.post(requestUrl, filters)
     },
     getTaskDetailById: (taskId) => {
         const requestUrl = `${baseUrl}/${taskId}`
