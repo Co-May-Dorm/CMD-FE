@@ -5,9 +5,9 @@ const queryString = require("query-string")
 // API liên quan đến phần công việc
 const baseUrl = "/tasks"
 const tasksApi = {
-    getTaskList: (params) => {
+    getTaskList: (params, filters) => {
         const requestUrl = `${baseUrl}?${queryString.stringify(params)}`
-        return axiosClient.get(requestUrl)
+        return axiosClient.post(requestUrl, filters)
     },
     getTaskListAssignedToMe: (params) => {
         const requestUrl = `${baseUrl}/assigeToMe?${queryString.stringify(params)}`
@@ -16,10 +16,6 @@ const tasksApi = {
     getTaskDetailById: (taskId) => {
         const requestUrl = `${baseUrl}/${taskId}`
         return axiosClient.get(requestUrl)
-    },
-    getTaskListByStatusIds: (listStatusIds) => {
-        const requestUrl = `${baseUrl}/statuses`
-        return axiosClient.post(requestUrl, listStatusIds)
     },
     getStatusList: () => {
         const requestUrl = `/status`

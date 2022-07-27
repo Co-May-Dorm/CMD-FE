@@ -7,14 +7,14 @@ import { BiSortAlt2 } from 'react-icons/bi'
 import { Button, Card, Container } from 'react-bootstrap'
 import clsx from 'clsx'
 
-import { getTaskListAssignedToMe, getTaskListByStatusIds } from '~/redux/tasksSlice'
+import { getTaskListAssignedToMe } from '~/redux/tasksSlice'
 import { tasksSelector } from '~/redux/selectors'
 import AppPagination from '~/components/AppPagination'
+import TaskRow from './TaskRow'
+import AddTask from './TasksFeatures/AddTask'
 import Loading from '~/components/Loading'
-import TaskRow from '../TaskRow'
-import AddTask from '../TasksFeatures/AddTask'
-import FiltersByStatusIds from '../TasksFeatures/FiltersByStatusIds'
-import FiltersAdvanced from '../TasksFeatures/FiltersAdvanced'
+import FiltersByStatusIds from './TasksFeatures/FiltersByStatusIds'
+import FiltersAdvanced from './TasksFeatures/FiltersAdvanced'
 
 const queryString = require('query-string')
 
@@ -22,20 +22,29 @@ const TasksAssignedToMe = () => {
     const status = useSelector(tasksSelector).status
     const tasks = useSelector(tasksSelector).tasks
     const pagination = useSelector(tasksSelector).pagination
-    
+
     const dispatch = useDispatch()
     const location = useLocation()
     const navigation = useNavigate()
 
-    const [filtersAdvanced, setFiltersAdvanced] = useState({
+    const [filtersBase, setFiltersBase] = useState({
         page: 1
     })
-    const [filterByStatusIds, setFilterByStatusIds] = useState({
-        statusIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    const [filtersAdvanced, setFiltersAdvanced] = useState({
+        title: "",
+        creatorIds: [],
+        receiverIds: [],
+        startDate: "",
+        finishDate: "",
+        statusIds: [],
+        departmentIds: [],
+        rate: "",
+        priority: "",
     })
 
+
     useEffect(() => {
-        document.title = "Công việc của tôi"     // Thiết lập tiêu đề cho trang
+        document.title = "Công việc"     // Thiết lập tiêu đề cho trang
 
         // Kiểm tra nếu load lại trang thì giữ nguyên các filter hiện tại
         if (location.search.length > 0) {
@@ -51,51 +60,63 @@ const TasksAssignedToMe = () => {
             }
 
             //
-            setFiltersAdvanced(newParams)
+            setFiltersBase(newParams)
         }
     }, [])
 
     useEffect(() => {
-        dispatch(getTaskListByStatusIds(filterByStatusIds))
-    }, [filterByStatusIds])
+        dispatch(getTaskListAssignedToMe({
+            params: filtersBase,
+            filters: filtersAdvanced
+        }))
+    }, [filtersBase, filtersAdvanced])
 
     useEffect(() => {
-        const requestUrl = location.pathname + "?" + queryString.stringify(filtersAdvanced)
+        const requestUrl = location.pathname + "?" + queryString.stringify(filtersBase)
         navigation(requestUrl)
-        dispatch(getTaskListAssignedToMe(filtersAdvanced))
-    }, [filtersAdvanced])
+        dispatch(getTaskListAssignedToMe({
+            params: filtersBase,
+            filters: filtersAdvanced
+        }))
+    }, [filtersBase, filtersAdvanced])
 
     //  Hàm thay đổi state khi ấn vào trang mới ở phần phân trang
     const handlePageChange = (newPage) => {
-        setFiltersAdvanced({
-            ...filtersAdvanced,
+        setFiltersBase({
+            ...filtersBase,
             page: newPage
         })
     }
 
     // Hàm thay đổi state khi thực hiện sắp xếp
     const handleSort = (sortBy) => {
-        if (filtersAdvanced.order === null || !filtersAdvanced.order) {       // Nếu đang không sắp xếp thì thực hiện sắp xếp tăng dần
-            setFiltersAdvanced({
-                ...filtersAdvanced,
+        if (filtersBase.order === null || !filtersBase.order) {       // Nếu đang không sắp xếp thì thực hiện sắp xếp tăng dần
+            setFiltersBase({
+                ...filtersBase,
                 sort: sortBy,
                 order: "asc"
             })
         }
-        else if (filtersAdvanced.order === "asc") {         // Nếu đang sắp xếp tăng dần thì thực hiện sắp xếp giảm dần
-            setFiltersAdvanced({
-                ...filtersAdvanced,
+        else if (filtersBase.order === "asc") {         // Nếu đang sắp xếp tăng dần thì thực hiện sắp xếp giảm dần
+            setFiltersBase({
+                ...filtersBase,
                 sort: sortBy,
                 order: "desc"
             })
         }
         else {                              // Nếu đang sắp xếp giảm dần thì thực hiện trở về ban đầu trước khi sắp xếp
-            setFiltersAdvanced({
-                ...filtersAdvanced,
+            setFiltersBase({
+                ...filtersBase,
                 sort: null,
                 order: null
             })
         }
+    }
+    const handleFilterByStatusIds = (statusIds) => {
+        setFiltersBase({
+            ...filtersBase,
+            statusIds: statusIds
+        })
     }
 
     return (
@@ -103,7 +124,7 @@ const TasksAssignedToMe = () => {
             <Container fluid>
                 <div className="row justify-content-xl-between justify-content-end align-items-center">
                     <div className="col-auto fw-bolder fs-5 mb-xl-0 mb-3">
-                        CÔNG VIỆC CỦA TÔI
+                        TẤT CẢ CÔNG VIỆC
                     </div>
                     <div className="col" />
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
@@ -113,7 +134,7 @@ const TasksAssignedToMe = () => {
                         <FiltersAdvanced filtersAdvanced={filtersAdvanced} setFiltersAdvanced={setFiltersAdvanced} />
                     </div>
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
-                        <FiltersByStatusIds filterByStatusIds={filterByStatusIds} setFilterByStatusIds={setFilterByStatusIds} />
+                        <FiltersByStatusIds filtersByStatusIds={filtersBase.statusIds} setFiltersByStatusIds={handleFilterByStatusIds} />
                     </div>
                 </div>
                 <div className="d-flex justify-content-start align-items-center">
@@ -144,8 +165,8 @@ const TasksAssignedToMe = () => {
                         >
                             TÊN CÔNG VIỆC
                             {
-                                (filtersAdvanced.sort === "title" && filtersAdvanced.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filtersAdvanced.sort === "title" && filtersAdvanced.order === "desc") ? <AiOutlineSortDescending />
+                                (filtersBase.sort === "title" && filtersBase.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filtersBase.sort === "title" && filtersBase.order === "desc") ? <AiOutlineSortDescending />
                                         : <BiSortAlt2 />
                             }
                         </span>
@@ -157,8 +178,8 @@ const TasksAssignedToMe = () => {
                         >
                             NGƯỜI GIAO
                             {
-                                (filtersAdvanced.sort === "creator.name" && filtersAdvanced.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filtersAdvanced.sort === "creator.name" && filtersAdvanced.order === "desc") ? <AiOutlineSortDescending />
+                                (filtersBase.sort === "creator.name" && filtersBase.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filtersBase.sort === "creator.name" && filtersBase.order === "desc") ? <AiOutlineSortDescending />
                                         : <BiSortAlt2 />
                             }
                         </span>
@@ -171,8 +192,8 @@ const TasksAssignedToMe = () => {
                         >
                             NGƯỜI NHẬN
                             {
-                                (filtersAdvanced.sort === "receiver.name" && filtersAdvanced.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filtersAdvanced.sort === "receiver.name" && filtersAdvanced.order === "desc") ? <AiOutlineSortDescending />
+                                (filtersBase.sort === "receiver.name" && filtersBase.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filtersBase.sort === "receiver.name" && filtersBase.order === "desc") ? <AiOutlineSortDescending />
                                         : <BiSortAlt2 />
                             }
                         </span>
@@ -184,8 +205,8 @@ const TasksAssignedToMe = () => {
                         >
                             THỜI GIAN
                             {
-                                (filtersAdvanced.sort === "startDate" && filtersAdvanced.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filtersAdvanced.sort === "startDate" && filtersAdvanced.order === "desc") ? <AiOutlineSortDescending />
+                                (filtersBase.sort === "startDate" && filtersBase.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filtersBase.sort === "startDate" && filtersBase.order === "desc") ? <AiOutlineSortDescending />
                                         : <BiSortAlt2 />
                             }
                         </span>
@@ -197,8 +218,8 @@ const TasksAssignedToMe = () => {
                         >
                             TÌNH TRẠNG
                             {
-                                (filtersAdvanced.sort === "status.name" && filtersAdvanced.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filtersAdvanced.sort === "status.name" && filtersAdvanced.order === "desc") ? <AiOutlineSortDescending />
+                                (filtersBase.sort === "status.name" && filtersBase.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filtersBase.sort === "status.name" && filtersBase.order === "desc") ? <AiOutlineSortDescending />
                                         : <BiSortAlt2 />
                             }
                         </span>
@@ -210,13 +231,12 @@ const TasksAssignedToMe = () => {
                         >
                             ĐÁNH GIÁ
                             {
-                                (filtersAdvanced.sort === "priority" && filtersAdvanced.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filtersAdvanced.sort === "priority" && filtersAdvanced.order === "desc") ? <AiOutlineSortDescending />
+                                (filtersBase.sort === "priority" && filtersBase.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filtersBase.sort === "priority" && filtersBase.order === "desc") ? <AiOutlineSortDescending />
                                         : <BiSortAlt2 />
                             }
                         </span>
                     </div>
-                    <div className="task-more" />
                 </div>
                 {
                     status === "loading" ? (
@@ -244,7 +264,10 @@ const TasksAssignedToMe = () => {
                     )
                 }
                 <AppPagination
-                    pagination={pagination}
+                    pagination={{
+                        ...pagination,
+                        page: filtersBase.page
+                    }}
                     onPageChange={handlePageChange}
                 />
             </Container>
