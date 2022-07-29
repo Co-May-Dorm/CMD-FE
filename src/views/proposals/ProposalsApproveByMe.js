@@ -7,17 +7,17 @@ import { BiSortAlt2 } from 'react-icons/bi'
 import { Button, Card, Container } from 'react-bootstrap'
 import clsx from 'clsx'
 
-import { getProposalList } from '~/redux/proposalsSlice'
+import { getProposalListApproveByMe } from '~/redux/proposalsSlice'
 import { proposalsSelector } from '~/redux/selectors'
 import AppPagination from '~/components/AppPagination'
 import Loading from '~/components/Loading'
-import ProposalRow from '../ProposalRow'
-import AddProposal from '../ProposalsFeatures/AddProposal'
-import FiltersAdvanced from '../ProposalsFeatures/FiltersAdvanced'
+import ProposalRow from './ProposalRow'
+import AddProposal from './ProposalsFeatures/AddProposal'
+import FiltersAdvanced from './ProposalsFeatures/FiltersAdvanced'
 
 const queryString = require('query-string')
 
-const ProposalsForAll = () => {
+const ProposalsApproveByMe = () => {
     const status = useSelector(proposalsSelector).status
     const proposals = useSelector(proposalsSelector).proposals
     const pagination = useSelector(proposalsSelector).pagination
@@ -38,7 +38,7 @@ const ProposalsForAll = () => {
     })
 
     useEffect(() => {
-        document.title = "Đề xuất"     // Thiết lập tiêu đề cho trang
+        document.title = "Đề xuất của tôi"     // Thiết lập tiêu đề cho trang
 
         // Kiểm tra nếu load lại trang thì giữ nguyên các filter hiện tại
         if (location.search.length > 0) {
@@ -59,7 +59,7 @@ const ProposalsForAll = () => {
     }, [])
 
     useEffect(() => {
-        dispatch(getProposalList({
+        dispatch(getProposalListApproveByMe({
             params: filtersBase,
             filters: filtersAdvanced
         }))
@@ -68,7 +68,7 @@ const ProposalsForAll = () => {
     useEffect(() => {
         const requestUrl = location.pathname + "?" + queryString.stringify(filtersBase)
         navigation(requestUrl)
-        dispatch(getProposalList({
+        dispatch(getProposalListApproveByMe({
             params: filtersBase,
             filters: filtersAdvanced
         }))
@@ -253,4 +253,4 @@ const ProposalsForAll = () => {
     )
 }
 
-export default ProposalsForAll
+export default ProposalsApproveByMe

@@ -9,8 +9,12 @@ const tasksApi = {
         const requestUrl = `${baseUrl}?${queryString.stringify(params)}`
         return axiosClient.post(requestUrl, filters)
     },
+    getTaskListCreatedByMe: (params, filters) => {
+        const requestUrl = `${baseUrl}/created-by-me?${queryString.stringify(params)}`
+        return axiosClient.post(requestUrl, filters)
+    },
     getTaskListAssignedToMe: (params, filters) => {
-        const requestUrl = `${baseUrl}/assige-to-me?${queryString.stringify(params)}`
+        const requestUrl = `${baseUrl}/assigned-to-me?${queryString.stringify(params)}`
         return axiosClient.post(requestUrl, filters)
     },
     getTaskDetailById: (taskId) => {

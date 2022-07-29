@@ -13,11 +13,9 @@ import AppPagination from '~/components/AppPagination'
 import TaskRow from './TaskRow'
 import AddTask from './TasksFeatures/AddTask'
 import Loading from '~/components/Loading'
-import FiltersByStatusIds from './TasksFeatures/FiltersByStatusIds'
 import FiltersAdvanced from './TasksFeatures/FiltersAdvanced'
 
 const queryString = require('query-string')
-const userInfo = JSON.parse(localStorage.getItem("userInfo"))
 
 const TasksAssignedToMe = () => {
     const status = useSelector(tasksSelector).status
@@ -41,7 +39,6 @@ const TasksAssignedToMe = () => {
         departmentIds: [],
         rate: "",
         priority: "",
-        employeeId: userInfo.id
     })
 
 
@@ -72,7 +69,6 @@ const TasksAssignedToMe = () => {
         }))
     }, [filtersBase, filtersAdvanced])
 
-    //  Hàm thay đổi state khi ấn vào trang mới ở phần phân trang
     const handlePageChange = (newPage) => {
         setFiltersBase({
             ...filtersBase,
@@ -80,23 +76,22 @@ const TasksAssignedToMe = () => {
         })
     }
 
-    // Hàm thay đổi state khi thực hiện sắp xếp
     const handleSort = (sortBy) => {
-        if (filtersBase.order === null || !filtersBase.order) {       // Nếu đang không sắp xếp thì thực hiện sắp xếp tăng dần
+        if (filtersBase.order === null || !filtersBase.order) {
             setFiltersBase({
                 ...filtersBase,
                 sort: sortBy,
                 order: "asc"
             })
         }
-        else if (filtersBase.order === "asc") {         // Nếu đang sắp xếp tăng dần thì thực hiện sắp xếp giảm dần
+        else if (filtersBase.order === "asc") {
             setFiltersBase({
                 ...filtersBase,
                 sort: sortBy,
                 order: "desc"
             })
         }
-        else {                              // Nếu đang sắp xếp giảm dần thì thực hiện trở về ban đầu trước khi sắp xếp
+        else {
             setFiltersBase({
                 ...filtersBase,
                 sort: null,
@@ -104,19 +99,13 @@ const TasksAssignedToMe = () => {
             })
         }
     }
-    const handleFilterByStatusIds = (statusIds) => {
-        setFiltersAdvanced({
-            ...filtersAdvanced,
-            statusIds: statusIds
-        })
-    }
 
     return (
         <Container fluid>
             <Container fluid>
                 <div className="row justify-content-xl-between justify-content-end align-items-center">
                     <div className="col-auto fw-bolder fs-5 mb-xl-0 mb-3">
-                        TẤT CẢ CÔNG VIỆC
+                        CÔNG VIỆC CỦA TÔI
                     </div>
                     <div className="col" />
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
@@ -125,15 +114,19 @@ const TasksAssignedToMe = () => {
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
                         <FiltersAdvanced filtersAdvanced={filtersAdvanced} setFiltersAdvanced={setFiltersAdvanced} />
                     </div>
-                    <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
-                        <FiltersByStatusIds filtersByStatusIds={filtersAdvanced.statusIds} setFiltersByStatusIds={handleFilterByStatusIds} />
-                    </div>
                 </div>
                 <div className="d-flex justify-content-start align-items-center">
                     <NavLink to="/tasks" end>
                         {
                             ({ isActive }) => <Button className="col-auto m-1" variant={clsx({ "primary": isActive, "outline-primary": !isActive })}>
                                 Tất cả
+                            </Button>
+                        }
+                    </NavLink>
+                    <NavLink to="/tasks/created-by-me">
+                        {
+                            ({ isActive }) => <Button className="col-auto m-1" variant={clsx({ "primary": isActive, "outline-primary": !isActive })}>
+                                Công việc tôi giao
                             </Button>
                         }
                     </NavLink>

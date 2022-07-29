@@ -5,6 +5,7 @@ const NewsFeed = React.lazy(() => import("~/views/newsFeed/NewsFeed"))
 const Employees = React.lazy(() => import("~/views/employees/EmployeesMainPage"))
 
 const Tasks = React.lazy(() => import("~/views/tasks/TasksMainPage"))
+const TasksCreatedByMe = React.lazy(() => import("~/views/tasks/TasksCreatedByMe"))
 const TasksAssignedToMe = React.lazy(() => import("~/views/tasks/TasksAssignedToMe"))
 
 const ProposalsForAll = React.lazy(() => import("~/views/proposals/ProposalsForAll"))
@@ -22,6 +23,11 @@ const routes = [
         name: "Tất cả công việc",
         path: "tasks",
         element: <Tasks />
+    },
+    {
+        name: "Công việc tôi giao",
+        path: "tasks/created-by-me",
+        element: <TasksCreatedByMe />
     },
     {
         name: "Công việc của tôi",

@@ -3,7 +3,7 @@ import { ListGroup } from 'react-bootstrap'
 
 import useOnClickOutside from '~/customHooks/useOnClickOutside'
 
-const Option = ({ index, value, placeholder, data, onChange, ...props }) => {
+const Select = ({ index, value, placeholder, displayValue, options, onSelect, ...props }) => {
     const [visible, setVisible] = useState(false)
     const ref = useRef()        // Ref form select Value
 
@@ -16,17 +16,17 @@ const Option = ({ index, value, placeholder, data, onChange, ...props }) => {
             className="form-select"
             {...props}
         >
-            {placeholder}
+            {value[displayValue] || placeholder}
             <div className="select">
                 {
-                    visible && data.map((item, key) => (
+                    visible && options.map((item, key) => (
                         <ListGroup.Item
                             action
                             key={key}
-                            onClick={() => onChange(index, item)}
-                            active={value.label === item.label}
+                            onClick={() => onSelect(index, item)}
+                            active={value[displayValue] === item[displayValue]}
                         >
-                            {item.label}
+                            {item[displayValue]}
                         </ListGroup.Item>
                     ))
                 }
@@ -35,4 +35,4 @@ const Option = ({ index, value, placeholder, data, onChange, ...props }) => {
     )
 }
 
-export default Option
+export default Select

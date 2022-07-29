@@ -1,17 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Form, ListGroup, Modal } from 'react-bootstrap'
+import { Button, Form, ListGroup } from 'react-bootstrap'
 import { BiTrash } from 'react-icons/bi'
 
 import { getRoleList } from '~/redux/rolesSlice'
 import { rolesSelector } from '~/redux/selectors'
+import Select from '~/components/Select'
 
 const Positions = ({ teamInfo, setTeamInfo }) => {
     const roles = useSelector(rolesSelector).roles
     const dispatch = useDispatch()
 
-    const [visibleDeletePosition, setVisibleDeletePosition] = useState(false)
     useEffect(() => {
         dispatch(getRoleList())
     }, [])
@@ -34,24 +34,19 @@ const Positions = ({ teamInfo, setTeamInfo }) => {
                 ...end]
         })
     }
-    const handleRoleChange = (e) => {
-        const index = e.target.tabIndex
-        const value = e.target.value
-        const findName = roles.find(role => role.id === Number(value))?.name
-        const start = teamInfo.positions.slice(0, index) || []
-        const end = teamInfo.positions.slice(index + 1, teamInfo.positions.length + 1) || []
+    const handleRoleChange = (index, newRole) => {
+        let newPositions = teamInfo.positions.map((position, key) => {
+            if (key === index) {
+                return {
+                    ...position,
+                    role: newRole
+                }
+            }
+            return position
+        })
         setTeamInfo({
             ...teamInfo,
-            positions: [
-                ...start,
-                {
-                    ...teamInfo.positions[index],
-                    role: {
-                        id: Number(value),
-                        name: findName
-                    }
-                },
-                ...end]
+            positions: newPositions
         })
     }
     const handleDelete = (index) => {
@@ -119,18 +114,14 @@ const Positions = ({ teamInfo, setTeamInfo }) => {
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Vai trò:</Form.Label>
-                                <Form.Select
-                                    tabIndex={index}
-                                    value={position.role?.id}
-                                    label={position.role?.name}
-                                    onChange={handleRoleChange}
-                                >
-                                    {
-                                        roles.map(role => (
-                                            <option key={role.id} value={role.id}>{role.name}</option>
-                                        ))
-                                    }
-                                </Form.Select>
+                                <Select
+                                    index={index}
+                                    placeholder="Chọn vai trò"
+                                    displayValue="name"
+                                    value={position.role}
+                                    options={roles}
+                                    onSelect={handleRoleChange}
+                                />
                             </Form.Group>
                             <div className="row justify-content-center">
                                 <Form.Check
@@ -142,38 +133,11 @@ const Positions = ({ teamInfo, setTeamInfo }) => {
                                     checked={position.isManager}
                                     onChange={handleInputChange}
                                 />
-                                <Button variant="none" className="col-auto me-3" onClick={() => setVisibleDeletePosition(true)}>
+                                <Button variant="none" className="col-auto me-3" onClick={() => handleDelete(index)}>
                                     <BiTrash />
                                 </Button>
                             </div>
                         </ListGroup.Item>
-                        <br />
-                        <Modal
-                            backdrop="static"
-                            show={visibleDeletePosition}
-                            onHide={() => setVisibleDeletePosition(false)}
-                        >
-                            <Modal.Header closeButton className="bg-gradient">
-                                <Modal.Title>XÓA CHỨC VỤ</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                Bạn có chắc muốn xóa chức vụ này khỏi CLB/Đội nhóm?
-                            </Modal.Body>
-                            <Modal.Footer>
-                                <Button
-                                    variant="secondary"
-                                    onClick={() => setVisibleDeletePosition(false)}
-                                >
-                                    Hủy
-                                </Button>
-                                <Button
-                                    variant="danger"
-                                    onClick={() => handleDelete(index)}
-                                >
-                                    Đồng ý
-                                </Button>
-                            </Modal.Footer>
-                        </Modal>
                     </div>
                 ))
             }
