@@ -26,6 +26,17 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
     }
     //
 
+    const handleResetFilters = () => {
+        setFiltersAdvanced({
+            statusIds: [],
+            creator: "",
+            createDateFrom: "",
+            createDateTo: "",
+            proposalTypeId: ""
+        })
+        setVisible(false)
+    }
+
     return (
         <>
             <Button
@@ -60,7 +71,7 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
                                 onSubmit={handleSubmit}
                             >
                                 {
-                                    ({ values, handleChange, handleBlur, handleSubmit, setFieldValue, isValid, dirty }) => (
+                                    ({ values, handleChange, handleSubmit, handleReset, setFieldValue }) => (
                                         <Form onSubmit={handleSubmit}>
                                             <div className="mb-4">
                                                 <Form.Label>Người giao:</Form.Label>
@@ -102,12 +113,24 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
                                                     onChange={handleChange}
                                                 />
                                             </div>
-                                            <Button
-                                                type="submit"
-                                                className="d-table m-auto"
-                                            >
-                                                Áp dụng
-                                            </Button>
+                                            <div className="d-flex justify-content-evenly">
+                                                <Button
+                                                    variant="outline-primary"
+                                                    className="col-5 fw-bolder"
+                                                    onClick={(e) => {
+                                                        handleReset(e)
+                                                        handleResetFilters()
+                                                    }}
+                                                >
+                                                    Đặt lại
+                                                </Button>
+                                                <Button
+                                                    className="col-5 fw-bolder"
+                                                    type="submit"
+                                                >
+                                                    Áp dụng
+                                                </Button>
+                                            </div>
                                         </Form>
                                     )
                                 }

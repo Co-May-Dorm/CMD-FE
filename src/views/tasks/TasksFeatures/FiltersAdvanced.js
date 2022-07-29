@@ -7,7 +7,7 @@ import employeesApi from '~/api/employeesApi'
 import MultiSelect from '~/components/MultiSelect'
 import tasksApi from '~/api/tasksApi'
 import departmentsApi from '~/api/departmentsApi'
-import resetIcon from '~/assets/icons/reset-form.svg'
+import Select from '~/components/Select'
 
 const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
     const [visible, setVisible] = useState(false)
@@ -68,8 +68,33 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
         setLoading(false)
     }
 
+    const handleResetFilters = () => {
+        setFiltersAdvanced({
+            title: "",
+            creatorIds: [],
+            receiverIds: [],
+            startDate: "",
+            finishDate: "",
+            statusIds: [],
+            departmentIds: [],
+            rate: "",
+            priority: "",
+            rateObject: {},
+            priorityObject: {}
+        })
+        setVisible(false)
+    }
+
     /* Xử lý Form với Formik */
-    let initialValues = filtersAdvanced
+    let initialValues = {
+        ...filtersAdvanced,
+        creators: filtersAdvanced.creators ? filtersAdvanced.creators : [],
+        receivers: filtersAdvanced.receivers ? filtersAdvanced.receivers : [],
+        statuses: filtersAdvanced.statuses ? filtersAdvanced.statuses : [],
+        departments: filtersAdvanced.departments ? filtersAdvanced.departments : [],
+        rateObject: filtersAdvanced.rateObject ? filtersAdvanced.rateObject : {},
+        priorityObject: filtersAdvanced.priorityObject ? filtersAdvanced.priorityObject : {},
+    }
 
     const validationSchema = Yup.object({
         title: Yup.string(),
@@ -79,8 +104,8 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
         finishDate: Yup.date(),
         statuses: Yup.array(),
         departments: Yup.array(),
-        rate: Yup.number(),
-        priority: Yup.number(),
+        rateObject: Yup.object(),
+        priorityObject: Yup.object(),
     })
 
     const handleSubmit = async (values, actions) => {
@@ -91,6 +116,8 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
             receiverIds: values.receivers?.map((receiver) => receiver.id) || [],
             statusIds: values.statuses?.map((status) => status.id) || [],
             departmentIds: values.departments?.map((department) => department.id) || [],
+            rate: values.rateObject?.value || "",
+            priority: values.priorityObject?.value || ""
         }
         setFiltersAdvanced({
             ...filtersAdvanced,
@@ -219,6 +246,70 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
                                                 />
                                             </div>
                                             <div className="mb-4">
+                                                <Form.Label>Đánh giá:</Form.Label>
+                                                <Select
+                                                    index={null}
+                                                    placeholder="Chọn đánh giá"
+                                                    displayValue="label"
+                                                    value={values.rateObject}
+                                                    options={[
+                                                        {
+                                                            label: "1 sao",
+                                                            value: 1
+                                                        },
+                                                        {
+                                                            label: "2 sao",
+                                                            value: 2
+                                                        },
+                                                        {
+                                                            label: "3 sao",
+                                                            value: 3
+                                                        },
+                                                        {
+                                                            label: "4 sao",
+                                                            value: 4
+                                                        },
+                                                        {
+                                                            label: "5 sao",
+                                                            value: 5
+                                                        },
+                                                    ]}
+                                                    onSelect={(index, selectedItem) => {
+                                                        setFieldValue("rateObject", selectedItem)
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="mb-4">
+                                                <Form.Label>Mức độ ưu tiên:</Form.Label>
+                                                <Select
+                                                    index={null}
+                                                    placeholder="Chọn mức độ ưu tiên"
+                                                    displayValue="label"
+                                                    value={values.priorityObject}
+                                                    options={[
+                                                        {
+                                                            label: "Thấp",
+                                                            value: 1
+                                                        },
+                                                        {
+                                                            label: "Trung bình",
+                                                            value: 2
+                                                        },
+                                                        {
+                                                            label: "Cao",
+                                                            value: 3
+                                                        },
+                                                        {
+                                                            label: "Rất cao",
+                                                            value: 4
+                                                        }
+                                                    ]}
+                                                    onSelect={(index, selectedItem) => {
+                                                        setFieldValue("priorityObject", selectedItem)
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="mb-4">
                                                 <Form.Label>Ngày tạo từ:</Form.Label>
                                                 <Form.Control
                                                     type="date"
@@ -236,16 +327,24 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
                                                     onChange={handleChange}
                                                 />
                                             </div>
-                                            <Button variant="none" onClick={handleReset}>
-                                                <Image src={resetIcon} />
-                                            </Button>
-                                            <Button
-                                                type="submit"
-                                                size="lg"
-                                                className="d-table m-auto"
-                                            >
-                                                Áp dụng
-                                            </Button>
+                                            <div className="d-flex justify-content-evenly">
+                                                <Button
+                                                    variant="outline-primary"
+                                                    className="col-5 fw-bolder"
+                                                    onClick={(e) => {
+                                                        handleReset(e)
+                                                        handleResetFilters()
+                                                    }}
+                                                >
+                                                    Đặt lại
+                                                </Button>
+                                                <Button
+                                                    className="col-5 fw-bolder"
+                                                    type="submit"
+                                                >
+                                                    Áp dụng
+                                                </Button>
+                                            </div>
                                         </Form>
                                     )
                                 }

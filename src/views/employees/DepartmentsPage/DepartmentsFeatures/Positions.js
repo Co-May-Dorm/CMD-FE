@@ -1,24 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Form, ListGroup, Modal } from 'react-bootstrap'
+import { Button, Form, ListGroup } from 'react-bootstrap'
 import { BiTrash } from 'react-icons/bi'
 
 import { getRoleList } from '~/redux/rolesSlice'
 import { rolesSelector } from '~/redux/selectors'
-import Option from '~/components/Option'
+import Select from '~/components/Select'
 
 const Positions = ({ departmentInfo, setDepartmentInfo }) => {
     const roles = useSelector(rolesSelector).roles
     const dispatch = useDispatch()
-    let newRoles = roles?.map((role, index) => {
-        return {
-            ...role,
-            label: role.name
-        }
-    })
 
-    const [visibleDeletePosition, setVisibleDeletePosition] = useState(false)
     useEffect(() => {
         dispatch(getRoleList())
     }, [])
@@ -42,8 +35,6 @@ const Positions = ({ departmentInfo, setDepartmentInfo }) => {
         })
     }
     const handleRoleChange = (index, newRole) => {
-        console.log("index: ", index)
-        console.log("newRole: ", newRole)
         let newPositions = departmentInfo.positions.map((position, key) => {
             if (key === index) {
                 return {
@@ -123,14 +114,13 @@ const Positions = ({ departmentInfo, setDepartmentInfo }) => {
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Vai trò:</Form.Label>
-                                <Option
+                                <Select
                                     index={index}
-                                    value={{
-                                        ...departmentInfo.positions[index].role,
-                                        label: departmentInfo.positions[index].role.name
-                                    }}
-                                    data={newRoles}
-                                    onChange={handleRoleChange}
+                                    placeholder="Chọn vai trò"
+                                    displayValue="name"
+                                    value={position.role}
+                                    options={roles}
+                                    onSelect={handleRoleChange}
                                 />
                             </Form.Group>
                             <div className="row justify-content-center">
@@ -143,38 +133,11 @@ const Positions = ({ departmentInfo, setDepartmentInfo }) => {
                                     checked={position.isManager}
                                     onChange={handleInputChange}
                                 />
-                                <Button variant="none" className="col-auto me-3" onClick={() => setVisibleDeletePosition(true)}>
+                                <Button variant="none" className="col-auto me-3" onClick={() => handleDelete(index)}>
                                     <BiTrash />
                                 </Button>
                             </div>
                         </ListGroup.Item>
-                        <br />
-                        <Modal
-                            backdrop="static"
-                            show={visibleDeletePosition}
-                            onHide={() => setVisibleDeletePosition(false)}
-                        >
-                            <Modal.Header closeButton className="bg-gradient">
-                                <Modal.Title>XÓA CHỨC VỤ</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                Bạn có chắc muốn xóa chức vụ này khỏi phòng ban?
-                            </Modal.Body>
-                            <Modal.Footer>
-                                <Button
-                                    variant="secondary"
-                                    onClick={() => setVisibleDeletePosition(false)}
-                                >
-                                    Hủy
-                                </Button>
-                                <Button
-                                    variant="danger"
-                                    onClick={() => handleDelete(index)}
-                                >
-                                    Đồng ý
-                                </Button>
-                            </Modal.Footer>
-                        </Modal>
                     </div>
                 ))
             }

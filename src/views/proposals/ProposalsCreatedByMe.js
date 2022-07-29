@@ -7,20 +7,20 @@ import { BiSortAlt2 } from 'react-icons/bi'
 import { Button, Card, Container } from 'react-bootstrap'
 import clsx from 'clsx'
 
-import { getTaskList } from '~/redux/tasksSlice'
-import { tasksSelector } from '~/redux/selectors'
+import { getProposalListCreatedByMe } from '~/redux/proposalsSlice'
+import { proposalsSelector } from '~/redux/selectors'
 import AppPagination from '~/components/AppPagination'
-import TaskRow from './TaskRow'
-import AddTask from './TasksFeatures/AddTask'
 import Loading from '~/components/Loading'
-import FiltersAdvanced from './TasksFeatures/FiltersAdvanced'
+import ProposalRow from './ProposalRow'
+import AddProposal from './ProposalsFeatures/AddProposal'
+import FiltersAdvanced from './ProposalsFeatures/FiltersAdvanced'
 
 const queryString = require('query-string')
 
-const TasksMainPage = () => {
-    const status = useSelector(tasksSelector).status
-    const tasks = useSelector(tasksSelector).tasks
-    const pagination = useSelector(tasksSelector).pagination
+const ProposalsCreatedByMe = () => {
+    const status = useSelector(proposalsSelector).status
+    const proposals = useSelector(proposalsSelector).proposals
+    const pagination = useSelector(proposalsSelector).pagination
 
     const dispatch = useDispatch()
     const location = useLocation()
@@ -30,45 +30,51 @@ const TasksMainPage = () => {
         page: 1
     })
     const [filtersAdvanced, setFiltersAdvanced] = useState({
-        title: "",
-        creatorIds: [],
-        receiverIds: [],
-        startDate: "",
-        finishDate: "",
         statusIds: [],
-        departmentIds: [],
-        rate: "",
-        priority: "",
+        creator: "",
+        createDateFrom: "",
+        createDateTo: "",
+        proposalTypeId: ""
     })
 
-
     useEffect(() => {
-        document.title = "Công việc"
+        document.title = "Đề xuất của tôi"     // Thiết lập tiêu đề cho trang
 
+        // Kiểm tra nếu load lại trang thì giữ nguyên các filter hiện tại
         if (location.search.length > 0) {
-            const params = queryString.parse(location.search)
-            let newParams = {}
+            const params = queryString.parse(location.search)     // Lấy danh sách params từ URL
+            let newParams = {}      // Lưu danh sách những param khác null
 
+            // Thực hiện việc loại bỏ những param có giá trị là null
             for (const [key, value] of Object.entries(params)) {
-                if (key !== "page") {
+                if (key !== "page") {       // Nếu giá trị của param là null hoặc chuỗi rỗng thì bỏ qua
                     continue
                 }
                 newParams[key] = value
             }
 
+            //
             setFiltersBase(newParams)
         }
     }, [])
 
     useEffect(() => {
-        const requestUrl = location.pathname + "?" + queryString.stringify(filtersBase)
-        navigation(requestUrl)
-        dispatch(getTaskList({
+        dispatch(getProposalListCreatedByMe({
             params: filtersBase,
             filters: filtersAdvanced
         }))
     }, [filtersBase, filtersAdvanced])
 
+    useEffect(() => {
+        const requestUrl = location.pathname + "?" + queryString.stringify(filtersBase)
+        navigation(requestUrl)
+        dispatch(getProposalListCreatedByMe({
+            params: filtersBase,
+            filters: filtersAdvanced
+        }))
+    }, [filtersBase, filtersAdvanced])
+
+    //  Hàm thay đổi state khi ấn vào trang mới ở phần phân trang
     const handlePageChange = (newPage) => {
         setFiltersBase({
             ...filtersBase,
@@ -76,22 +82,25 @@ const TasksMainPage = () => {
         })
     }
 
+
+
+    // Hàm thay đổi state khi thực hiện sắp xếp
     const handleSort = (sortBy) => {
-        if (filtersBase.order === null || !filtersBase.order) {
+        if (filtersBase.order === null || !filtersBase.order) {       // Nếu đang không sắp xếp thì thực hiện sắp xếp tăng dần
             setFiltersBase({
                 ...filtersBase,
                 sort: sortBy,
                 order: "asc"
             })
         }
-        else if (filtersBase.order === "asc") {
+        else if (filtersBase.order === "asc") {         // Nếu đang sắp xếp tăng dần thì thực hiện sắp xếp giảm dần
             setFiltersBase({
                 ...filtersBase,
                 sort: sortBy,
                 order: "desc"
             })
         }
-        else {
+        else {                              // Nếu đang sắp xếp giảm dần thì thực hiện trở về ban đầu trước khi sắp xếp
             setFiltersBase({
                 ...filtersBase,
                 sort: null,
@@ -105,35 +114,38 @@ const TasksMainPage = () => {
             <Container fluid>
                 <div className="row justify-content-xl-between justify-content-end align-items-center">
                     <div className="col-auto fw-bolder fs-5 mb-xl-0 mb-3">
-                        TẤT CẢ CÔNG VIỆC
+                        DANH SÁCH ĐỀ XUẤT
                     </div>
                     <div className="col" />
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
-                        <AddTask />
+                        <AddProposal />
                     </div>
+                    {/* <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
+                        <FiltersBase filtersBase={filtersBase} setFiltersBase={setFiltersBase} />
+                    </div> */}
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
                         <FiltersAdvanced filtersAdvanced={filtersAdvanced} setFiltersAdvanced={setFiltersAdvanced} />
                     </div>
                 </div>
                 <div className="d-flex justify-content-start align-items-center">
-                    <NavLink to="/tasks" end>
+                    <NavLink to="/proposals" end>
                         {
                             ({ isActive }) => <Button className="col-auto m-1" variant={clsx({ "primary": isActive, "outline-primary": !isActive })}>
                                 Tất cả
                             </Button>
                         }
                     </NavLink>
-                    <NavLink to="/tasks/created-by-me">
+                    <NavLink to="/proposals/created-by-me">
                         {
                             ({ isActive }) => <Button className="col-auto m-1" variant={clsx({ "primary": isActive, "outline-primary": !isActive })}>
-                                Công việc tôi giao
+                                Đề xuất của tôi
                             </Button>
                         }
                     </NavLink>
-                    <NavLink to="/tasks/assigned-to-me">
+                    <NavLink to="/proposals/approve-by-me">
                         {
                             ({ isActive }) => <Button className="col-auto m-1" variant={clsx({ "primary": isActive, "outline-primary": !isActive })}>
-                                Công việc của tôi
+                                Đề xuất tôi duyệt
                             </Button>
                         }
                     </NavLink>
@@ -141,83 +153,64 @@ const TasksMainPage = () => {
                 <hr />
             </Container>
             <Container fluid>
-                <div className="task task-header">
+                <div className="proposal proposal-header">
                     <div className="ms-lg-5" />
-                    <div className="task-title">
+                    <div className="proposal-creator">
                         <span
                             className="fw-bolder cursor-pointer"
-                            onClick={() => handleSort("title")}
+                            onClick={() => handleSort("pro.creator.name")}
                         >
-                            TÊN CÔNG VIỆC
+                            NGƯỜI ĐỀ XUẤT
                             {
-                                (filtersBase.sort === "title" && filtersBase.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filtersBase.sort === "title" && filtersBase.order === "desc") ? <AiOutlineSortDescending />
+                                (filtersBase.sort === "pro.creator.name" && filtersBase.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filtersBase.sort === "pro.creator.name" && filtersBase.order === "desc") ? <AiOutlineSortDescending />
                                         : <BiSortAlt2 />
                             }
                         </span>
                     </div>
-                    <div className="task-creator">
+                    <div className="proposal-type">
                         <span
                             className="fw-bolder cursor-pointer"
-                            onClick={() => handleSort("creator.name")}
+                            onClick={() => handleSort("pro.proposalType.id")}
                         >
-                            NGƯỜI GIAO
+                            LOẠI ĐỀ XUẤT
                             {
-                                (filtersBase.sort === "creator.name" && filtersBase.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filtersBase.sort === "creator.name" && filtersBase.order === "desc") ? <AiOutlineSortDescending />
+                                (filtersBase.sort === "pro.proposalType.id" && filtersBase.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filtersBase.sort === "pro.proposalType.id" && filtersBase.order === "desc") ? <AiOutlineSortDescending />
                                         : <BiSortAlt2 />
                             }
                         </span>
                     </div>
-                    <div className="task-arrow" />
-                    <div className="task-receiver">
+                    <div className="proposal-content">
                         <span
-                            className="fw-bolder cursor-pointer"
+                            className="fw-bolder"
                             onClick={() => handleSort("receiver.name")}
                         >
-                            NGƯỜI NHẬN
-                            {
-                                (filtersBase.sort === "receiver.name" && filtersBase.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filtersBase.sort === "receiver.name" && filtersBase.order === "desc") ? <AiOutlineSortDescending />
-                                        : <BiSortAlt2 />
-                            }
+                            MỤC ĐÍCH/LÝ DO
                         </span>
                     </div>
-                    <div className="task-timeline">
+                    <div className="proposal-createDate">
                         <span
                             className="fw-bolder cursor-pointer"
-                            onClick={() => handleSort("startDate")}
+                            onClick={() => handleSort("pro.createDate")}
                         >
-                            THỜI GIAN
+                            NGÀY TẠO
                             {
-                                (filtersBase.sort === "startDate" && filtersBase.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filtersBase.sort === "startDate" && filtersBase.order === "desc") ? <AiOutlineSortDescending />
+                                (filtersBase.sort === "pro.createDate" && filtersBase.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filtersBase.sort === "pro.createDate" && filtersBase.order === "desc") ? <AiOutlineSortDescending />
                                         : <BiSortAlt2 />
                             }
                         </span>
                     </div>
-                    <div className="task-status">
+                    <div className="proposal-status">
                         <span
                             className="fw-bolder cursor-pointer"
-                            onClick={() => handleSort("status.name")}
+                            onClick={() => handleSort("pro.status.id")}
                         >
-                            TÌNH TRẠNG
+                            TRẠNG THÁI
                             {
-                                (filtersBase.sort === "status.name" && filtersBase.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filtersBase.sort === "status.name" && filtersBase.order === "desc") ? <AiOutlineSortDescending />
-                                        : <BiSortAlt2 />
-                            }
-                        </span>
-                    </div>
-                    <div className="task-rate">
-                        <span
-                            className="fw-bolder cursor-pointer d-flex justify-content-center"
-                            onClick={() => handleSort("priority")}
-                        >
-                            ĐÁNH GIÁ
-                            {
-                                (filtersBase.sort === "priority" && filtersBase.order === "asc") ? <AiOutlineSortAscending />
-                                    : (filtersBase.sort === "priority" && filtersBase.order === "desc") ? <AiOutlineSortDescending />
+                                (filtersBase.sort === "pro.status.id" && filtersBase.order === "asc") ? <AiOutlineSortAscending />
+                                    : (filtersBase.sort === "pro.status.id" && filtersBase.order === "desc") ? <AiOutlineSortDescending />
                                         : <BiSortAlt2 />
                             }
                         </span>
@@ -231,15 +224,15 @@ const TasksMainPage = () => {
                     ) : (
                         <div className="list-group-horizontal-lg">
                             {
-                                tasks?.map((task, index) => (
-                                    <TaskRow
-                                        key={index}
-                                        task={task}
+                                proposals?.map((proposal) => (
+                                    <ProposalRow
+                                        key={proposal.id}
+                                        proposalInfo={proposal}
                                     />
                                 ))
                             }
                             {
-                                tasks?.length === 0 ? (
+                                proposals?.length === 0 ? (
                                     <Card.Body align="center">
                                         Không có dữ liệu
                                     </Card.Body>
@@ -260,4 +253,4 @@ const TasksMainPage = () => {
     )
 }
 
-export default TasksMainPage
+export default ProposalsCreatedByMe

@@ -7,8 +7,8 @@ const MultiSelect = ({ ...props }) => {
             background: "linear-gradient(to right, #0b7ce3 25%, #67f3c9 125%)",
             borderRadius: "0.5rem"
         },
-        multiselectContainer: {
-            // color: 'red'
+        optionListContainer: {
+            border: "1px solid #4fa7f7",
         },
         searchBox: {
             padding: "0.375rem 0.5rem",
