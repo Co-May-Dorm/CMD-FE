@@ -1,26 +1,86 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Form, Offcanvas, Row } from 'react-bootstrap'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 
-const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
+import MultiSelect from '~/components/MultiSelect'
+import employeesApi from '~/api/employeesApi'
+import proposalsApi from '~/api/proposalsApi'
+
+const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced, type }) => {
     const [visible, setVisible] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [creatorList, setCreatorList] = useState([])
+    const [statusList, setStatusList] = useState([])
+    const [proposalTypeList, setProposalTypeList] = useState([])
+
+    useEffect(() => {
+        employeesApi.getEmployeeListByName("")
+            .then((response) => {
+                setCreatorList(response.data.data.employees)
+            })
+        proposalsApi.getStatusList()
+            .then((response) => {
+                setStatusList(response.data.data)
+            })
+        proposalsApi.getProposalTypeList()
+            .then((response) => {
+                setProposalTypeList(response.data.data)
+            })
+    }, [])
+
+    const handleCreatorSearch = (value) => {
+        setLoading(true)
+        employeesApi.getEmployeeListByName(value)
+            .then((response) => {
+                setCreatorList(response.data.data.employees)
+            })
+        setLoading(false)
+    }
+    const handleStatusSearch = (value) => {
+        setLoading(true)
+        proposalsApi.getStatusList()
+            .then((response) => {
+                const results = response.data.data.filter((status) => status.name.includes(value))
+                setStatusList(results)
+            })
+        setLoading(false)
+    }
+    const handleProposalTypeSearch = (value) => {
+        proposalsApi.getProposalTypeList()
+            .then((response) => {
+                const results = response.data.data.filter((status) => status.name.includes(value))
+                setProposalTypeList(results)
+            })
+        setLoading(false)
+    }
 
     /* Xử lý Form với Formik */
-    const initialValues = filtersAdvanced
+    let initialValues = {
+        ...filtersAdvanced,
+        creators: filtersAdvanced.creators ? filtersAdvanced.creators : [],
+        statuses: filtersAdvanced.statuses ? filtersAdvanced.statuses : [],
+        proposalTypes: filtersAdvanced.proposalTypes ? filtersAdvanced.proposalTypes : [],
+    }
 
     const validationSchema = Yup.object({
-        creator: Yup.string(),
+        statuses: Yup.array(),
+        creators: Yup.array(),
         createDateFrom: Yup.date(),
         createDateTo: Yup.date(),
-        proposalTypeId: Yup.number(),
+        proposalTypes: Yup.array(),
     })
 
     const handleSubmit = async (values, actions) => {
         actions.setSubmitting(true)
+        const data = {
+            ...values,
+            creatorIds: values.creators?.map((creator) => creator.id) || [],
+            statusIds: values.statuses?.map((status) => status.id) || []
+        }
         setFiltersAdvanced({
             ...filtersAdvanced,
-            ...values
+            ...data
         })
         actions.setSubmitting(false)
     }
@@ -29,10 +89,10 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
     const handleResetFilters = () => {
         setFiltersAdvanced({
             statusIds: [],
-            creator: "",
+            creatorIds: "",
             createDateFrom: "",
             createDateTo: "",
-            proposalTypeId: ""
+            proposalTypeIds: ""
         })
         setVisible(false)
     }
@@ -74,13 +134,61 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
                                     ({ values, handleChange, handleSubmit, handleReset, setFieldValue }) => (
                                         <Form onSubmit={handleSubmit}>
                                             <div className="mb-4">
-                                                <Form.Label>Người giao:</Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    name="creator"
-                                                    placeholder="Nhập tên người giao..."
-                                                    value={values.creator}
-                                                    onChange={handleChange}
+                                                <Form.Label>Loại đề xuất:</Form.Label>
+                                                <MultiSelect
+                                                    placeholder="Chọn loại đề xuất..."
+                                                    displayValue="name"
+                                                    showCheckbox
+                                                    options={proposalTypeList}
+                                                    loading={loading}
+                                                    selectedValues={filtersAdvanced.proposalTypes}
+                                                    onSelect={(selectedList) => {
+                                                        setFieldValue("proposalTypes", selectedList)
+                                                    }}
+                                                    onRemove={(selectedList) => {
+                                                        setFieldValue("proposalTypes", selectedList)
+                                                    }}
+                                                    onSearch={handleProposalTypeSearch}
+                                                />
+                                            </div>
+                                            {
+                                                type !== "created-by-me" && (
+                                                    <div className="mb-4">
+                                                        <Form.Label>Người đề xuất:</Form.Label>
+                                                        <MultiSelect
+                                                            placeholder="Chọn người đề xuất..."
+                                                            displayValue="name"
+                                                            showCheckbox
+                                                            options={creatorList}
+                                                            loading={loading}
+                                                            selectedValues={filtersAdvanced.creators}
+                                                            onSelect={(selectedList) => {
+                                                                setFieldValue("creators", selectedList)
+                                                            }}
+                                                            onRemove={(selectedList) => {
+                                                                setFieldValue("creators", selectedList)
+                                                            }}
+                                                            onSearch={handleCreatorSearch}
+                                                        />
+                                                    </div>
+                                                )
+                                            }
+                                            <div className="mb-4">
+                                                <Form.Label>Trạng thái:</Form.Label>
+                                                <MultiSelect
+                                                    placeholder="Chọn trạng thái..."
+                                                    displayValue="name"
+                                                    showCheckbox
+                                                    options={statusList}
+                                                    loading={loading}
+                                                    selectedValues={filtersAdvanced.statuses}
+                                                    onSelect={(selectedList) => {
+                                                        setFieldValue("statuses", selectedList)
+                                                    }}
+                                                    onRemove={(selectedList) => {
+                                                        setFieldValue("statuses", selectedList)
+                                                    }}
+                                                    onSearch={handleStatusSearch}
                                                 />
                                             </div>
                                             <Row className="mb-4 justify-content-betwween">
@@ -103,16 +211,6 @@ const FiltersAdvanced = ({ filtersAdvanced, setFiltersAdvanced }) => {
                                                     />
                                                 </div>
                                             </Row>
-                                            <div className="mb-4">
-                                                <Form.Label>Loại đề xuất:</Form.Label>
-                                                <Form.Control
-                                                    type="number"
-                                                    name="proposalTypeId"
-                                                    placeholder="Nhập id loại đề xuất..."
-                                                    value={values.title}
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
                                             <div className="d-flex justify-content-evenly">
                                                 <Button
                                                     variant="outline-primary"

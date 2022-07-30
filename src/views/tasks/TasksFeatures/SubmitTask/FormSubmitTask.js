@@ -70,7 +70,6 @@ const FormSubmitTask = ({ visible, setVisible, task = null }) => {
     })
 
     const handleSubmit = async (values, actions) => {
-        console.log(values)
         actions.setSubmitting(true)
         if (task?.id) {
             dispatch(updateTask({
@@ -119,7 +118,7 @@ const FormSubmitTask = ({ visible, setVisible, task = null }) => {
                                     <Form.Control
                                         type="text"
                                         name="title"
-                                        placeholder="Tên công việc"
+                                        placeholder="Nhập tên công việc"
                                         className={clsx({
                                             "is-invalid": touched.title && errors.title
                                         })}

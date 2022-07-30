@@ -30,11 +30,11 @@ const ProposalsForAll = () => {
         page: 1
     })
     const [filtersAdvanced, setFiltersAdvanced] = useState({
+        proposalTypeIds: [],
+        creatorIds: [],
         statusIds: [],
-        creator: "",
         createDateFrom: "",
         createDateTo: "",
-        proposalTypeId: ""
     })
 
     useEffect(() => {
@@ -51,7 +51,6 @@ const ProposalsForAll = () => {
                 newParams[key] = value
             }
 
-            //
             setFiltersBase(newParams)
         }
     }, [])
@@ -115,7 +114,7 @@ const ProposalsForAll = () => {
                         <AddProposal />
                     </div>
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
-                        <FiltersAdvanced filtersAdvanced={filtersAdvanced} setFiltersAdvanced={setFiltersAdvanced} />
+                        <FiltersAdvanced filtersAdvanced={filtersAdvanced} setFiltersAdvanced={setFiltersAdvanced} type="all" />
                     </div>
                 </div>
                 <div className="d-flex justify-content-start align-items-center">

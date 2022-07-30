@@ -46,10 +46,10 @@ const FormSubmitProposal = ({ visible, setVisible, proposal }) => {
                                         placeholder={field.placeholder}
                                         value={values[field.name]}
                                         onChange={handleChange}
-                                        required={field.isRequired}
+                                        required={field.required}
                                     />
                                     {
-                                        field.isRequired && <Form.Control.Feedback type="invalid">
+                                        field.required && <Form.Control.Feedback type="invalid">
                                             {field.feedBack}
                                         </Form.Control.Feedback>
                                     }
@@ -71,10 +71,10 @@ const FormSubmitProposal = ({ visible, setVisible, proposal }) => {
                                         placeholder={field.placeholder}
                                         value={values[field.name]}
                                         onChange={handleChange}
-                                        required={field.isRequired}
+                                        required={field.required}
                                     />
                                     {
-                                        field.isRequired && <Form.Control.Feedback type="invalid">
+                                        field.required && <Form.Control.Feedback type="invalid">
                                             {field.feedBack}
                                         </Form.Control.Feedback>
                                     }
@@ -96,10 +96,10 @@ const FormSubmitProposal = ({ visible, setVisible, proposal }) => {
                                         placeholder={field.placeholder}
                                         value={values[field.name]}
                                         onChange={handleChange}
-                                        required={field.isRequired}
+                                        required={field.required}
                                     />
                                     {
-                                        field.isRequired && <Form.Control.Feedback type="invalid">
+                                        field.required && <Form.Control.Feedback type="invalid">
                                             {field.feedBack}
                                         </Form.Control.Feedback>
                                     }
@@ -121,10 +121,10 @@ const FormSubmitProposal = ({ visible, setVisible, proposal }) => {
                                         placeholder={field.placeholder}
                                         value={values[field.name]}
                                         onChange={handleChange}
-                                        required={field.isRequired}
+                                        required={field.required}
                                     />
                                     {
-                                        field.isRequired && <Form.Control.Feedback type="invalid">
+                                        field.required && <Form.Control.Feedback type="invalid">
                                             {field.feedBack}
                                         </Form.Control.Feedback>
                                     }

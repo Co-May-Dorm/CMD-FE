@@ -43,7 +43,7 @@ const TasksMainPage = () => {
 
 
     useEffect(() => {
-        document.title = "Công việc"
+        document.title = "Tất cả công việc"
 
         if (location.search.length > 0) {
             const params = queryString.parse(location.search)
