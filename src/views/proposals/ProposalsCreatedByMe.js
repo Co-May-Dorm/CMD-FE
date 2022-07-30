@@ -30,24 +30,21 @@ const ProposalsCreatedByMe = () => {
         page: 1
     })
     const [filtersAdvanced, setFiltersAdvanced] = useState({
+        proposalTypeIds: [],
         statusIds: [],
-        creator: "",
         createDateFrom: "",
         createDateTo: "",
-        proposalTypeId: ""
     })
 
     useEffect(() => {
-        document.title = "Đề xuất của tôi"     // Thiết lập tiêu đề cho trang
+        document.title = "Đề xuất của tôi"
 
-        // Kiểm tra nếu load lại trang thì giữ nguyên các filter hiện tại
         if (location.search.length > 0) {
-            const params = queryString.parse(location.search)     // Lấy danh sách params từ URL
-            let newParams = {}      // Lưu danh sách những param khác null
+            const params = queryString.parse(location.search)
+            let newParams = {}
 
-            // Thực hiện việc loại bỏ những param có giá trị là null
             for (const [key, value] of Object.entries(params)) {
-                if (key !== "page") {       // Nếu giá trị của param là null hoặc chuỗi rỗng thì bỏ qua
+                if (key !== "page") {
                     continue
                 }
                 newParams[key] = value
@@ -74,7 +71,6 @@ const ProposalsCreatedByMe = () => {
         }))
     }, [filtersBase, filtersAdvanced])
 
-    //  Hàm thay đổi state khi ấn vào trang mới ở phần phân trang
     const handlePageChange = (newPage) => {
         setFiltersBase({
             ...filtersBase,
@@ -82,25 +78,22 @@ const ProposalsCreatedByMe = () => {
         })
     }
 
-
-
-    // Hàm thay đổi state khi thực hiện sắp xếp
     const handleSort = (sortBy) => {
-        if (filtersBase.order === null || !filtersBase.order) {       // Nếu đang không sắp xếp thì thực hiện sắp xếp tăng dần
+        if (filtersBase.order === null || !filtersBase.order) {
             setFiltersBase({
                 ...filtersBase,
                 sort: sortBy,
                 order: "asc"
             })
         }
-        else if (filtersBase.order === "asc") {         // Nếu đang sắp xếp tăng dần thì thực hiện sắp xếp giảm dần
+        else if (filtersBase.order === "asc") {
             setFiltersBase({
                 ...filtersBase,
                 sort: sortBy,
                 order: "desc"
             })
         }
-        else {                              // Nếu đang sắp xếp giảm dần thì thực hiện trở về ban đầu trước khi sắp xếp
+        else {
             setFiltersBase({
                 ...filtersBase,
                 sort: null,
@@ -120,11 +113,8 @@ const ProposalsCreatedByMe = () => {
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
                         <AddProposal />
                     </div>
-                    {/* <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
-                        <FiltersBase filtersBase={filtersBase} setFiltersBase={setFiltersBase} />
-                    </div> */}
                     <div className="col-auto mb-xl-0 mb-3 d-sm-block d-none">
-                        <FiltersAdvanced filtersAdvanced={filtersAdvanced} setFiltersAdvanced={setFiltersAdvanced} />
+                        <FiltersAdvanced filtersAdvanced={filtersAdvanced} setFiltersAdvanced={setFiltersAdvanced} type="created-by-me" />
                     </div>
                 </div>
                 <div className="d-flex justify-content-start align-items-center">

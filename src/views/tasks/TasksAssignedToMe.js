@@ -43,7 +43,7 @@ const TasksAssignedToMe = () => {
 
 
     useEffect(() => {
-        document.title = "Công việc"
+        document.title = "Công việc của tôi"
 
         if (location.search.length > 0) {
             const params = queryString.parse(location.search)

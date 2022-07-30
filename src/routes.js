@@ -12,12 +12,20 @@ const ProposalsForAll = React.lazy(() => import("~/views/proposals/ProposalsForA
 const ProposalsCreatedByMe = React.lazy(() => import("~/views/proposals/ProposalsCreatedByMe"))
 const ProposalsApproveByMe = React.lazy(() => import("~/views/proposals/ProposalsApproveByMe"))
 
+const ProposalTypes = React.lazy(() => import("~/views/configs/proposal-types/ProposalTypesMainPage"))
+
 const Info = React.lazy(() => import("~/views/info/Info"))
 
 const routes = [
     {
-        name: "Home",
-        path: "newsFeeds"
+        name: "Trang chủ",
+        path: "/",
+        element: <NewsFeed />
+    },
+    {
+        path: "newsFeeds/",
+        name: "Bảng tin",
+        element: <NewsFeed />
     },
     {
         name: "Tất cả công việc",
@@ -60,9 +68,9 @@ const routes = [
         element: <Info />
     },
     {
-        path: "newsFeeds/",
-        name: "Bảng tin",
-        element: <NewsFeed />
+        path: "configs",
+        name: "Thiết lập chung",
+        element: <ProposalTypes />
     }
 ]
 

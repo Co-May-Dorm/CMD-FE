@@ -18,6 +18,10 @@ const _nav = [
     {
         name: 'Nhân viên',
         to: '/employees',
+    },
+    {
+        name: 'Thiết lập chung',
+        to: '/configs',
     }
 ]
 
